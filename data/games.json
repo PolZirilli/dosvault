@@ -15,6 +15,7 @@
       "id": "quake",
       "name": "QUAKE",
       "genre": "fps",
+      "added": "2026-08-09",
       "year": "1996",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/quake.jsdos"
     },
@@ -22,6 +23,7 @@
       "id": "doom",
       "name": "DOOM",
       "genre": "fps",
+      "added": "2026-08-09",
       "year": "1991",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/doom.jsdos"
     },
@@ -29,6 +31,7 @@
       "id": "doom2",
       "name": "DOOM2",
       "genre": "fps",
+      "added": "2026-08-09",
       "year": "1994",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/doom2.jsdos"
     },
@@ -36,6 +39,7 @@
       "id": "blood",
       "name": "BLOOD",
       "genre": "fps",
+      "added": "2026-08-09",
       "year": "1997",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blood.jsdos"
     },
@@ -43,6 +47,7 @@
       "id": "hexen",
       "name": "HEXEN",
       "genre": "fps",
+      "added": "2026-08-20",
       "year": "1997",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/hexen.jsdos"
     },
@@ -50,6 +55,7 @@
       "id": "wolf3d",
       "name": "WOLF3D",
       "genre": "fps",
+      "added": "2026-08-09",
       "year": "1992",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/wolf3d.jsdos"
     },
@@ -57,6 +63,7 @@
       "id": "duke",
       "name": "DUKE3D",
       "genre": "fps",
+      "added": "2026-08-11",
       "year": "1995",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dukenukem3D.jsdos"
     },
@@ -64,6 +71,7 @@
       "id": "heretic",
       "name": "HERETIC",
       "genre": "fps",
+      "added": "2026-08-12",
       "year": "1995",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/heretic.jsdos"
     },
@@ -71,6 +79,7 @@
       "id": "flightaq",
       "name": "FLIGHTAQ",
       "genre": "avg",
+      "added": "2026-08-15",
       "year": "1991",
       "engine": "scummvm",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/flightamazonq.zip"
@@ -79,6 +88,7 @@
       "id": "indy3",
       "name": "INDY3",
       "genre": "avg",
+      "added": "2026-08-10",
       "year": "1989",
       "engine": "scummvm",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indy3.zip"
@@ -87,6 +97,7 @@
       "id": "atlantis",
       "name": "ATLANTIS",
       "genre": "avg",
+      "added": "2026-08-15",
       "year": "1989",
       "engine": "scummvm",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/atlantis.zip"
@@ -95,6 +106,7 @@
       "id": "monkey1",
       "name": "MONKEY1",
       "genre": "avg",
+      "added": "2026-08-15",
       "year": "1990",
       "engine": "scummvm",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/monkey1.zip"
@@ -103,6 +115,7 @@
       "id": "monkey2",
       "name": "MONKEY2",
       "genre": "avg",
+      "added": "2026-08-15",
       "year": "1991",
       "engine": "scummvm",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/monkey2.zip"
@@ -111,6 +124,7 @@
       "id": "loom",
       "name": "LOOM",
       "genre": "avg",
+      "added": "2026-08-15",
       "year": "1992",
       "engine": "scummvm",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/loom.zip"
@@ -119,6 +133,7 @@
       "id": "eob",
       "name": "EYEOFB",
       "genre": "avg",
+      "added": "2026-08-11",
       "year": "1991",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/eob.jsdos"
     },
@@ -126,6 +141,7 @@
       "id": "mm",
       "name": "MMANSION",
       "genre": "avg",
+      "added": "2026-08-13",
       "year": "1985",
       "engine": "scummvm",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/maniacmansion.zip"
@@ -134,6 +150,7 @@
       "id": "lsl1",
       "name": "LSL1",
       "genre": "avg",
+      "added": "2026-08-13",
       "year": "1985",
       "engine": "scummvm",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/lsl1.scummvm.zip"
@@ -142,6 +159,7 @@
       "id": "legendofkyrandia",
       "name": "LEGENDOFKYRANDIA",
       "genre": "avg",
+      "added": "2026-08-21",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/legendofkyrandia.jsdos"
     },
@@ -149,6 +167,7 @@
       "id": "cadaver",
       "name": "CADAVER",
       "genre": "avg",
+      "added": "2026-08-23",
       "year": "1996",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cadaver.jsdos"
     },
@@ -156,6 +175,7 @@
       "id": "kgb",
       "name": "KGB",
       "genre": "avg",
+      "added": "2026-08-23",
       "year": "1993",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/kgb.jsdos"
     },
@@ -163,6 +183,7 @@
       "id": "arcticmoves",
       "name": "ARCTICMOVES",
       "genre": "platformer",
+      "added": "2026-08-23",
       "year": "1992",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/arcticmoves.jsdos"
     },
@@ -170,6 +191,7 @@
       "id": "bluesbrothers",
       "name": "BLUESBROTHERS",
       "genre": "platformer",
+      "added": "2026-08-23",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/bluesbrothers.jsdos"
     },
@@ -177,6 +199,7 @@
       "id": "prince",
       "name": "PRINCE",
       "genre": "platformer",
+      "added": "2026-08-11",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince.jsdos"
     },
@@ -184,6 +207,7 @@
       "id": "prince2",
       "name": "PRINCE2",
       "genre": "platformer",
+      "added": "2026-08-12",
       "year": "1992",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince2.jsdos"
     },
@@ -191,6 +215,7 @@
       "id": "dangerousdave",
       "name": "DANGERDAVE",
       "genre": "platformer",
+      "added": "2026-08-11",
       "year": "1990",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dangerousdave.jsdos"
     },
@@ -198,6 +223,7 @@
       "id": "dukenukem2",
       "name": "DUKENUKEM2",
       "genre": "platformer",
+      "added": "2026-08-11",
       "year": "1991",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dukenukem2.jsdos"
     },
@@ -205,6 +231,7 @@
       "id": "jazzjack",
       "name": "JAZZJACK",
       "genre": "platformer",
+      "added": "2026-08-11",
       "year": "1990",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/jazz.jsdos"
     },
@@ -212,6 +239,7 @@
       "id": "aliencarnage",
       "name": "ALIENCARNAGE",
       "genre": "platformer",
+      "added": "2026-08-21",
       "year": "1993",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/aliencarnage.jsdos"
     },
@@ -219,6 +247,7 @@
       "id": "totalcarnage",
       "name": "TOTALCARNAGE",
       "genre": "platformer",
+      "added": "2026-08-23",
       "year": "1993",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/totalcarnage.jsdos"
     },
@@ -226,6 +255,7 @@
       "id": "warcraft",
       "name": "WARCRAFT",
       "genre": "rts",
+      "added": "2026-08-10",
       "year": "1997",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft.jsdos"
     },
@@ -233,6 +263,7 @@
       "id": "warcraft2",
       "name": "WARCRAFT2",
       "genre": "rts",
+      "added": "2026-08-09",
       "year": "1999",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft2.jsdos"
     },
@@ -240,6 +271,7 @@
       "id": "battlechess",
       "name": "BATTLECHESS",
       "genre": "arcade",
+      "added": "2026-08-11",
       "year": "1999",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/battlechess.jsdos"
     },
@@ -247,6 +279,7 @@
       "id": "blockout",
       "name": "BLOCKOUT",
       "genre": "arcade",
+      "added": "2026-08-21",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blockout.jsdos"
     },
@@ -254,6 +287,7 @@
       "id": "epicpinball",
       "name": "EPICPINBALL",
       "genre": "arcade",
+      "added": "2026-08-23",
       "year": "1993",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/epicpinball.jsdos"
     },
@@ -261,6 +295,7 @@
       "id": "pinball",
       "name": "PINBALL",
       "genre": "arcade",
+      "added": "2026-08-23",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinblld.jsdos"
     },
@@ -268,6 +303,7 @@
       "id": "pinball2",
       "name": "PINBALL2",
       "genre": "arcade",
+      "added": "2026-08-23",
       "year": "1994",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinblld2.jsdos"
     },
@@ -275,6 +311,7 @@
       "id": "pinball3",
       "name": "PINBALL3",
       "genre": "arcade",
+      "added": "2026-08-23",
       "year": "1994",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinbllf.jsdos"
     },
@@ -282,6 +319,7 @@
       "id": "deathrally",
       "name": "DEATHRALLY",
       "genre": "race",
+      "added": "2026-08-11",
       "year": "1996",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/deathrally.jsdos"
     },
@@ -289,6 +327,7 @@
       "id": "gpcircuit",
       "name": "GPCIRCUIT",
       "genre": "race",
+      "added": "2026-08-15",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/gpcircuit.jsdos"
     },
@@ -296,6 +335,7 @@
       "id": "superoffroads",
       "name": "SUPEROFFROADS",
       "genre": "race",
+      "added": "2026-08-20",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/superoffroads.jsdos"
     },
@@ -303,6 +343,7 @@
       "id": "streetroads",
       "name": "STREETROADS",
       "genre": "race",
+      "added": "2026-08-23",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/streetroads.jsdos"
     },
@@ -310,6 +351,7 @@
       "id": "streetroads2",
       "name": "STREETROADS2",
       "genre": "race",
+      "added": "2026-08-23",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/streetroads2.jsdos"
     },
@@ -317,6 +359,7 @@
       "id": "harddrivin",
       "name": "HARDDRIVIN",
       "genre": "race",
+      "added": "2026-08-20",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/harddrivin.jsdos"
     },
@@ -324,6 +367,7 @@
       "id": "stunts",
       "name": "STUNTS",
       "genre": "race",
+      "added": "2026-08-15",
       "year": "1990",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/stunts.jsdos"
     },
@@ -331,6 +375,7 @@
       "id": "ciscoheat",
       "name": "CISCOHEAT",
       "genre": "race",
+      "added": "2026-08-21",
       "year": "1991",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/ciscoheat.jsdos"
     },
@@ -338,6 +383,7 @@
       "id": "indy500",
       "name": "INDY500",
       "genre": "race",
+      "added": "2026-08-21",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indy500.jsdos"
     },
@@ -345,6 +391,7 @@
       "id": "lamborghini",
       "name": "LAMBORGHINI",
       "genre": "race",
+      "added": "2026-08-21",
       "year": "1992",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/lamborghini.jsdos"
     },
@@ -352,6 +399,7 @@
       "id": "micromachines2",
       "name": "MICROMACHINES2",
       "genre": "race",
+      "added": "2026-08-21",
       "year": "1994",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/micromachines2.jsdos"
     },
@@ -359,6 +407,7 @@
       "id": "needforspeed",
       "name": "NEEDFORSPEED",
       "genre": "race",
+      "added": "2026-08-21",
       "year": "1995",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/needforspeed.jsdos"
     },
@@ -366,6 +415,7 @@
       "id": "quarantine2",
       "name": "QUARANTINE2",
       "genre": "race",
+      "added": "2026-08-21",
       "year": "1995",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/quarantine2.jsdos"
     },
@@ -373,6 +423,7 @@
       "id": "testdrive2",
       "name": "TESTDRIVE2",
       "genre": "race",
+      "added": "2026-08-21",
       "year": "1989",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive2.jsdos"
     },
@@ -380,6 +431,7 @@
       "id": "testdrive3",
       "name": "TESTDRIVE3",
       "genre": "race",
+      "added": "2026-08-21",
       "year": "1990",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive3.jsdos"
     }
