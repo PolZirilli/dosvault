@@ -153,20 +153,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cadaver.jsdos"
     },
     {
-      "id": "dragonslair",
-      "name": "DRAGONSLAIR",
-      "genre": "avg",
-      "year": "1986",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dragonslair.jsdos"
-    },
-    {
-      "id": "dragonslair3",
-      "name": "DRAGONSLAIR3",
-      "genre": "avg",
-      "year": "1990",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dragonslair3.jsdos"
-    },
-    {
       "id": "bluesbrothers",
       "name": "BLUESBROTHERS",
       "genre": "platformer",
