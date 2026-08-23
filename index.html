@@ -85,6 +85,71 @@
   </div>
 </div>
 
+<!-- Popup de Ayuda / Contacto (F1): reemplaza el viejo mensaje de una linea
+     en el cmdline por un formulario real. Se envia via Netlify Forms (el
+     sitio esta hosteado en Netlify) -- por eso el <form> queda siempre
+     presente en el HTML (aunque el modal este oculto por CSS), que es lo
+     que Netlify necesita para detectarlo al momento del deploy. El envio
+     en si se hace por fetch() desde js/app.js para no recargar la pagina. -->
+<div id="helpModal" class="modal-overlay">
+  <div class="mb-dialog nc-frame help-dialog">
+    <div class="mb-titlebar">Ayuda / Contacto</div>
+    <div class="mb-body help-body" id="helpModalBody">
+      <p class="dv-intro">
+        Flechas: moverse &nbsp;|&nbsp; Tab / &lt;- -&gt;: cambiar panel &nbsp;|&nbsp; Enter: abrir/ejecutar &nbsp;|&nbsp; F2: controles &nbsp;|&nbsp; F3: info del juego
+      </p>
+      <p class="dv-intro">&iquest;Encontraste un error, tenes feedback o queres pedir un juego que falta? Dejalo aca abajo:</p>
+      <form id="helpForm" class="dv-form" name="contacto" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contacto">
+        <p class="dv-honeypot"><label>No completar este campo: <input name="bot-field"></label></p>
+        <label class="dv-field">
+          <span>Nombre (opcional)</span>
+          <input class="dv-input" type="text" name="name" autocomplete="name">
+        </label>
+        <label class="dv-field">
+          <span>Email (opcional, para poder responderte)</span>
+          <input class="dv-input" type="email" name="email" autocomplete="email">
+        </label>
+        <label class="dv-field">
+          <span>Tipo</span>
+          <select class="dv-input dv-select" name="type">
+            <option value="feedback">Feedback general</option>
+            <option value="pedido">Pedido de un juego</option>
+            <option value="bug">Reporte de error</option>
+            <option value="otro">Otro</option>
+          </select>
+        </label>
+        <label class="dv-field">
+          <span>Mensaje</span>
+          <textarea class="dv-input dv-textarea" name="message" required></textarea>
+        </label>
+        <div class="dv-form-status" id="helpFormStatus"></div>
+        <div class="info-buttons">
+          <button type="submit" class="info-btn dv-submit" id="helpFormSubmit">[ Enviar ]</button>
+        </div>
+      </form>
+    </div>
+    <div class="info-buttons">
+      <span class="info-btn" id="helpModalClose">[ Cerrar ]</span>
+    </div>
+  </div>
+</div>
+
+<!-- Popup de "Novedades" al entrar al sitio: lista los juegos agregados a
+     data/games.json desde la ultima visita del navegador (ver checkNewGames
+     en js/app.js). Se guia por el campo "added" de cada juego en
+     data/games.json -- si se agrega un juego nuevo, hay que sumarle ese
+     campo ("added": "YYYY-MM-DD") para que aparezca aca. -->
+<div id="newGamesModal" class="modal-overlay">
+  <div class="mb-dialog nc-frame newgames-dialog">
+    <div class="mb-titlebar">Novedades</div>
+    <div class="mb-body newgames-body" id="newGamesModalBody"></div>
+    <div class="info-buttons">
+      <span class="info-btn" id="newGamesModalClose">[ Cerrar ]</span>
+    </div>
+  </div>
+</div>
+
 <script src="js/vendor/js-dos/js-dos.js"></script>
 <script>
   if (window.emulators) {
