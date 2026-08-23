@@ -230,13 +230,10 @@ function fetchBundleInfo(g) {
   return BUNDLE_INFO_CACHE[g.id];
 }
 
-// Nombre estilo "8.3" de DOS: mayúsculas, máximo `max` caracteres. Si es más
-// largo, trunca y agrega "~1" como hace Windows/DOS al generar un nombre
-// corto a partir de uno largo (ej. "DANGEROUSDAVE" -> "DANGER~1").
-function toDosName(name, max = 7) {
-  const upper = String(name).toUpperCase();
-  if (upper.length <= max) return upper;
-  return upper.slice(0, Math.max(1, max - 2)) + '~1';
+// Nombre en mayúsculas, sin truncar -- se muestra el título completo del
+// juego (antes se recortaba estilo 8.3 de DOS, ej. "DANGER~1").
+function toDosName(name) {
+  return String(name).toUpperCase();
 }
 
 function buildLeftItems() {
@@ -294,10 +291,10 @@ function renderRightPanel() {
   RIGHT_ITEMS.forEach((g, i) => {
     const row = document.createElement('div');
     row.className = 'panel-row is-file' + (state.focus === 'right' && i === state.rightIndex ? ' selected' : '');
-    // Nombre siempre en mayúsculas y truncado estilo 8.3 de DOS (máx. 7
-    // caracteres + "~1" si no entra) -- el título real completo queda
-    // disponible en el tooltip (title=) y en el popup de info (F3).
-    const dosName = toDosName(g.name, 7);
+    // Nombre siempre en mayúsculas, sin límite de caracteres -- se ve el
+    // título completo. El tooltip (title=) y el popup de info (F3) también
+    // muestran el título completo.
+    const dosName = toDosName(g.name);
     row.title = g.title || g.name;
     row.innerHTML = `
       <div class="col-name">
