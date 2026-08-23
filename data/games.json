@@ -146,6 +146,34 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/legendofkyrandia.jsdos"
     },
     {
+      "id": "cadaver",
+      "name": "CADAVER",
+      "genre": "avg",
+      "year": "1996",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cadaver.jsdos"
+    },
+    {
+      "id": "dragonslair",
+      "name": "DRAGONSLAIR",
+      "genre": "avg",
+      "year": "1986",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dragonslair.jsdos"
+    },
+    {
+      "id": "dragonslair3",
+      "name": "DRAGONSLAIR3",
+      "genre": "avg",
+      "year": "1990",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dragonslair3.jsdos"
+    },
+    {
+      "id": "bluesbrothers",
+      "name": "BLUESBROTHERS",
+      "genre": "platformer",
+      "year": "1989",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/bluesbrothers.jsdos"
+    },
+    {
       "id": "prince",
       "name": "PRINCE",
       "genre": "platformer",
@@ -160,11 +188,11 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince2.jsdos"
     },
     {
-      "id": "bstone",
-      "name": "BSTONE",
+      "id": "ghostofghosts",
+      "name": "GHOSTANDGOBLINS",
       "genre": "platformer",
-      "year": "1990",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/bstone.jsdos"
+      "year": "1989",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/ghopstsngoblins.jsdos"
     },
     {
       "id": "dangerousdave",
@@ -188,6 +216,20 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/jazz.jsdos"
     },
     {
+      "id": "aliencarnage",
+      "name": "ALIENCARNAGE",
+      "genre": "platformer",
+      "year": "1993",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/aliencarnage.jsdos"
+    },
+    {
+      "id": "totalcarnage",
+      "name": "TOTALCARNAGE",
+      "genre": "platformer",
+      "year": "1993",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/totalcarnage.jsdos"
+    },
+    {
       "id": "warcraft",
       "name": "WARCRAFT",
       "genre": "rts",
@@ -202,11 +244,25 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft2.jsdos"
     },
     {
+      "id": "cabal",
+      "name": "CABAL",
+      "genre": "arcade",
+      "year": "1989",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cabal.jsdos"
+    },
+    {
       "id": "battlechess",
       "name": "BATTLECHESS",
       "genre": "arcade",
       "year": "1999",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/battlechess.jsdos"
+    },
+    {
+      "id": "blockout",
+      "name": "BLOCKOUT",
+      "genre": "arcade",
+      "year": "1989",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blockout.jsdos"
     },
     {
       "id": "deathrally",
@@ -256,20 +312,6 @@
       "genre": "race",
       "year": "1990",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/stunts.jsdos"
-    },
-    {
-      "id": "aliencarnage",
-      "name": "ALIENCARNAGE",
-      "genre": "platformer",
-      "year": "1993",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/aliencarnage.jsdos"
-    },
-    {
-      "id": "blockout",
-      "name": "BLOCKOUT",
-      "genre": "arcade",
-      "year": "1989",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blockout.jsdos"
     },
     {
       "id": "ciscoheat",
