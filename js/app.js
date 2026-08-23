@@ -23,6 +23,14 @@ const dosInstances = {};
 // instancia devuelta por Dos(container, {}).
 const dosLayers = {};
 let zTop = 100;
+// id del juego que tiene el foco de teclado en este momento, o null si el
+// foco esta en el shell (panel de categorias/juegos). Mientras haya un id
+// aca, el listener de keydown de mas abajo no procesa NADA de navegacion --
+// las teclas le llegan derecho al juego (canvas de js-dos / iframe de
+// ScummVM) en vez de mover la seleccion de la lista por atras. Se limpia
+// clickeando fuera de la ventana del juego (ver el listener de mousedown en
+// captura, mas abajo) o cerrando/minimizando esa ventana.
+let gamePlaying = null;
 
 const panelLeftList = document.getElementById('panelLeftList');
 const panelRightList = document.getElementById('panelRightList');
@@ -44,6 +52,14 @@ const controlsModalEl = document.getElementById('controlsModal');
 const controlsModalBody = document.getElementById('controlsModalBody');
 const controlsModalResetBtn = document.getElementById('controlsModalReset');
 const controlsModalCloseBtn = document.getElementById('controlsModalClose');
+const helpModalEl = document.getElementById('helpModal');
+const helpForm = document.getElementById('helpForm');
+const helpFormStatus = document.getElementById('helpFormStatus');
+const helpFormSubmit = document.getElementById('helpFormSubmit');
+const helpModalCloseBtn = document.getElementById('helpModalClose');
+const newGamesModalEl = document.getElementById('newGamesModal');
+const newGamesModalBody = document.getElementById('newGamesModalBody');
+const newGamesModalCloseBtn = document.getElementById('newGamesModalClose');
 
 // Repo público de GitHub de donde sale la fecha real del último cambio a
 // data/games.json (columna Date/Time del panel izquierdo). Si el repo
@@ -68,10 +84,11 @@ const GITHUB_REPO = 'PolZirilli/dosvault';
 const CONTROL_ACTIONS = [
   { id: 'moveUp', label: 'Mover arriba', group: 'nav', default: 'ArrowUp' },
   { id: 'moveDown', label: 'Mover abajo', group: 'nav', default: 'ArrowDown' },
-  { id: 'switchPanel', label: 'Cambiar de panel', hint: '← y → siempre funcionan además, pase lo que pase acá', group: 'nav', default: 'Tab' },
+  { id: 'switchPanel', label: 'Cambiar de panel', hint: '<- y -> siempre funcionan además, pase lo que pase acá', group: 'nav', default: 'Tab' },
   { id: 'confirm', label: 'Confirmar', hint: 'Abrir categoría / lanzar juego', group: 'nav', default: 'Enter' },
   { id: 'run', label: 'Ejecutar juego', hint: 'Igual que Confirmar, con un juego seleccionado', group: 'nav', default: 'F4' },
   { id: 'help', label: 'Ayuda', group: 'nav', default: 'F1' },
+  { id: 'controls', label: 'Controles', group: 'nav', default: 'F2' },
   { id: 'info', label: 'Info del juego', group: 'nav', default: 'F3' },
   { id: 'refresh', label: 'Refrescar', group: 'nav', default: 'F5' },
   { id: 'closeActive', label: 'Cerrar ventana activa', group: 'nav', default: 'F10' },
@@ -82,7 +99,10 @@ const CONTROL_ACTIONS = [
 const CONTROLS_STORAGE_KEY = 'dosvaultControls';
 
 const CODE_LABELS = {
-  ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→',
+  // ArrowLeft/ArrowRight se escriben "<-"/"->" en vez de los glifos ← → --
+  // la fuente bitmap del sitio (PxPlus IBM VGA8) no los tiene y se veian
+  // como "+" en el popup de Controles.
+  ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '<-', ArrowRight: '->',
   ControlLeft: 'Ctrl (izq)', ControlRight: 'Ctrl (der)',
   AltLeft: 'Alt (izq)', AltRight: 'Alt (der)',
   ShiftLeft: 'Shift (izq)', ShiftRight: 'Shift (der)',
@@ -152,6 +172,7 @@ const ACTION_HANDLERS = {
   confirm: () => activateSelection(),
   run: () => activateSelection(),
   help: () => showHelp(),
+  controls: () => openControlsModal(),
   info: () => openInfoModalForSelection(),
   refresh: () => render(),
   closeActive: () => {
@@ -278,10 +299,18 @@ function renderLeftPanel() {
   });
 }
 
+// Orden alfabetico (por titulo visible) dentro de cada categoria -- antes
+// quedaban en el orden en que aparecen en data/games.json, que no tenia
+// ningun criterio para quien navega el catalogo.
+function gameSortLabel(g) {
+  return (g.title || g.name || '').toUpperCase();
+}
+
 function selectGenre(genreId) {
   currentGenre = genreId;
   state.rightIndex = 0;
-  RIGHT_ITEMS = GAMES.filter(g => g.genre === genreId);
+  RIGHT_ITEMS = GAMES.filter(g => g.genre === genreId)
+    .sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
   const label = GENRES[genreId] || genreId;
   panelRightHeader.textContent = `C:\\${label.toUpperCase()}`;
 }
@@ -412,19 +441,32 @@ function activateSelection() {
 document.addEventListener('keydown', e => {
   if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
 
+  // Hay un juego con el foco: el teclado es todo suyo. No se procesa ningun
+  // atajo del shell (ni navegacion ni F-keys) hasta que se salga del juego
+  // (cerrando la ventana o clickeando afuera de ella) -- ver `gamePlaying`.
+  if (gamePlaying) return;
+
   // Popup de Controles esperando que se apriete la tecla nueva para una
   // acción: se la lleva entera, no debe disparar nada ni navegar atrás.
   if (controlsCapture) { e.preventDefault(); handleControlsCapture(e); return; }
 
-  // Con el popup de info (F3) o el de Controles (F2) abiertos, Escape los
-  // cierra y el resto de los atajos de navegación quedan bloqueados para no
-  // mover la selección de atrás sin que se vea.
+  // Con algun popup abierto (info F3, Controles F2, Ayuda F1 o Novedades),
+  // Escape lo cierra y el resto de los atajos de navegación quedan
+  // bloqueados para no mover la selección de atrás sin que se vea.
   if (infoModalEl && infoModalEl.classList.contains('show')) {
     if (e.key === 'Escape') { e.preventDefault(); closeInfoModal(); }
     return;
   }
   if (controlsModalEl && controlsModalEl.classList.contains('show')) {
     if (e.key === 'Escape') { e.preventDefault(); closeControlsModal(); }
+    return;
+  }
+  if (helpModalEl && helpModalEl.classList.contains('show')) {
+    if (e.key === 'Escape') { e.preventDefault(); closeHelpModal(); }
+    return;
+  }
+  if (newGamesModalEl && newGamesModalEl.classList.contains('show')) {
+    if (e.key === 'Escape') { e.preventDefault(); closeNewGamesModal(); }
     return;
   }
 
@@ -437,10 +479,121 @@ document.addEventListener('keydown', e => {
   if (handler) { e.preventDefault(); handler(); }
 });
 
+// Cualquier click que no caiga dentro de una ventana de juego (.window)
+// cuenta como "salir del juego": le devuelve el teclado al shell. Captura
+// (no bubbling) para llegar antes que el propio handler de mousedown de la
+// ventana (que hace foco/`gamePlaying = id` cuando el click SI es adentro).
+document.addEventListener('mousedown', e => {
+  if (!e.target.closest || !e.target.closest('.window')) gamePlaying = null;
+}, true);
+
+// F1 solia escribir una linea de ayuda en el cmdline; ahora abre el popup
+// de Ayuda / Contacto (ver #helpModal en index.html) con el mismo resumen
+// de atajos arriba de un formulario para feedback o pedidos de juegos.
 function showHelp() {
-  cmdline.innerHTML = 'Flechas: moverse &nbsp;|&nbsp; Tab: cambiar panel &nbsp;|&nbsp; Enter: abrir/ejecutar<span class="cursor-blink"></span>';
-  setTimeout(updateCmdline, 2500);
+  openHelpModal();
 }
+
+function openHelpModal() {
+  if (!helpModalEl) return;
+  if (infoModalEl) closeInfoModal();
+  if (controlsModalEl) closeControlsModal();
+  helpModalEl.classList.add('show');
+}
+
+function closeHelpModal() {
+  if (helpModalEl) helpModalEl.classList.remove('show');
+}
+
+if (helpModalCloseBtn) helpModalCloseBtn.addEventListener('click', closeHelpModal);
+// Click en el fondo oscuro (fuera del diálogo) también cierra.
+if (helpModalEl) helpModalEl.addEventListener('click', e => { if (e.target === helpModalEl) closeHelpModal(); });
+
+/* ---------- FORMULARIO DE CONTACTO (dentro del popup de Ayuda) ---------- */
+// Se envia a Netlify Forms: el sitio esta hosteado en Netlify, que detecta
+// el <form data-netlify="true"> al buildear el sitio (por eso el form tiene
+// que existir siempre en el HTML, no armarse recien por JS) y junta los
+// envios en Site settings -> Forms del panel de Netlify. Aca solo se
+// intercepta el submit para mandarlo por fetch y no recargar la pagina.
+function encodeFormData(form) {
+  return new URLSearchParams(new FormData(form)).toString();
+}
+
+if (helpForm) {
+  helpForm.addEventListener('submit', e => {
+    e.preventDefault();
+    if (helpFormSubmit) helpFormSubmit.disabled = true;
+    if (helpFormStatus) { helpFormStatus.textContent = 'Enviando...'; helpFormStatus.className = 'dv-form-status'; }
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encodeFormData(helpForm),
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        helpForm.classList.add('sent');
+        if (helpFormStatus) { helpFormStatus.textContent = '¡Gracias! Tu mensaje se envio.'; helpFormStatus.className = 'dv-form-status ok'; }
+        helpForm.reset();
+      })
+      .catch(err => {
+        console.error('No se pudo enviar el formulario de contacto:', err);
+        if (helpFormStatus) { helpFormStatus.textContent = 'No se pudo enviar. Probá de nuevo en un rato.'; helpFormStatus.className = 'dv-form-status error'; }
+      })
+      .finally(() => {
+        if (helpFormSubmit) helpFormSubmit.disabled = false;
+      });
+  });
+}
+
+/* ---------- POPUP DE NOVEDADES ---------- */
+// Compara el campo "added" ("YYYY-MM-DD") de cada juego en data/games.json
+// contra la fecha de la ultima visita guardada en localStorage (por
+// navegador). Si hay juegos con "added" mas nuevo, los lista en un popup al
+// entrar. La primera vez que alguien entra (sin fecha guardada todavia) no
+// se muestra nada -- solo se guarda la fecha de hoy como punto de partida,
+// para no mostrar los 52 juegos existentes como si fueran "nuevos".
+const LAST_VISIT_KEY = 'dosvaultLastVisit';
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function checkNewGames() {
+  let lastVisit = null;
+  try { lastVisit = localStorage.getItem(LAST_VISIT_KEY); } catch (err) {
+    console.error('No se pudo leer la fecha de la ultima visita (localStorage no disponible):', err);
+  }
+
+  if (lastVisit) {
+    const newOnes = GAMES
+      .filter(g => g.added && g.added > lastVisit)
+      .sort((a, b) => a.added === b.added ? gameSortLabel(a).localeCompare(gameSortLabel(b), 'es') : a.added.localeCompare(b.added));
+    if (newOnes.length) openNewGamesModal(newOnes);
+  }
+
+  try { localStorage.setItem(LAST_VISIT_KEY, todayStr()); } catch (err) {
+    console.error('No se pudo guardar la fecha de esta visita (localStorage no disponible):', err);
+  }
+}
+
+function openNewGamesModal(list) {
+  if (!newGamesModalEl || !newGamesModalBody) return;
+  const rows = list.map(g => {
+    const genreLabel = (GENRES[g.genre] || g.genre || '').toUpperCase();
+    return `<div class="newgame-row"><span class="ng-name">${toDosName(g.title || g.name)}</span><span class="ng-meta">${genreLabel} · ${g.year}</span></div>`;
+  }).join('');
+  const plural = list.length === 1 ? '' : 's';
+  newGamesModalBody.innerHTML = `<p class="ng-intro">Se agregar${list.length === 1 ? 'ó' : 'on'} ${list.length} juego${plural} nuevo${plural} desde tu última visita:</p>${rows}`;
+  newGamesModalEl.classList.add('show');
+}
+
+function closeNewGamesModal() {
+  if (newGamesModalEl) newGamesModalEl.classList.remove('show');
+}
+
+if (newGamesModalCloseBtn) newGamesModalCloseBtn.addEventListener('click', closeNewGamesModal);
+if (newGamesModalEl) newGamesModalEl.addEventListener('click', e => { if (e.target === newGamesModalEl) closeNewGamesModal(); });
 
 /* ---------- FKEYS ---------- */
 const FKEYS = [
@@ -678,6 +831,40 @@ if (controlsModalCloseBtn) controlsModalCloseBtn.addEventListener('click', close
 // Click en el fondo oscuro (fuera del diálogo) también cierra.
 if (controlsModalEl) controlsModalEl.addEventListener('click', e => { if (e.target === controlsModalEl) closeControlsModal(); });
 
+/* ---------- KEYBOARD LOCK EN PANTALLA COMPLETA ---------- */
+// Cuando un juego entra a pantalla completa REAL del navegador (Fullscreen
+// API, boton [⛶] mas abajo), pedimos tambien el Keyboard Lock API
+// (navigator.keyboard.lock()) para que combinaciones que el propio
+// NAVEGADOR reserva (algunos atajos de Chrome/Edge) le lleguen al juego en
+// vez de disparar su accion habitual mientras se esta jugando.
+//
+// OJO -- limite real, no es un bug: esto NO puede evitar atajos GLOBALES
+// del sistema operativo (ej. una tecla o gesto configurado para abrir una
+// app como Claude, Spotlight, Alfred, Raycast, etc.). Esos atajos los
+// captura el sistema operativo ANTES de que el evento le llegue al
+// navegador -- ninguna pagina web, DOSVault incluido, tiene forma de
+// interceptarlos ni bloquearlos desde JS. Si "Opcion x3" abre Claude,
+// hay que desactivar o cambiar ese atajo desde la configuracion de la app
+// que lo escucha (ej. Configuracion de Claude de escritorio -> atajo
+// global) o desde Preferencias del Sistema > Teclado en macOS.
+//
+// Solo funciona en navegadores Chromium (Chrome/Edge/Opera) y solo estando
+// en fullscreen real; en el resto de los navegadores navigator.keyboard no
+// existe y esto no hace nada (silenciosamente).
+if (document.addEventListener) {
+  document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+      if (navigator.keyboard && navigator.keyboard.lock) {
+        navigator.keyboard.lock().catch(err => {
+          console.warn('Keyboard Lock no disponible en este navegador:', err);
+        });
+      }
+    } else if (navigator.keyboard && navigator.keyboard.unlock) {
+      navigator.keyboard.unlock();
+    }
+  });
+}
+
 /* ---------- WINDOWS / MOTORES DE EMULACIÓN ---------- */
 // Un juego corre con js-dos (DOSBox/WASM) por default. Si en games.json trae
 // "engine": "scummvm", se usa el motor nativo de ScummVM (ver
@@ -840,6 +1027,11 @@ function launchGame(g) {
   makeDraggable(win, win.querySelector('.titlebar'));
 
   addRunningTab(g);
+
+  // La ventana recien abierta queda arriba de todo y con el foco: el
+  // teclado pasa a ser del juego (ver `gamePlaying` y el guard al principio
+  // del listener de keydown).
+  gamePlaying = g.id;
 }
 
 function addRunningTab(g) {
@@ -863,6 +1055,7 @@ function focusWin(id) {
   if (!win) return;
   win.style.zIndex = ++zTop;
   document.querySelectorAll('.running-tab').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  gamePlaying = id;
   // Si es una ventana de ScummVM, devolverle el foco de teclado al iframe
   // del juego (si no, el menú Ctrl+F5 / Guardar / Opciones no recibe nada).
   if (dosInstances[id]) {
@@ -875,6 +1068,7 @@ function minimizeWin(id) {
   win.style.display = 'none';
   const tab = runningEl ? runningEl.querySelector(`.running-tab[data-id="${id}"]`) : null;
   if (tab) tab.classList.remove('active');
+  if (gamePlaying === id) gamePlaying = null;
 }
 function restoreWin(id) {
   const win = openWins[id];
@@ -886,6 +1080,7 @@ function closeWin(id) {
   const win = openWins[id];
   if (win) win.remove();
   delete openWins[id];
+  if (gamePlaying === id) gamePlaying = null;
   if (dosInstances[id]) {
     // Tanto js-dos (CommandInterface) como el wrapper de ScummVM exponen
     // una promesa que resuelve a un objeto con .exit() — mismo contrato,
@@ -924,6 +1119,7 @@ fetch('data/games.json')
     buildLeftItems();
     if (LEFT_ITEMS.length) selectGenre(LEFT_ITEMS[0].id);
     render();
+    checkNewGames();
   })
   .catch(err => {
     panelRightList.innerHTML = '<div class="panel-row" style="color:#fff;padding:20px;">No se pudo cargar data/games.json. Si abriste el archivo directo (file://), corré un servidor local — ver README.md.</div>';
