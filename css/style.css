@@ -776,3 +776,140 @@ body {
   color: #000;
   border-color: #000;
 }
+
+/* ---------- POPUP DE AYUDA / CONTACTO (F1) ---------- */
+.help-dialog {
+  width: 100%;
+  max-width: 460px;
+  background: #00aaaa;
+  color: #fff;
+}
+
+.help-body {
+  padding: 14px 16px;
+  text-align: left;
+  max-height: 74vh;
+  overflow-y: auto;
+}
+
+.dv-intro {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  color: #002a2a;
+}
+
+.dv-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.dv-field {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.dv-field span {
+  display: block;
+  font-size: 0.8rem;
+  margin-bottom: 3px;
+  color: #002a2a;
+}
+
+.dv-input {
+  width: 100%;
+  background: #000;
+  color: #55ffff;
+  border: 2px solid #003a3a;
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.dv-input:focus {
+  outline: none;
+  border-color: #ffcc00;
+}
+
+.dv-select {
+  cursor: pointer;
+}
+
+.dv-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.dv-form-status {
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  min-height: 0;
+}
+
+.dv-form-status.error {
+  color: #ffcccc;
+}
+
+.dv-form-status.ok {
+  color: #003a3a;
+  font-weight: bold;
+}
+
+.dv-submit {
+  font-family: inherit;
+  font-size: 1.2rem;
+}
+
+.dv-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.dv-form.sent .dv-field,
+.dv-form.sent .dv-intro-hide {
+  display: none;
+}
+
+/* ---------- POPUP DE NOVEDADES (juegos nuevos desde la ultima visita) ---------- */
+.newgames-dialog {
+  width: 100%;
+  max-width: 480px;
+  background: #00aaaa;
+  color: #000;
+}
+
+.newgames-body {
+  padding: 14px 16px;
+  text-align: left;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.ng-intro {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.newgame-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+  font-size: 0.95rem;
+}
+
+.newgame-row .ng-name {
+  font-weight: bold;
+}
+
+.newgame-row .ng-meta {
+  opacity: 0.8;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
