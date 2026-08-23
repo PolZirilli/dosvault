@@ -188,6 +188,14 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/arcticmoves.jsdos"
     },
     {
+      "id": "anotherworld",
+      "name": "ANOTHERWORLD",
+      "genre": "platformer",
+      "added": "2026-08-23",
+      "year": "1991",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/anotherworld.jsdos"
+    },
+    {
       "id": "bluesbrothers",
       "name": "BLUESBROTHERS",
       "genre": "platformer",
