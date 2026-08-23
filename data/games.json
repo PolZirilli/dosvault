@@ -153,6 +153,20 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cadaver.jsdos"
     },
     {
+      "id": "kgb",
+      "name": "KGB",
+      "genre": "avg",
+      "year": "1993",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/kgb.jsdos"
+    },
+    {
+      "id": "arcticmoves",
+      "name": "ARCTICMOVES",
+      "genre": "platformer",
+      "year": "1992",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/arcticmoves.jsdos"
+    },
+    {
       "id": "bluesbrothers",
       "name": "BLUESBROTHERS",
       "genre": "platformer",
@@ -244,6 +258,34 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blockout.jsdos"
     },
     {
+      "id": "epicpinball",
+      "name": "EPICPINBALL",
+      "genre": "arcade",
+      "year": "1993",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/epicpinball.jsdos"
+    },
+    {
+      "id": "pinball",
+      "name": "PINBALL",
+      "genre": "arcade",
+      "year": "1989",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinblld.jsdos"
+    },
+    {
+      "id": "pinball2",
+      "name": "PINBALL2",
+      "genre": "arcade",
+      "year": "1994",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinblld2.jsdos"
+    },
+    {
+      "id": "pinball3",
+      "name": "PINBALL3",
+      "genre": "arcade",
+      "year": "1994",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinbllf.jsdos"
+    },
+    {
       "id": "deathrally",
       "name": "DEATHRALLY",
       "genre": "race",
@@ -265,18 +307,18 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/superoffroads.jsdos"
     },
     {
-      "id": "streero",
-      "name": "STREETRO",
+      "id": "streetroads",
+      "name": "STREETROADS",
       "genre": "race",
       "year": "1989",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/StreetRo.jsdos"
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/streetroads.jsdos"
     },
     {
-      "id": "strtrods",
-      "name": "STRTRODS",
+      "id": "streetroads2",
+      "name": "STREETROADS2",
       "genre": "race",
-      "year": "1990",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/StrtRods.jsdos"
+      "year": "1989",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/streetroads2.jsdos"
     },
     {
       "id": "harddrivin",
@@ -347,6 +389,13 @@
       "genre": "race",
       "year": "1990",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive3.jsdos"
+    },
+    {
+      "id": "nascar2",
+      "name": "NASCAR2",
+      "genre": "race",
+      "year": "1994",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/nascar2.jsdos"
     }
   ]
 }
