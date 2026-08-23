@@ -68,13 +68,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/heretic.jsdos"
     },
     {
-      "id": "alienincident",
-      "name": "ALIENINCIDENT",
-      "genre": "avg",
-      "year": "1996",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/alienincident.jsdos"
-    },
-    {
       "id": "flightaq",
       "name": "FLIGHTAQ",
       "genre": "avg",
