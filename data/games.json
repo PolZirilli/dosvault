@@ -84,6 +84,15 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/heretic.jsdos"
     },
     {
+      "id": "riseofthetriad",
+      "name": "RISEOFTHETRIAD",
+      "genre": "avg",
+      "added": "2026-08-23",
+      "year": "1989",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/riseofthetriad.jsdos"
+    },
+    {
       "id": "atlantis",
       "name": "ATLANTIS",
       "genre": "avg",
@@ -112,15 +121,6 @@
       "engine": "scummvm",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Indiana%20Jones%20and%20The%20Last%20Crusade%20(1989).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indy3.zip"
-    },
-    {
-      "id": "riseofthetriad",
-      "name": "RISEOFTHETRIAD",
-      "genre": "avg",
-      "added": "2026-08-23",
-      "year": "1989",
-      "cover": "empty",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/riseofthetriad.jsdos"
     },
     {
       "id": "monkey1",
