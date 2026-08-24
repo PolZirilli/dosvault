@@ -114,6 +114,15 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indy3.zip"
     },
     {
+      "id": "riseofthetriad",
+      "name": "RISEOFTHETRIAD",
+      "genre": "avg",
+      "added": "2026-08-23",
+      "year": "1989",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/riseofthetriad.jsdos"
+    },
+    {
       "id": "monkey1",
       "name": "MONKEY1",
       "genre": "avg",
@@ -263,6 +272,24 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dukenukem2.jsdos"
     },
     {
+      "id": "goldenaxe",
+      "name": "GOLDENAXE",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1989",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/goldenaxe.jsdos"
+    },
+    {
+      "id": "halloweenharry",
+      "name": "HALLOWEENHARRY",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1989",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/halloweenharry.jsdos"
+    },
+    {
       "id": "jazzjack",
       "name": "JAZZJACK",
       "genre": "platformer",
@@ -270,6 +297,15 @@
       "year": "1990",
       "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/jazz.jsdos"
+    },
+    {
+      "id": "tintinin",
+      "name": "TINTININ",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1990",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/tintinin.jsdos"
     },
     {
       "id": "aliencarnage",
@@ -495,6 +531,24 @@
       "year": "1990",
       "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive3.jsdos"
+    },
+    {
+      "id": "f40pursuitsimulator",
+      "name": "F40PURSUITSIMULATOR",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1990",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/f40pursuitsimulator.jsdos"
+    },
+    {
+      "id": "teamsuzuki",
+      "name": "TEAMSUZUKI",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1990",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/teamsuzuki.jsdos"
     }
   ]
 }
