@@ -281,15 +281,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/goldenaxe.jsdos"
     },
     {
-      "id": "halloweenharry",
-      "name": "HALLOWEENHARRY",
-      "genre": "platformer",
-      "added": "2026-08-11",
-      "year": "1989",
-      "cover": "empty",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/halloweenharry.jsdos"
-    },
-    {
       "id": "jazzjack",
       "name": "JAZZJACK",
       "genre": "platformer",
