@@ -17,6 +17,7 @@
       "genre": "fps",
       "added": "2026-08-09",
       "year": "1996",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Quake%20(1996).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/quake.jsdos"
     },
     {
@@ -25,6 +26,7 @@
       "genre": "fps",
       "added": "2026-08-09",
       "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/DOOM%20(1993).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/doom.jsdos"
     },
     {
@@ -33,6 +35,7 @@
       "genre": "fps",
       "added": "2026-08-09",
       "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/DOOM%20II%20(1994).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/doom2.jsdos"
     },
     {
@@ -41,6 +44,7 @@
       "genre": "fps",
       "added": "2026-08-09",
       "year": "1997",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Blood%20(1997).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blood.jsdos"
     },
     {
@@ -49,6 +53,7 @@
       "genre": "fps",
       "added": "2026-08-20",
       "year": "1997",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Hexen.png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/hexen.jsdos"
     },
     {
@@ -57,6 +62,7 @@
       "genre": "fps",
       "added": "2026-08-09",
       "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Wolfenstein%203D%20(1992).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/wolf3d.jsdos"
     },
     {
@@ -65,6 +71,7 @@
       "genre": "fps",
       "added": "2026-08-11",
       "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Duke%20Nukem%203D%20(1996).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dukenukem3D.jsdos"
     },
     {
@@ -73,6 +80,7 @@
       "genre": "fps",
       "added": "2026-08-12",
       "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Heretic%20(1994).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/heretic.jsdos"
     },
     {
@@ -82,6 +90,7 @@
       "added": "2026-08-15",
       "year": "1989",
       "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Indiana%20Jones%20and%20the%20Fate%20of%20Atlantis.png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/atlantis.zip"
     },
     {
@@ -91,6 +100,7 @@
       "added": "2026-08-15",
       "year": "1991",
       "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Flight%20of%20the%20Amazon%20Queen.png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/flightamazonq.zip"
     },
     {
@@ -100,6 +110,7 @@
       "added": "2026-08-10",
       "year": "1989",
       "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Indiana%20Jones%20and%20The%20Last%20Crusade%20(1989).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indy3.zip"
     },
     {
@@ -109,6 +120,7 @@
       "added": "2026-08-15",
       "year": "1990",
       "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Secret%20of%20Monkey%20Island,%20The%20(1990).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/monkey1.zip"
     },
     {
@@ -118,6 +130,7 @@
       "added": "2026-08-15",
       "year": "1991",
       "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Monkey%20Island%202%20-%20LeChuck's%20Revenge%20(1991).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/monkey2.zip"
     },
     {
@@ -127,6 +140,7 @@
       "added": "2026-08-15",
       "year": "1992",
       "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Loom%20(CD-ROM).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/loom.zip"
     },
     {
@@ -135,15 +149,8 @@
       "genre": "avg",
       "added": "2026-08-11",
       "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Eye%20of%20the%20Beholder.png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/eob.jsdos"
-    },
-    {
-      "id": "delirium",
-      "name": "ESCFROMDELIRIUM",
-      "genre": "avg",
-      "added": "2026-08-23",
-      "year": "1996",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/delirium.jsdos"
     },
     {
       "id": "mm",
@@ -152,6 +159,7 @@
       "added": "2026-08-13",
       "year": "1985",
       "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Maniac%20Mansion%20Enhanced%20(1988).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/maniacmansion.zip"
     },
     {
@@ -161,6 +169,7 @@
       "added": "2026-08-13",
       "year": "1985",
       "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Leisure%20Suit%20Larry%201%20-%20In%20the%20Land%20of%20the%20Lounge%20Lizards%20(1991).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/lsl1.scummvm.zip"
     },
     {
@@ -169,6 +178,7 @@
       "genre": "avg",
       "added": "2026-08-21",
       "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/The%20Legend%20of%20Kyrandia%20-%20book%20one.png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/legendofkyrandia.jsdos"
     },
     {
@@ -177,6 +187,7 @@
       "genre": "avg",
       "added": "2026-08-23",
       "year": "1996",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cadaver.jsdos"
     },
     {
@@ -185,6 +196,7 @@
       "genre": "avg",
       "added": "2026-08-23",
       "year": "1993",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/kgb.jsdos"
     },
     {
@@ -193,15 +205,8 @@
       "genre": "platformer",
       "added": "2026-08-23",
       "year": "1992",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/arcticmoves.jsdos"
-    },
-    {
-      "id": "anotherworld",
-      "name": "ANOTHERWORLD",
-      "genre": "platformer",
-      "added": "2026-08-23",
-      "year": "1991",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/anotherworld.jsdos"
     },
     {
       "id": "bluesbrothers",
@@ -209,6 +214,7 @@
       "genre": "platformer",
       "added": "2026-08-23",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/bluesbrothers.jsdos"
     },
     {
@@ -217,6 +223,7 @@
       "genre": "platformer",
       "added": "2026-08-23",
       "year": "1991",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/biomenace.jsdos"
     },
     {
@@ -225,6 +232,7 @@
       "genre": "platformer",
       "added": "2026-08-11",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince.jsdos"
     },
     {
@@ -233,6 +241,7 @@
       "genre": "platformer",
       "added": "2026-08-12",
       "year": "1992",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince2.jsdos"
     },
     {
@@ -241,6 +250,7 @@
       "genre": "platformer",
       "added": "2026-08-11",
       "year": "1990",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dangerousdave.jsdos"
     },
     {
@@ -249,6 +259,7 @@
       "genre": "platformer",
       "added": "2026-08-11",
       "year": "1991",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dukenukem2.jsdos"
     },
     {
@@ -257,6 +268,7 @@
       "genre": "platformer",
       "added": "2026-08-11",
       "year": "1990",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/jazz.jsdos"
     },
     {
@@ -265,6 +277,7 @@
       "genre": "platformer",
       "added": "2026-08-21",
       "year": "1993",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/aliencarnage.jsdos"
     },
     {
@@ -273,6 +286,7 @@
       "genre": "platformer",
       "added": "2026-08-23",
       "year": "1993",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/totalcarnage.jsdos"
     },
     {
@@ -281,6 +295,7 @@
       "genre": "rts",
       "added": "2026-08-10",
       "year": "1997",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft.jsdos"
     },
     {
@@ -289,6 +304,7 @@
       "genre": "rts",
       "added": "2026-08-09",
       "year": "1999",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft2.jsdos"
     },
     {
@@ -297,6 +313,7 @@
       "genre": "arcade",
       "added": "2026-08-11",
       "year": "1999",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/battlechess.jsdos"
     },
     {
@@ -305,6 +322,7 @@
       "genre": "arcade",
       "added": "2026-08-21",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blockout.jsdos"
     },
     {
@@ -313,6 +331,7 @@
       "genre": "arcade",
       "added": "2026-08-23",
       "year": "1993",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/epicpinball.jsdos"
     },
     {
@@ -321,6 +340,7 @@
       "genre": "arcade",
       "added": "2026-08-23",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinblld.jsdos"
     },
     {
@@ -329,6 +349,7 @@
       "genre": "arcade",
       "added": "2026-08-23",
       "year": "1994",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinblld2.jsdos"
     },
     {
@@ -337,6 +358,7 @@
       "genre": "arcade",
       "added": "2026-08-23",
       "year": "1994",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinbllf.jsdos"
     },
     {
@@ -345,6 +367,7 @@
       "genre": "race",
       "added": "2026-08-11",
       "year": "1996",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/deathrally.jsdos"
     },
     {
@@ -353,6 +376,7 @@
       "genre": "race",
       "added": "2026-08-15",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/gpcircuit.jsdos"
     },
     {
@@ -361,6 +385,7 @@
       "genre": "race",
       "added": "2026-08-20",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/superoffroads.jsdos"
     },
     {
@@ -369,6 +394,7 @@
       "genre": "race",
       "added": "2026-08-23",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/streetroads.jsdos"
     },
     {
@@ -377,6 +403,7 @@
       "genre": "race",
       "added": "2026-08-23",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/streetroads2.jsdos"
     },
     {
@@ -385,6 +412,7 @@
       "genre": "race",
       "added": "2026-08-20",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/harddrivin.jsdos"
     },
     {
@@ -393,6 +421,7 @@
       "genre": "race",
       "added": "2026-08-15",
       "year": "1990",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/stunts.jsdos"
     },
     {
@@ -401,6 +430,7 @@
       "genre": "race",
       "added": "2026-08-21",
       "year": "1991",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/ciscoheat.jsdos"
     },
     {
@@ -409,6 +439,7 @@
       "genre": "race",
       "added": "2026-08-21",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indy500.jsdos"
     },
     {
@@ -417,6 +448,7 @@
       "genre": "race",
       "added": "2026-08-21",
       "year": "1992",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/lamborghini.jsdos"
     },
     {
@@ -425,6 +457,7 @@
       "genre": "race",
       "added": "2026-08-21",
       "year": "1994",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/micromachines2.jsdos"
     },
     {
@@ -433,6 +466,7 @@
       "genre": "race",
       "added": "2026-08-21",
       "year": "1995",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/needforspeed.jsdos"
     },
     {
@@ -441,6 +475,7 @@
       "genre": "race",
       "added": "2026-08-21",
       "year": "1995",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/quarantine2.jsdos"
     },
     {
@@ -449,6 +484,7 @@
       "genre": "race",
       "added": "2026-08-21",
       "year": "1989",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive2.jsdos"
     },
     {
@@ -457,6 +493,7 @@
       "genre": "race",
       "added": "2026-08-21",
       "year": "1990",
+      "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive3.jsdos"
     }
   ]
