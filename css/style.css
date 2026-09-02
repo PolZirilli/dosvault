@@ -54,9 +54,9 @@ body {
   color: #0000aa;
 }
 
-/* Barra de titulo: selector de idioma pegado a la izquierda, marca al
-   lado. Mismo alto que el texto de "DOSVAULT" (align-items: center) para
-   que no se vea descentrado. */
+/* Barra de titulo: marca a la izquierda, selector de idioma pegado a la
+   derecha, misma linea. Mismo alto que el texto de "DOSVAULT"
+   (align-items: center) para que no se vea descentrado. */
 #siteTitle {
   display: flex;
   align-items: center;
@@ -70,6 +70,7 @@ body {
   font-size: 0.95rem;
   font-weight: bold;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .lang-btn {
@@ -570,6 +571,30 @@ body {
   margin-right: auto;
 }
 
+/* ---------- TOAST (mensajes cortos, ej. "seleccioná un juego primero") ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 64px;
+  transform: translateX(-50%) translateY(10px);
+  background: #000;
+  color: #ffcc00;
+  border: 2px solid #55fffe;
+  padding: 8px 16px;
+  font-size: 1rem;
+  z-index: 999999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  max-width: 80vw;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* ---------- MODAL OVERLAY (compartido: aviso mobile + popup de info F3) ---------- */
 .modal-overlay {
   display: none;
@@ -712,11 +737,21 @@ body {
   padding-right: 4px;
 }
 
-.info-source {
-  display: block;
-  margin-top: 10px;
-  font-size: 0.8rem;
-  color: #003a3a;
+.info-more {
+  display: inline-block;
+  margin-top: 8px;
+  background: #00000000;
+  color: #000;
+  border: 2px solid #000;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.info-more:hover {
+  background: #000;
+  color: #55ffff;
 }
 
 .info-buttons {
@@ -749,22 +784,40 @@ body {
   color: white;
 }
 
+.controls-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 8px 16px 0;
+}
+
+.controls-tab {
+  flex: 1;
+  text-align: center;
+  padding: 6px 10px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.6;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.controls-tab:hover {
+  opacity: 0.85;
+}
+
+.controls-tab.active {
+  opacity: 1;
+  border-bottom-color: #fff;
+  cursor: default;
+}
+
 .controls-body {
   padding: 12px 16px;
   text-align: left;
   max-height: 60vh;
   overflow-y: auto;
-}
-
-.controls-group-title {
-  font-size: 1.05rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  margin: 12px 0 4px;
-}
-
-.controls-group-title:first-child {
-  margin-top: 0;
 }
 
 .controls-group-note {
@@ -842,8 +895,11 @@ body {
   overflow-y: auto;
 }
 
-.dv-intro {
-  font-size: 0.85rem;
+/* Selector mas especifico que ".mb-body p" (que fija 13px para el aviso
+   mobile) para que este 1em -- como pide el tamaño minimo de texto del
+   popup de Ayuda -- realmente se aplique. */
+.mb-body.help-body .dv-intro {
+  font-size: 1em;
   line-height: 1.4;
   margin-bottom: 10px;
   color: #002a2a;
@@ -864,7 +920,7 @@ body {
 
 .dv-field span {
   display: block;
-  font-size: 0.8rem;
+  font-size: 1em;
   margin-bottom: 3px;
   color: #002a2a;
 }
@@ -876,7 +932,7 @@ body {
   border: 2px solid #003a3a;
   padding: 6px 8px;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 1em;
 }
 
 .dv-input:focus {
@@ -894,7 +950,7 @@ body {
 }
 
 .dv-form-status {
-  font-size: 0.85rem;
+  font-size: 1em;
   margin-bottom: 8px;
   min-height: 0;
 }

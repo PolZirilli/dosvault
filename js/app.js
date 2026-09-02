@@ -40,6 +40,7 @@ const panelRightStatus = document.getElementById('panelRightStatus');
 const cmdline = document.getElementById('cmdline');
 const runningEl = document.getElementById('running');
 const fkeysEl = document.getElementById('fkeys');
+const toastEl = document.getElementById('toast');
 // Pueden no existir si index.html quedó desactualizado respecto a este
 // archivo (ej. deploy parcial) -- todo lo que los use más abajo chequea
 // null primero, así una falta de sincronía nunca tira abajo el resto del
@@ -182,11 +183,11 @@ const ACTION_HANDLERS = {
   moveDown: () => moveSelection(1),
   switchPanel: () => switchFocus(),
   confirm: () => activateSelection(),
-  run: () => activateSelection(),
+  run: () => runSelection(),
   help: () => showHelp(),
   controls: () => openControlsModal(),
   info: () => openInfoModalForSelection(),
-  refresh: () => render(),
+  refresh: () => location.reload(),
   closeActive: () => {
     const ids = Object.keys(openWins);
     if (ids.length) closeWin(ids[ids.length - 1]);
@@ -194,6 +195,31 @@ const ACTION_HANDLERS = {
   action1: () => { },
   action2: () => { },
 };
+
+// Toast corto (ej. "seleccioná un juego primero") -- ver #toast en
+// index.html. Reemplaza cualquier mensaje que estuviera mostrandose.
+let toastTimer = null;
+function showToast(msg) {
+  if (!toastEl) return;
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2600);
+}
+
+// "Ejecutar" (F3 en la barra inferior / F4 físico por defecto): a
+// diferencia de Confirmar (Enter), que también sirve para entrar a una
+// categoría, esta acción es específicamente "correr el juego ya
+// seleccionado" -- si todavía no hay uno (foco en el panel izquierdo, o
+// panel derecho vacío), se avisa en vez de no hacer nada.
+function runSelection() {
+  const g = state.focus === 'right' ? RIGHT_ITEMS[state.rightIndex] : null;
+  if (g) {
+    launchGame(g);
+  } else {
+    showToast(t('toast.selectGameFirst'));
+  }
+}
 
 const pad2 = n => String(n).padStart(2, '0');
 
@@ -619,13 +645,17 @@ function closeNewGamesModal() {
 if (newGamesModalCloseBtn) newGamesModalCloseBtn.addEventListener('click', closeNewGamesModal);
 if (newGamesModalEl) newGamesModalEl.addEventListener('click', e => { if (e.target === newGamesModalEl) closeNewGamesModal(); });
 
-/* ---------- FKEYS ---------- */
+/* ---------- FKEYS ----------
+ * El texto de cada botón (fkey.f1..f5, en js/i18n.js) es el que el usuario
+ * define como nombre visible; la acción de acá abajo tiene que corresponder
+ * a ESE nombre, no al número de F-key original. Con la traducción actual:
+ * F1=Controles, F2=Información, F3=Ejecutar, F4=Refrescar, F5=Ayuda. */
 const FKEYS = [
-  { key: 'F1', labelKey: 'fkey.f1', action: showHelp },
-  { key: 'F2', labelKey: 'fkey.f2', action: () => openControlsModal() },
-  { key: 'F3', labelKey: 'fkey.f3', action: () => openInfoModalForSelection() },
-  { key: 'F4', labelKey: 'fkey.f4', action: activateSelection },
-  { key: 'F5', labelKey: 'fkey.f5', action: render },
+  { key: 'F1', labelKey: 'fkey.f1', action: () => openControlsModal() },
+  { key: 'F2', labelKey: 'fkey.f2', action: () => openInfoModalForSelection() },
+  { key: 'F3', labelKey: 'fkey.f3', action: () => runSelection() },
+  { key: 'F4', labelKey: 'fkey.f4', action: () => location.reload() },
+  { key: 'F5', labelKey: 'fkey.f5', action: () => showHelp() },
   {
     key: 'F10', labelKey: 'fkey.f10', action: () => {
       const ids = Object.keys(openWins);
@@ -733,23 +763,41 @@ async function openInfoModal(g) {
   if (infoModalEl.classList.contains('show')) renderInfoModal(g, WIKI_CACHE[cacheKey]);
 }
 
+// Largo máximo de la sinopsis antes de cortar (y ofrecer "ver más"). Corta
+// en el espacio más cercano para no partir una palabra a la mitad.
+const INFO_SYNOPSIS_LIMIT = 260;
+function truncateSynopsis(text) {
+  if (!text || text.length <= INFO_SYNOPSIS_LIMIT) return text;
+  const cut = text.slice(0, INFO_SYNOPSIS_LIMIT);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut) + '…';
+}
+
 function renderInfoModal(g, data) {
   if (!infoModalBody) return;
   const titleText = (data && data.title) || g.title || g.name;
   const publisher = (data && data.publisher) || t('info.unknownPublisher');
-  const synopsis = (data && data.extract) ? data.extract : t('info.noSynopsis');
-  const image = data && data.image;
+  const fullSynopsis = (data && data.extract) ? data.extract : t('info.noSynopsis');
+  const synopsis = truncateSynopsis(fullSynopsis);
+  // Portada: primero la de data/games.json (campo "cover", curada a mano),
+  // y si no hay ("empty" o vacío) la que haya traído la búsqueda en
+  // Wikipedia.
+  const cover = (g.cover && g.cover !== 'empty') ? g.cover : (data && data.image);
+  // "Ver más": a la página de Wikipedia si se encontró una, si no a una
+  // búsqueda en Google -- así el botón siempre lleva a algún lado.
+  const moreUrl = (data && data.sourceUrl) ||
+    `https://www.google.com/search?q=${encodeURIComponent((g.title || g.name) + ' DOS video game')}`;
 
   infoModalBody.innerHTML = `
     <div class="info-cols">
-      ${image
-      ? `<img class="info-image" src="${image}" alt="${titleText}">`
+      ${cover
+      ? `<img class="info-image" src="${cover}" alt="${titleText}">`
       : `<div class="info-image info-image-empty">${t('info.noImage')}</div>`}
       <div class="info-text">
         <div class="info-title">${titleText}</div>
         <div class="info-meta"><b>${t('info.year')}</b> ${g.year} &nbsp;&nbsp; <b>${t('info.publisher')}</b> ${publisher}</div>
         <div class="info-synopsis">${synopsis}</div>
-        ${data && data.sourceUrl ? `<a class="info-source" href="${data.sourceUrl}" target="_blank" rel="noopener">${t('info.source')}</a>` : ''}
+        <a class="info-more" href="${moreUrl}" target="_blank" rel="noopener">${t('info.more')}</a>
       </div>
     </div>`;
 }
@@ -769,11 +817,18 @@ if (infoModalEl) infoModalEl.addEventListener('click', e => { if (e.target === i
 // de keydown más arriba, que intercepta esa tecla entera y la manda a
 // handleControlsCapture en vez de dejarla navegar/disparar acciones).
 let controlsCapture = null;
+// Qué tab del popup está activo: "nav" (controles de navegación del sitio)
+// o "game" (controles básicos dentro del juego -- ESC/CTRL/ALT/Espacio).
+// Separados en tabs porque son dos cosas conceptualmente distintas: nav ya
+// está conectado a la UI del shell, game queda guardado/asignable pero
+// todavía no le llega al juego (ver nota en CONTROL_ACTIONS más arriba).
+let controlsActiveTab = 'nav';
 
 function openControlsModal() {
   if (!controlsModalEl) return;
   if (infoModalEl && infoModalEl.classList.contains('show')) closeInfoModal();
   controlsCapture = null;
+  controlsActiveTab = 'nav';
   renderControlsModal();
   controlsModalEl.classList.add('show');
 }
@@ -783,26 +838,41 @@ function closeControlsModal() {
   if (controlsModalEl) controlsModalEl.classList.remove('show');
 }
 
+function setControlsTab(tab) {
+  if (tab !== 'nav' && tab !== 'game') return;
+  if (tab === controlsActiveTab) return;
+  controlsCapture = null;
+  controlsActiveTab = tab;
+  renderControlsModal();
+}
+
+if (controlsModalEl) {
+  controlsModalEl.querySelectorAll('.controls-tab').forEach(tabEl => {
+    tabEl.addEventListener('click', () => setControlsTab(tabEl.dataset.tab));
+  });
+}
+
 function renderControlsModal() {
   if (!controlsModalBody) return;
-  const groups = [
-    { id: 'nav', title: t('ctrl.group.nav'), note: '' },
-    { id: 'game', title: t('ctrl.group.game'), note: t('ctrl.group.game.note') },
-  ];
-  controlsModalBody.innerHTML = groups.map(group => {
-    const actions = CONTROL_ACTIONS.filter(a => a.group === group.id);
-    if (!actions.length) return '';
-    const rows = actions.map(a => `
+
+  const tabNavEl = document.getElementById('controlsTabNav');
+  const tabGameEl = document.getElementById('controlsTabGame');
+  [[tabNavEl, 'nav'], [tabGameEl, 'game']].forEach(([el, id]) => {
+    if (!el) return;
+    const isActive = controlsActiveTab === id;
+    el.classList.toggle('active', isActive);
+    el.setAttribute('aria-selected', String(isActive));
+  });
+
+  const note = controlsActiveTab === 'game' ? t('ctrl.group.game.note') : '';
+  const actions = CONTROL_ACTIONS.filter(a => a.group === controlsActiveTab);
+  const rows = actions.map(a => `
       <div class="controls-row">
         <div class="cr-label">${actionLabel(a)}${a.hint ? `<span class="cr-hint">${actionHint(a)}</span>` : ''}</div>
         <span class="cr-key">${codeLabel(KEYMAP[a.id])}</span>
         <span class="cr-btn" data-action="${a.id}">${t('btn.change')}</span>
       </div>`).join('');
-    return `
-      <div class="controls-group-title">${group.title}</div>
-      ${group.note ? `<div class="controls-group-note">${group.note}</div>` : ''}
-      ${rows}`;
-  }).join('');
+  controlsModalBody.innerHTML = `${note ? `<div class="controls-group-note">${note}</div>` : ''}${rows}`;
 
   controlsModalBody.querySelectorAll('.cr-btn').forEach(btn => {
     btn.addEventListener('click', () => {

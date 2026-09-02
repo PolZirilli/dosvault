@@ -29,10 +29,10 @@
   </div>
   <div id="shell">
     <div id="siteTitle" class="head-frame">
+      <span class="site-title-text">DOSVAULT</span>
       <div id="langSwitch" class="lang-switch" role="group" aria-label="Idioma / Language">
         <button type="button" class="lang-btn" id="langBtnEs" data-lang="es">ES</button><span class="lang-sep">/</span><button type="button" class="lang-btn" id="langBtnEn" data-lang="en">EN</button>
       </div>
-      <span class="site-title-text">DOSVAULT</span>
     </div>
     <div id="panels">
       <div class="panel nc-frame" id="panelLeft">
@@ -61,6 +61,7 @@
     <div id="cmdline">C:\&gt;<span class="cursor-blink"></span></div>
     <div id="fkeys"></div>
   </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <div id="infoModal" class="modal-overlay">
     <div class="mb-dialog nc-frame info-dialog">
       <div class="mb-titlebar" data-i18n="modal.info.title">Info del juego</div>
@@ -73,6 +74,10 @@
   <div id="controlsModal" class="modal-overlay">
     <div class="mb-dialog nc-frame controls-dialog">
       <div class="mb-titlebar" data-i18n="modal.controls.title">Controles</div>
+      <div class="controls-tabs" id="controlsTabs" role="tablist">
+        <span class="controls-tab active" id="controlsTabNav" data-tab="nav" role="tab" aria-selected="true" data-i18n="ctrl.group.nav">Navegación</span>
+        <span class="controls-tab" id="controlsTabGame" data-tab="game" role="tab" aria-selected="false" data-i18n="ctrl.group.game">Dentro del juego</span>
+      </div>
       <div class="mb-body controls-body" id="controlsModalBody"></div>
       <div class="info-buttons">
         <span class="info-btn" id="controlsModalReset" data-i18n="btn.resetDefaults">[ Restaurar por defecto ]</span>
@@ -84,10 +89,6 @@
     <div class="mb-dialog nc-frame help-dialog">
       <div class="mb-titlebar" data-i18n="modal.help.title">Ayuda / Contacto</div>
       <div class="mb-body help-body" id="helpModalBody">
-        <p class="dv-intro" data-i18n-html="help.shortcuts">
-          Flechas: moverse &nbsp;|&nbsp; Tab / &lt;- -&gt;: cambiar panel &nbsp;|&nbsp; Enter: abrir/ejecutar
-          &nbsp;|&nbsp; F2: controles &nbsp;|&nbsp; F3: info del juego
-        </p>
         <p class="dv-intro" data-i18n="help.intro2">&iquest;Encontraste un error, tenes feedback o queres pedir un juego que falta? Dejalo aca
           abajo:</p>
         <form id="helpForm" class="dv-form" name="contacto" method="POST" data-netlify="true"
