@@ -597,13 +597,13 @@ if (newGamesModalEl) newGamesModalEl.addEventListener('click', e => { if (e.targ
 
 /* ---------- FKEYS ---------- */
 const FKEYS = [
-  { key: 'F1', label: 'Ayuda', action: showHelp },
-  { key: 'F2', label: 'Controles', action: () => openControlsModal() },
-  { key: 'F3', label: 'Info', action: () => openInfoModalForSelection() },
-  { key: 'F4', label: 'Ejecutar', action: activateSelection },
-  { key: 'F5', label: 'Refrescar', action: render },
+  { key: 'F1', label: 'Controles', action: showHelp },
+  { key: 'F2', label: 'Informacion', action: () => openControlsModal() },
+  { key: 'F3', label: 'Ejecutar', action: () => openInfoModalForSelection() },
+  { key: 'F4', label: 'Refrescar', action: activateSelection },
+  { key: 'F5', label: 'Ayuda', action: render },
   {
-    key: 'F10', label: 'Cerrar activa', action: () => {
+    key: 'F10', label: 'Cerrar', action: () => {
       const ids = Object.keys(openWins);
       if (ids.length) closeWin(ids[ids.length - 1]);
     }
