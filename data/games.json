@@ -540,6 +540,42 @@
       "year": "1990",
       "cover": "empty",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/teamsuzuki.jsdos"
+    },
+    {
+      "id": "darkforces",
+      "name": "DARKFORCES",
+      "genre": "shooter",
+      "added": "2026-08-23",
+      "year": "1995",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/darkforces.jsdos"
+    },
+    {
+      "id": "desertstrike",
+      "name": "DESERTSTRIKE",
+      "genre": "shooter",
+      "added": "2026-08-23",
+      "year": "1992",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/desertstrike.jsdos"
+    },
+    {
+      "id": "shadowwarrior",
+      "name": "SHADOWWARRIOR",
+      "genre": "shooter",
+      "added": "2026-08-23",
+      "year": "1996",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/shadowwarrior.jsdos"
+    },
+    {
+      "id": "strife",
+      "name": "STRIFE",
+      "genre": "shooter",
+      "added": "2026-08-23",
+      "year": "1996",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/strife.jsdos"
     }
   ]
 }
