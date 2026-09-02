@@ -1,164 +1,143 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DOSVAULT</title>
-<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-<!-- VT323 queda como fallback web; la tipografía principal (PxPlus IBM VGA8,
-     modo texto VGA real) se auto-hospeda en css/fonts/ y se define via
-     @font-face en css/style.css. -->
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="js/vendor/js-dos/js-dos.css">
-<link rel="icon" href="favicon.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DOSVAULT</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="js/vendor/js-dos/js-dos.css">
+  <link rel="icon" href="favicon.png" type="image/png">
 </head>
+
 <body>
-
-<div id="mobileBlock" class="modal-overlay">
-  <div class="mb-dialog nc-frame">
-    <div class="mb-titlebar">Aviso del sistema</div>
-    <div class="mb-body">
-      <svg viewBox="0 0 24 24" width="46" height="46" aria-hidden="true">
-        <polygon points="12,2 22,20 2,20" fill="#ffcc00" stroke="#000" stroke-width="1"></polygon>
-        <rect x="11" y="9" width="2" height="6" fill="#000"></rect>
-        <rect x="11" y="16" width="2" height="2" fill="#000"></rect>
-      </svg>
-      <p><span class="mb-strong">Este sistema requiere una computadora de escritorio.</span>Ya que DOS necesita teclado, mouse y más potencia de la que un pobre navegador móvil puede ofrecer. (aparte que jugar a joyas como Doom o Heretic en el movil es de completo PT!) Abrí este sitio desde tu PC/MAC de escritorio para continuar.</p>
-    </div>
-  </div>
-</div>
-
-<div id="shell">
-  <div id="siteTitle" class="head-frame">DOSVAULT</div>
-  <div id="panels">
-    <div class="panel nc-frame" id="panelLeft">
-      <div class="panel-header" id="panelLeftHeader">C:\</div>
-      <div class="panel-cols">
-        <div class="col-name">Nombre</div>
-        <div class="col-size">Size</div>
-        <div class="col-date">Date</div>
-        <div class="col-time">Time</div>
+  <div id="mobileBlock" class="modal-overlay">
+    <div class="mb-dialog nc-frame">
+      <div class="mb-titlebar">Aviso del sistema</div>
+      <div class="mb-body">
+        <svg viewBox="0 0 24 24" width="46" height="46" aria-hidden="true">
+          <polygon points="12,2 22,20 2,20" fill="#ffcc00" stroke="#000" stroke-width="1"></polygon>
+          <rect x="11" y="9" width="2" height="6" fill="#000"></rect>
+          <rect x="11" y="16" width="2" height="2" fill="#000"></rect>
+        </svg>
+        <p><span class="mb-strong">Este catálogo requiere una computadora de escritorio.</span>La emulación de DOS
+          necesita teclado, mouse y más potencia de la que un navegador móvil puede ofrecer. Abrí este sitio desde tu PC
+          para continuar.</p>
       </div>
-      <div class="panel-list" id="panelLeftList"></div>
-      <div class="panel-status" id="panelLeftStatus"></div>
-    </div>
-    <div class="panel nc-frame" id="panelRight">
-      <div class="panel-header" id="panelRightHeader">C:\</div>
-      <div class="panel-cols">
-        <div class="col-name">Nombre</div>
-        <div class="col-size">Size</div>
-        <div class="col-date">Date</div>
-        <div class="col-time">Time</div>
-      </div>
-      <div class="panel-list" id="panelRightList"></div>
-      <div class="panel-status" id="panelRightStatus"></div>
     </div>
   </div>
-  <div id="cmdline">C:\&gt;<span class="cursor-blink"></span></div>
-  <div id="fkeys"></div>
-</div>
-
-<!-- Popup de info de juego (F3): mismo estilo de dialogo NC que #mobileBlock.
-     El contenido de #infoModalBody lo arma js/app.js con datos de
-     Wikipedia/Wikidata (ver fetchWikiInfo en app.js). -->
-<div id="infoModal" class="modal-overlay">
-  <div class="mb-dialog nc-frame info-dialog">
-    <div class="mb-titlebar">Info del juego</div>
-    <div class="mb-body info-body" id="infoModalBody"></div>
-    <div class="info-buttons">
-      <span class="info-btn" id="infoModalClose">[ Cerrar ]</span>
-    </div>
-  </div>
-</div>
-
-<!-- Popup de Controles (F2): mapeo de teclas del shell, guardado en
-     localStorage. El contenido de #controlsModalBody lo arma js/app.js
-     (ver CONTROL_ACTIONS / renderControlsModal en app.js). -->
-<div id="controlsModal" class="modal-overlay">
-  <div class="mb-dialog nc-frame controls-dialog">
-    <div class="mb-titlebar">Controles</div>
-    <div class="mb-body controls-body" id="controlsModalBody"></div>
-    <div class="info-buttons">
-      <span class="info-btn" id="controlsModalReset">[ Restaurar por defecto ]</span>
-      <span class="info-btn" id="controlsModalClose">[ Cerrar ]</span>
-    </div>
-  </div>
-</div>
-
-<!-- Popup de Ayuda / Contacto (F1): reemplaza el viejo mensaje de una linea
-     en el cmdline por un formulario real. Se envia via Netlify Forms (el
-     sitio esta hosteado en Netlify) -- por eso el <form> queda siempre
-     presente en el HTML (aunque el modal este oculto por CSS), que es lo
-     que Netlify necesita para detectarlo al momento del deploy. El envio
-     en si se hace por fetch() desde js/app.js para no recargar la pagina. -->
-<div id="helpModal" class="modal-overlay">
-  <div class="mb-dialog nc-frame help-dialog">
-    <div class="mb-titlebar">Ayuda / Contacto</div>
-    <div class="mb-body help-body" id="helpModalBody">
-      <p class="dv-intro">
-        Flechas: moverse &nbsp;|&nbsp; Tab / &lt;- -&gt;: cambiar panel &nbsp;|&nbsp; Enter: abrir/ejecutar &nbsp;|&nbsp; F2: controles &nbsp;|&nbsp; F3: info del juego
-      </p>
-      <p class="dv-intro">&iquest;Encontraste un error, tenes feedback o queres pedir un juego que falta? Dejalo aca abajo:</p>
-      <form id="helpForm" class="dv-form" name="contacto" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="contacto">
-        <p class="dv-honeypot"><label>No completar este campo: <input name="bot-field"></label></p>
-        <label class="dv-field">
-          <span>Nombre (opcional)</span>
-          <input class="dv-input" type="text" name="name" autocomplete="name">
-        </label>
-        <label class="dv-field">
-          <span>Email (opcional, para poder responderte)</span>
-          <input class="dv-input" type="email" name="email" autocomplete="email">
-        </label>
-        <label class="dv-field">
-          <span>Tipo</span>
-          <select class="dv-input dv-select" name="type">
-            <option value="feedback">Feedback general</option>
-            <option value="pedido">Pedido de un juego</option>
-            <option value="bug">Reporte de error</option>
-            <option value="otro">Otro</option>
-          </select>
-        </label>
-        <label class="dv-field">
-          <span>Mensaje</span>
-          <textarea class="dv-input dv-textarea" name="message" required></textarea>
-        </label>
-        <div class="dv-form-status" id="helpFormStatus"></div>
-        <div class="info-buttons">
-          <button type="submit" class="info-btn dv-submit" id="helpFormSubmit">[ Enviar ]</button>
+  <div id="shell">
+    <div id="siteTitle" class="head-frame">DOSVAULT</div>
+    <div id="panels">
+      <div class="panel nc-frame" id="panelLeft">
+        <div class="panel-header" id="panelLeftHeader">C:\</div>
+        <div class="panel-cols">
+          <div class="col-name">Nombre</div>
+          <div class="col-size">Tamaño</div>
+          <div class="col-date">Fecha</div>
+          <div class="col-time">Hora</div>
         </div>
-      </form>
+        <div class="panel-list" id="panelLeftList"></div>
+        <div class="panel-status" id="panelLeftStatus"></div>
+      </div>
+      <div class="panel nc-frame" id="panelRight">
+        <div class="panel-header" id="panelRightHeader">C:\</div>
+        <div class="panel-cols">
+          <div class="col-name">Nombre</div>
+          <div class="col-size">Tamaño</div>
+          <div class="col-date">Fecha</div>
+          <div class="col-time">Hora</div>
+        </div>
+        <div class="panel-list" id="panelRightList"></div>
+        <div class="panel-status" id="panelRightStatus"></div>
+      </div>
     </div>
-    <div class="info-buttons">
-      <span class="info-btn" id="helpModalClose">[ Cerrar ]</span>
+    <div id="cmdline">C:\&gt;<span class="cursor-blink"></span></div>
+    <div id="fkeys"></div>
+  </div>
+  <div id="infoModal" class="modal-overlay">
+    <div class="mb-dialog nc-frame info-dialog">
+      <div class="mb-titlebar">Info del juego</div>
+      <div class="mb-body info-body" id="infoModalBody"></div>
+      <div class="info-buttons">
+        <span class="info-btn" id="infoModalClose">[ Cerrar ]</span>
+      </div>
     </div>
   </div>
-</div>
-
-<!-- Popup de "Novedades" al entrar al sitio: lista los juegos agregados a
-     data/games.json desde la ultima visita del navegador (ver checkNewGames
-     en js/app.js). Se guia por el campo "added" de cada juego en
-     data/games.json -- si se agrega un juego nuevo, hay que sumarle ese
-     campo ("added": "YYYY-MM-DD") para que aparezca aca. -->
-<div id="newGamesModal" class="modal-overlay">
-  <div class="mb-dialog nc-frame newgames-dialog">
-    <div class="mb-titlebar">Novedades</div>
-    <div class="mb-body newgames-body" id="newGamesModalBody"></div>
-    <div class="info-buttons">
-      <span class="info-btn" id="newGamesModalClose">[ Cerrar ]</span>
+  <div id="controlsModal" class="modal-overlay">
+    <div class="mb-dialog nc-frame controls-dialog">
+      <div class="mb-titlebar">Controles</div>
+      <div class="mb-body controls-body" id="controlsModalBody"></div>
+      <div class="info-buttons">
+        <span class="info-btn" id="controlsModalReset">[ Restaurar por defecto ]</span>
+        <span class="info-btn" id="controlsModalClose">[ Cerrar ]</span>
+      </div>
     </div>
   </div>
-</div>
-
-<script src="js/vendor/js-dos/js-dos.js"></script>
-<script>
-  if (window.emulators) {
-    emulators.pathPrefix = "js/vendor/js-dos/";
-  }
-</script>
-<!-- Motor ScummVM: liviano, carga scummvm.js/.wasm recién al lanzar un juego
-     con "engine":"scummvm" en games.json. Ver README-SCUMMVM.md. -->
-<script src="js/scummvm-engine.js"></script>
-<script src="js/app.js"></script>
+  <div id="helpModal" class="modal-overlay">
+    <div class="mb-dialog nc-frame help-dialog">
+      <div class="mb-titlebar">Ayuda / Contacto</div>
+      <div class="mb-body help-body" id="helpModalBody">
+        <p class="dv-intro">
+          Flechas: moverse &nbsp;|&nbsp; Tab / &lt;- -&gt;: cambiar panel &nbsp;|&nbsp; Enter: abrir/ejecutar
+          &nbsp;|&nbsp; F2: controles &nbsp;|&nbsp; F3: info del juego
+        </p>
+        <p class="dv-intro">&iquest;Encontraste un error, tenes feedback o queres pedir un juego que falta? Dejalo aca
+          abajo:</p>
+        <form id="helpForm" class="dv-form" name="contacto" method="POST" data-netlify="true"
+          netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="contacto">
+          <p class="dv-honeypot"><label>No completar este campo: <input name="bot-field"></label></p>
+          <label class="dv-field">
+            <span>Nombre (opcional)</span>
+            <input class="dv-input" type="text" name="name" autocomplete="name">
+          </label>
+          <label class="dv-field">
+            <span>Email (opcional, para poder responderte)</span>
+            <input class="dv-input" type="email" name="email" autocomplete="email">
+          </label>
+          <label class="dv-field">
+            <span>Tipo</span>
+            <select class="dv-input dv-select" name="type">
+              <option value="feedback">Feedback general</option>
+              <option value="pedido">Pedido de un juego</option>
+              <option value="bug">Reporte de error</option>
+              <option value="otro">Otro</option>
+            </select>
+          </label>
+          <label class="dv-field">
+            <span>Mensaje</span>
+            <textarea class="dv-input dv-textarea" name="message" required></textarea>
+          </label>
+          <div class="dv-form-status" id="helpFormStatus"></div>
+          <div class="info-buttons">
+            <button type="submit" class="info-btn dv-submit" id="helpFormSubmit">[ Enviar ]</button>
+          </div>
+        </form>
+      </div>
+      <div class="info-buttons">
+        <span class="info-btn" id="helpModalClose">[ Cerrar ]</span>
+      </div>
+    </div>
+  </div>
+  <div id="newGamesModal" class="modal-overlay">
+    <div class="mb-dialog nc-frame newgames-dialog">
+      <div class="mb-titlebar">Novedades</div>
+      <div class="mb-body newgames-body" id="newGamesModalBody"></div>
+      <div class="info-buttons">
+        <span class="info-btn" id="newGamesModalClose">[ Cerrar ]</span>
+      </div>
+    </div>
+  </div>
+  <script src="js/vendor/js-dos/js-dos.js"></script>
+  <script>
+    if (window.emulators) {
+      emulators.pathPrefix = "js/vendor/js-dos/";
+    }
+  </script>
+  <script src="js/scummvm-engine.js"></script>
+  <script src="js/app.js"></script>
 </body>
+
 </html>
