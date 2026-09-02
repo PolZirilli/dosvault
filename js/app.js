@@ -82,36 +82,48 @@ const GITHUB_REPO = 'PolZirilli/dosvault';
 // activarse, pero quedan guardadas y visibles para no tener que rediseñar
 // el popup cuando se conecten.
 const CONTROL_ACTIONS = [
-  { id: 'moveUp', label: 'Mover arriba', group: 'nav', default: 'ArrowUp' },
-  { id: 'moveDown', label: 'Mover abajo', group: 'nav', default: 'ArrowDown' },
-  { id: 'switchPanel', label: 'Cambiar de panel', hint: '<- y -> siempre funcionan además, pase lo que pase acá', group: 'nav', default: 'Tab' },
-  { id: 'confirm', label: 'Confirmar', hint: 'Abrir categoría / lanzar juego', group: 'nav', default: 'Enter' },
-  { id: 'run', label: 'Ejecutar juego', hint: 'Igual que Confirmar, con un juego seleccionado', group: 'nav', default: 'F4' },
-  { id: 'help', label: 'Ayuda', group: 'nav', default: 'F1' },
-  { id: 'controls', label: 'Controles', group: 'nav', default: 'F2' },
-  { id: 'info', label: 'Info del juego', group: 'nav', default: 'F3' },
-  { id: 'refresh', label: 'Refrescar', group: 'nav', default: 'F5' },
-  { id: 'closeActive', label: 'Cerrar ventana activa', group: 'nav', default: 'F10' },
-  { id: 'action1', label: 'Acción primaria', hint: 'Reservado para más adelante (ej. palanca/botón principal de un juego)', group: 'game', default: 'ControlLeft' },
-  { id: 'action2', label: 'Acción secundaria', hint: 'Reservado para más adelante (ej. palanca/botón secundario de un juego)', group: 'game', default: 'AltLeft' },
+  { id: 'moveUp', group: 'nav', default: 'ArrowUp' },
+  { id: 'moveDown', group: 'nav', default: 'ArrowDown' },
+  { id: 'switchPanel', hint: true, group: 'nav', default: 'Tab' },
+  { id: 'confirm', hint: true, group: 'nav', default: 'Enter' },
+  { id: 'run', hint: true, group: 'nav', default: 'F4' },
+  { id: 'help', group: 'nav', default: 'F1' },
+  { id: 'controls', group: 'nav', default: 'F2' },
+  { id: 'info', group: 'nav', default: 'F3' },
+  { id: 'refresh', group: 'nav', default: 'F5' },
+  { id: 'closeActive', group: 'nav', default: 'F10' },
+  { id: 'action1', hint: true, group: 'game', default: 'ControlLeft' },
+  { id: 'action2', hint: true, group: 'game', default: 'AltLeft' },
 ];
+
+// Los labels/hints de cada accion viven en I18N (js/i18n.js), no aca --
+// asi CONTROL_ACTIONS no hay que reconstruirlo al cambiar de idioma, solo
+// releer estas dos funciones en cada render.
+function actionLabel(a) { return t('ctrl.' + a.id + '.label'); }
+function actionHint(a) { return a.hint ? t('ctrl.' + a.id + '.hint') : ''; }
 
 const CONTROLS_STORAGE_KEY = 'dosvaultControls';
 
-const CODE_LABELS = {
-  // ArrowLeft/ArrowRight se escriben "<-"/"->" en vez de los glifos ← → --
-  // la fuente bitmap del sitio (PxPlus IBM VGA8) no los tiene y se veian
-  // como "+" en el popup de Controles.
+// ArrowLeft/ArrowRight se escriben "<-"/"->" en vez de los glifos ← → -- la
+// fuente bitmap del sitio (PxPlus IBM VGA8) no los tiene y se veian como
+// "+" en el popup de Controles. Estos no cambian con el idioma (glifos y
+// nombres de tecla ya son universales); Ctrl/Alt/Shift izq/der si tienen
+// traduccion, ver I18N (js/i18n.js).
+const CODE_LABELS_FIXED = {
   ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '<-', ArrowRight: '->',
-  ControlLeft: 'Ctrl (izq)', ControlRight: 'Ctrl (der)',
-  AltLeft: 'Alt (izq)', AltRight: 'Alt (der)',
-  ShiftLeft: 'Shift (izq)', ShiftRight: 'Shift (der)',
-  Space: 'Espacio', Enter: 'Enter', Tab: 'Tab', Escape: 'Escape',
+  Enter: 'Enter', Tab: 'Tab', Escape: 'Escape',
+};
+const CODE_LABEL_KEYS = {
+  ControlLeft: 'code.ctrlLeft', ControlRight: 'code.ctrlRight',
+  AltLeft: 'code.altLeft', AltRight: 'code.altRight',
+  ShiftLeft: 'code.shiftLeft', ShiftRight: 'code.shiftRight',
+  Space: 'code.space',
 };
 
 function codeLabel(code) {
-  if (!code) return '— sin asignar —';
-  if (CODE_LABELS[code]) return CODE_LABELS[code];
+  if (!code) return t('ctrl.unassigned');
+  if (CODE_LABELS_FIXED[code]) return CODE_LABELS_FIXED[code];
+  if (CODE_LABEL_KEYS[code]) return t(CODE_LABEL_KEYS[code]);
   if (/^Key[A-Z]$/.test(code)) return code.slice(3);
   if (/^Digit[0-9]$/.test(code)) return code.slice(5);
   return code;
@@ -257,10 +269,19 @@ function toDosName(name) {
   return String(name).toUpperCase();
 }
 
+// Etiqueta visible de un genero en el idioma actual. I18N_GENRES (en
+// js/i18n.js) trae la traduccion para los generos conocidos; si en el
+// futuro se agrega uno nuevo a data/games.json sin agregar su traduccion
+// ahi, cae de vuelta al texto que ya trae el propio games.json.
+function genreLabel(id) {
+  const dict = I18N_GENRES[currentLang] || I18N_GENRES.en;
+  return dict[id] || (GENRES && GENRES[id]) || id;
+}
+
 function buildLeftItems() {
   LEFT_ITEMS = Object.keys(GENRES).map(id => {
     const count = GAMES.filter(g => g.genre === id).length;
-    return { id, label: GENRES[id], count };
+    return { id, label: genreLabel(id), count };
   }).filter(item => item.count > 0);
 }
 
@@ -293,8 +314,8 @@ function renderLeftPanel() {
   // Una sola consulta a GitHub (cacheada) alcanza para las 6-9 filas: todas
   // dependen del mismo archivo data/games.json.
   fetchGamesJsonDateTime().then(dt => {
-    panelLeftList.querySelectorAll('.col-date').forEach(el => { el.textContent = dt ? dt.date : 'N/D'; });
-    panelLeftList.querySelectorAll('.col-time').forEach(el => { el.textContent = dt ? dt.time : 'N/D'; });
+    panelLeftList.querySelectorAll('.col-date').forEach(el => { el.textContent = dt ? dt.date : t('common.na'); });
+    panelLeftList.querySelectorAll('.col-time').forEach(el => { el.textContent = dt ? dt.time : t('common.na'); });
     updateStatusBars();
   });
 }
@@ -311,7 +332,7 @@ function selectGenre(genreId) {
   state.rightIndex = 0;
   RIGHT_ITEMS = GAMES.filter(g => g.genre === genreId)
     .sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
-  const label = GENRES[genreId] || genreId;
+  const label = genreLabel(genreId);
   panelRightHeader.textContent = `C:\\${label.toUpperCase()}`;
 }
 
@@ -349,18 +370,18 @@ function renderRightPanel() {
       const sizeEl = row.querySelector('.col-size');
       const dateEl = row.querySelector('.col-date');
       const timeEl = row.querySelector('.col-time');
-      sizeEl.textContent = info && info.size != null ? String(info.size) : 'N/D';
-      dateEl.textContent = info && info.dateTime ? info.dateTime.date : 'N/D';
-      timeEl.textContent = info && info.dateTime ? info.dateTime.time : 'N/D';
+      sizeEl.textContent = info && info.size != null ? String(info.size) : t('common.na');
+      dateEl.textContent = info && info.dateTime ? info.dateTime.date : t('common.na');
+      timeEl.textContent = info && info.dateTime ? info.dateTime.time : t('common.na');
       if (RIGHT_ITEMS[state.rightIndex] === g) updateStatusBars();
     });
   });
 }
 
 function updateCmdline() {
-  let path = 'C:\\CATEGORIAS';
+  let path = `C:\\${t('cmd.categories')}`;
   if (currentGenre) {
-    path += `\\${(GENRES[currentGenre] || currentGenre).toUpperCase()}`;
+    path += `\\${genreLabel(currentGenre).toUpperCase()}`;
     if (state.focus === 'right' && RIGHT_ITEMS[state.rightIndex]) {
       path += `\\${RIGHT_ITEMS[state.rightIndex].id.toUpperCase()}.EXE`;
     }
@@ -379,7 +400,7 @@ function updateStatusBars() {
     if (cached) {
       cached.then(dt => {
         const el = panelLeftStatus.querySelector('.st-date');
-        if (el) el.textContent = dt ? `${dt.date}  ${dt.time}` : 'N/D';
+        if (el) el.textContent = dt ? `${dt.date}  ${dt.time}` : t('common.na');
       });
     }
   } else {
@@ -393,7 +414,7 @@ function updateStatusBars() {
       cached.then(info => {
         if (RIGHT_ITEMS[state.rightIndex] !== rightItem) return;
         const el = panelRightStatus.querySelector('.st-date');
-        if (el) el.textContent = info && info.dateTime ? `${info.dateTime.date}  ${info.dateTime.time}` : 'N/D';
+        if (el) el.textContent = info && info.dateTime ? `${info.dateTime.date}  ${info.dateTime.time}` : t('common.na');
       });
     }
   } else {
@@ -523,7 +544,7 @@ if (helpForm) {
   helpForm.addEventListener('submit', e => {
     e.preventDefault();
     if (helpFormSubmit) helpFormSubmit.disabled = true;
-    if (helpFormStatus) { helpFormStatus.textContent = 'Enviando...'; helpFormStatus.className = 'dv-form-status'; }
+    if (helpFormStatus) { helpFormStatus.textContent = t('form.sending'); helpFormStatus.className = 'dv-form-status'; }
 
     fetch('/', {
       method: 'POST',
@@ -533,12 +554,12 @@ if (helpForm) {
       .then(res => {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         helpForm.classList.add('sent');
-        if (helpFormStatus) { helpFormStatus.textContent = '¡Gracias! Tu mensaje se envio.'; helpFormStatus.className = 'dv-form-status ok'; }
+        if (helpFormStatus) { helpFormStatus.textContent = t('form.sent'); helpFormStatus.className = 'dv-form-status ok'; }
         helpForm.reset();
       })
       .catch(err => {
         console.error('No se pudo enviar el formulario de contacto:', err);
-        if (helpFormStatus) { helpFormStatus.textContent = 'No se pudo enviar. Probá de nuevo en un rato.'; helpFormStatus.className = 'dv-form-status error'; }
+        if (helpFormStatus) { helpFormStatus.textContent = t('form.error'); helpFormStatus.className = 'dv-form-status error'; }
       })
       .finally(() => {
         if (helpFormSubmit) helpFormSubmit.disabled = false;
@@ -577,14 +598,17 @@ function checkNewGames() {
   }
 }
 
+function newGamesIntro(n) {
+  return n === 1 ? t('newgames.intro.one') : t('newgames.intro.many', { n });
+}
+
 function openNewGamesModal(list) {
   if (!newGamesModalEl || !newGamesModalBody) return;
   const rows = list.map(g => {
-    const genreLabel = (GENRES[g.genre] || g.genre || '').toUpperCase();
-    return `<div class="newgame-row"><span class="ng-name">${toDosName(g.title || g.name)}</span><span class="ng-meta">${genreLabel} · ${g.year}</span></div>`;
+    const genreText = genreLabel(g.genre).toUpperCase();
+    return `<div class="newgame-row"><span class="ng-name">${toDosName(g.title || g.name)}</span><span class="ng-meta">${genreText} · ${g.year}</span></div>`;
   }).join('');
-  const plural = list.length === 1 ? '' : 's';
-  newGamesModalBody.innerHTML = `<p class="ng-intro">Se agregar${list.length === 1 ? 'ó' : 'on'} ${list.length} juego${plural} nuevo${plural} desde tu última visita:</p>${rows}`;
+  newGamesModalBody.innerHTML = `<p class="ng-intro">${newGamesIntro(list.length)}</p>${rows}`;
   newGamesModalEl.classList.add('show');
 }
 
@@ -597,13 +621,13 @@ if (newGamesModalEl) newGamesModalEl.addEventListener('click', e => { if (e.targ
 
 /* ---------- FKEYS ---------- */
 const FKEYS = [
-  { key: 'F1', label: 'Controles', action: showHelp },
-  { key: 'F2', label: 'Informacion', action: () => openControlsModal() },
-  { key: 'F3', label: 'Ejecutar', action: () => openInfoModalForSelection() },
-  { key: 'F4', label: 'Refrescar', action: activateSelection },
-  { key: 'F5', label: 'Ayuda', action: render },
+  { key: 'F1', labelKey: 'fkey.f1', action: showHelp },
+  { key: 'F2', labelKey: 'fkey.f2', action: () => openControlsModal() },
+  { key: 'F3', labelKey: 'fkey.f3', action: () => openInfoModalForSelection() },
+  { key: 'F4', labelKey: 'fkey.f4', action: activateSelection },
+  { key: 'F5', labelKey: 'fkey.f5', action: render },
   {
-    key: 'F10', label: 'Cerrar', action: () => {
+    key: 'F10', labelKey: 'fkey.f10', action: () => {
       const ids = Object.keys(openWins);
       if (ids.length) closeWin(ids[ids.length - 1]);
     }
@@ -615,7 +639,7 @@ function renderFkeys() {
   FKEYS.forEach(fk => {
     const el = document.createElement('div');
     el.className = 'fkey';
-    el.innerHTML = `<span class="num">${fk.key.replace('F', '')}</span><span class="label">${fk.label}</span>`;
+    el.innerHTML = `<span class="num">${fk.key.replace('F', '')}</span><span class="label">${t(fk.labelKey)}</span>`;
     el.addEventListener('click', fk.action);
     fkeysEl.appendChild(el);
   });
@@ -655,7 +679,11 @@ async function fetchWikidataPublisher(wikidataId, lang) {
 }
 
 async function fetchWikiInfo(query) {
-  for (const lang of ['es', 'en']) {
+  // Se busca primero en el idioma activo del sitio y despues en el otro --
+  // asi alguien viendo el sitio en ingles recibe la sinopsis en ingles
+  // cuando existe (muchos juegos DOS viejos tienen mejor cobertura ahi).
+  const langOrder = currentLang === 'en' ? ['en', 'es'] : ['es', 'en'];
+  for (const lang of langOrder) {
     try {
       const searchUrl = `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query + ' video game')}&srlimit=1&format=json&origin=*`;
       const search = (await wikiFetchJson(searchUrl)).query.search;
@@ -691,33 +719,37 @@ function openInfoModalForSelection() {
 async function openInfoModal(g) {
   if (!g || !infoModalEl || !infoModalBody) return;
   const displayTitle = g.title || g.name;
-  infoModalBody.innerHTML = `<div class="info-loading">Buscando información de ${displayTitle}...<span class="cursor-blink"></span></div>`;
+  infoModalBody.innerHTML = `<div class="info-loading">${t('info.searching', { title: displayTitle })}<span class="cursor-blink"></span></div>`;
   infoModalEl.classList.add('show');
 
-  if (!(g.id in WIKI_CACHE)) {
-    WIKI_CACHE[g.id] = await fetchWikiInfo(g.title || g.name);
+  // La cache se indexa tambien por idioma: si el visitante cambia de
+  // idioma y vuelve a abrir el mismo juego, se busca de nuevo en vez de
+  // mostrar la sinopsis que habia quedado en el idioma anterior.
+  const cacheKey = currentLang + ':' + g.id;
+  if (!(cacheKey in WIKI_CACHE)) {
+    WIKI_CACHE[cacheKey] = await fetchWikiInfo(g.title || g.name);
   }
   // Por si se cerró el popup mientras la búsqueda seguía en vuelo.
-  if (infoModalEl.classList.contains('show')) renderInfoModal(g, WIKI_CACHE[g.id]);
+  if (infoModalEl.classList.contains('show')) renderInfoModal(g, WIKI_CACHE[cacheKey]);
 }
 
 function renderInfoModal(g, data) {
   if (!infoModalBody) return;
   const titleText = (data && data.title) || g.title || g.name;
-  const publisher = (data && data.publisher) || 'Desconocida';
-  const synopsis = (data && data.extract) ? data.extract : 'No se encontró sinopsis para este juego en Wikipedia.';
+  const publisher = (data && data.publisher) || t('info.unknownPublisher');
+  const synopsis = (data && data.extract) ? data.extract : t('info.noSynopsis');
   const image = data && data.image;
 
   infoModalBody.innerHTML = `
     <div class="info-cols">
       ${image
       ? `<img class="info-image" src="${image}" alt="${titleText}">`
-      : `<div class="info-image info-image-empty">Sin imagen<br>disponible</div>`}
+      : `<div class="info-image info-image-empty">${t('info.noImage')}</div>`}
       <div class="info-text">
         <div class="info-title">${titleText}</div>
-        <div class="info-meta"><b>Año:</b> ${g.year} &nbsp;&nbsp; <b>Distribuidora:</b> ${publisher}</div>
+        <div class="info-meta"><b>${t('info.year')}</b> ${g.year} &nbsp;&nbsp; <b>${t('info.publisher')}</b> ${publisher}</div>
         <div class="info-synopsis">${synopsis}</div>
-        ${data && data.sourceUrl ? `<a class="info-source" href="${data.sourceUrl}" target="_blank" rel="noopener">Fuente: Wikipedia</a>` : ''}
+        ${data && data.sourceUrl ? `<a class="info-source" href="${data.sourceUrl}" target="_blank" rel="noopener">${t('info.source')}</a>` : ''}
       </div>
     </div>`;
 }
@@ -754,20 +786,17 @@ function closeControlsModal() {
 function renderControlsModal() {
   if (!controlsModalBody) return;
   const groups = [
-    { id: 'nav', title: 'Navegación', note: '' },
-    {
-      id: 'game', title: 'Dentro del juego',
-      note: 'Reservado para más adelante -- por ahora no hacen nada dentro de los juegos, pero ya se pueden asignar.',
-    },
+    { id: 'nav', title: t('ctrl.group.nav'), note: '' },
+    { id: 'game', title: t('ctrl.group.game'), note: t('ctrl.group.game.note') },
   ];
   controlsModalBody.innerHTML = groups.map(group => {
     const actions = CONTROL_ACTIONS.filter(a => a.group === group.id);
     if (!actions.length) return '';
     const rows = actions.map(a => `
       <div class="controls-row">
-        <div class="cr-label">${a.label}${a.hint ? `<span class="cr-hint">${a.hint}</span>` : ''}</div>
+        <div class="cr-label">${actionLabel(a)}${a.hint ? `<span class="cr-hint">${actionHint(a)}</span>` : ''}</div>
         <span class="cr-key">${codeLabel(KEYMAP[a.id])}</span>
-        <span class="cr-btn" data-action="${a.id}">[ Cambiar ]</span>
+        <span class="cr-btn" data-action="${a.id}">${t('btn.change')}</span>
       </div>`).join('');
     return `
       <div class="controls-group-title">${group.title}</div>
@@ -795,7 +824,7 @@ function startCapture(actionId, btnEl, keyEl) {
     if (controlsCapture.keyEl) controlsCapture.keyEl.textContent = codeLabel(KEYMAP[controlsCapture.actionId]);
   }
   controlsCapture = { actionId, btnEl, keyEl };
-  if (keyEl) keyEl.textContent = 'Presioná una tecla...';
+  if (keyEl) keyEl.textContent = t('ctrl.pressKey');
   const row = btnEl && btnEl.closest('.controls-row');
   if (row) row.classList.add('capturing');
 }
@@ -890,8 +919,8 @@ function launchGame(g) {
     <div class="titlebar">
       <div class="titlebar-title">${g.name.toUpperCase()}.EXE</div>
       <div class="win-controls">
-        ${isScummvm ? '<span class="win-btn menu" title="Menu ScummVM (Guardar/Cargar/Opciones)">[≡]</span>' : ''}
-        ${g.bundle ? '<span class="win-btn fs" title="Pantalla completa (ESC queda libre para el juego)">[⛶]</span>' : ''}
+        ${isScummvm ? `<span class="win-btn menu" title="${t('win.menuTooltip')}">[≡]</span>` : ''}
+        ${g.bundle ? `<span class="win-btn fs" title="${t('win.fsTooltip')}">[⛶]</span>` : ''}
         <span class="win-btn max">[□]</span>
         <span class="win-btn close">[X]</span>
       </div>
@@ -900,7 +929,7 @@ function launchGame(g) {
       <div class="boot-lines"></div>
       <div class="win-screen" style="display:none;">
         <div class="big-title">${g.name.toUpperCase()}</div>
-        <div class="hint">Todavía no hay un bundle asignado a este juego. Agregalo en data/games.json (campo "bundle") o dejalo local en la carpeta games/ para que arranque acá el motor real.</div>
+        <div class="hint">${t('win.noBundleHint')}</div>
         <div style="margin-top:16px;">C:\\GAMES\\${g.id.toUpperCase()}&gt;<span class="cursor-blink"></span></div>
       </div>
     </div>
@@ -912,10 +941,10 @@ function launchGame(g) {
   const screen = win.querySelector('.win-screen');
   const body = win.querySelector('.win-body');
   const lines = [
-    isScummvm ? 'ScummVM Engine v1.0' : 'MS-DOS Emulator v1.0',
-    isScummvm ? 'Detectando motor del juego...' : 'Detectando controladora de sonido... Sound Blaster 16 OK',
-    `Montando C:\\GAMES\\${g.id.toUpperCase()}...`,
-    isScummvm ? 'Auto-detectando juego...' : `Cargando ${g.id.toUpperCase()}.EXE...`,
+    isScummvm ? t('boot.scummEngine') : t('boot.dosEngine'),
+    isScummvm ? t('boot.detectingEngineScumm') : t('boot.detectingSound'),
+    t('boot.mounting', { id: g.id.toUpperCase() }),
+    isScummvm ? t('boot.autoDetecting') : t('boot.loading', { id: g.id.toUpperCase() }),
   ];
   lines.forEach((t, i) => {
     setTimeout(() => {
@@ -939,7 +968,7 @@ function launchGame(g) {
           container.innerHTML = '';
           container.style.color = '#f66';
           container.style.padding = '14px';
-          container.textContent = 'No se pudo iniciar ScummVM: ' + err.message;
+          container.textContent = t('err.scummStart') + err.message;
           return null;
         });
         // En cuanto la ventana quede activa (foco de mouse/teclado), que
@@ -948,7 +977,7 @@ function launchGame(g) {
       } else {
         container.style.color = '#f66';
         container.style.padding = '14px';
-        container.textContent = 'No se pudo cargar el motor de ScummVM (js/scummvm-engine.js).';
+        container.textContent = t('err.scummEngineMissing');
       }
     } else if (g.bundle) {
       body.classList.add('no-pad');
@@ -973,17 +1002,17 @@ function launchGame(g) {
         // al arrancar el juego.
         win.classList.add('pseudo-fs');
         const fsBtnEl = win.querySelector('.win-btn.fs');
-        if (fsBtnEl) fsBtnEl.title = 'Pantalla completa real (ESC para salir)';
+        if (fsBtnEl) fsBtnEl.title = t('win.fsRealTooltip');
         // Mantiene el título del botón sincronizado si el usuario sale de
         // pantalla completa apretando ESC directamente (en vez de clickear
         // el botón).
         dosLayers[g.id].setOnFullscreen(active => {
-          if (fsBtnEl) fsBtnEl.title = active ? 'Salir de pantalla completa (ESC)' : 'Pantalla completa real (ESC para salir)';
+          if (fsBtnEl) fsBtnEl.title = active ? t('win.fsExitTooltip') : t('win.fsRealTooltip');
         });
       } else {
         container.style.color = '#f66';
         container.style.padding = '14px';
-        container.textContent = 'No se pudo cargar js-dos (revisá la conexión a internet).';
+        container.textContent = t('err.jsdosMissing');
       }
     } else {
       screen.style.display = 'block';
@@ -1122,6 +1151,19 @@ fetch('data/games.json')
     checkNewGames();
   })
   .catch(err => {
-    panelRightList.innerHTML = '<div class="panel-row" style="color:#fff;padding:20px;">No se pudo cargar data/games.json. Si abriste el archivo directo (file://), corré un servidor local — ver README.md.</div>';
+    panelRightList.innerHTML = `<div class="panel-row" style="color:#fff;padding:20px;">${t('err.loadGames')}</div>`;
     console.error(err);
   });
+
+// Cambio de idioma (switch ES/EN, ver js/i18n.js): todo lo que ya se haya
+// dibujado con texto hardcodeado (fkeys, paneles, popup de controles si
+// esta abierto) se vuelve a dibujar en el idioma nuevo. Lo que es HTML
+// estatico (titulos de popup, formulario, etc.) ya lo actualiza
+// applyStaticI18n() en i18n.js -- no hace falta tocarlo desde aca.
+document.addEventListener('dv:langchange', () => {
+  buildLeftItems();
+  if (currentGenre) selectGenre(currentGenre);
+  renderFkeys();
+  render();
+  if (controlsModalEl && controlsModalEl.classList.contains('show')) renderControlsModal();
+});
