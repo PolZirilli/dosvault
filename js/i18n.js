@@ -34,7 +34,6 @@ const I18N = {
     'btn.change': '[ Cambiar ]',
     'btn.submit': '[ Enviar ]',
 
-    'help.shortcuts': 'Flechas: moverse &nbsp;|&nbsp; Tab / &lt;- -&gt;: cambiar panel &nbsp;|&nbsp; Enter: abrir/ejecutar &nbsp;|&nbsp; F2: controles &nbsp;|&nbsp; F3: info del juego',
     'help.intro2': '¿Encontraste un error, tenes feedback o queres pedir un juego que falta? Dejalo aca abajo:',
 
     'form.honeypot': 'No completar este campo:',
@@ -95,7 +94,9 @@ const I18N = {
     'info.noImage': 'Sin imagen<br>disponible',
     'info.year': 'Año:',
     'info.publisher': 'Distribuidora:',
-    'info.source': 'Fuente: Wikipedia',
+    'info.more': '[ Ver más ]',
+
+    'toast.selectGameFirst': 'Seleccioná un juego primero y después presioná Ejecutar.',
 
     'win.menuTooltip': 'Menu ScummVM (Guardar/Cargar/Opciones)',
     'win.fsTooltip': 'Pantalla completa (ESC queda libre para el juego)',
@@ -142,7 +143,6 @@ const I18N = {
     'btn.change': '[ Change ]',
     'btn.submit': '[ Send ]',
 
-    'help.shortcuts': 'Arrow keys: move &nbsp;|&nbsp; Tab / &lt;- -&gt;: switch panel &nbsp;|&nbsp; Enter: open/run &nbsp;|&nbsp; F2: controls &nbsp;|&nbsp; F3: game info',
     'help.intro2': 'Found a bug, have feedback, or want to request a missing game? Leave it below:',
 
     'form.honeypot': 'Do not fill this field:',
@@ -203,7 +203,9 @@ const I18N = {
     'info.noImage': 'No image<br>available',
     'info.year': 'Year:',
     'info.publisher': 'Publisher:',
-    'info.source': 'Source: Wikipedia',
+    'info.more': '[ See more ]',
+
+    'toast.selectGameFirst': 'Select a game first, then press Run.',
 
     'win.menuTooltip': 'ScummVM menu (Save/Load/Options)',
     'win.fsTooltip': 'Fullscreen (ESC stays free for the game)',
