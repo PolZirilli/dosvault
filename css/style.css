@@ -54,6 +54,56 @@ body {
   color: #0000aa;
 }
 
+/* Barra de titulo: selector de idioma pegado a la izquierda, marca al
+   lado. Mismo alto que el texto de "DOSVAULT" (align-items: center) para
+   que no se vea descentrado. */
+#siteTitle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.lang-switch {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.lang-btn {
+  font: inherit;
+  color: #0000aa;
+  opacity: .55;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.lang-btn:hover {
+  opacity: .85;
+}
+
+.lang-btn.active {
+  opacity: 1;
+  color: #fff;
+  text-decoration: underline;
+  cursor: default;
+}
+
+.lang-sep {
+  color: #0000aa;
+  opacity: .55;
+}
+
+.site-title-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* ---------- SHELL ---------- */
 #shell {
   position: absolute;

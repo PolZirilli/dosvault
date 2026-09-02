@@ -14,29 +14,34 @@
 <body>
   <div id="mobileBlock" class="modal-overlay">
     <div class="mb-dialog nc-frame">
-      <div class="mb-titlebar">Aviso del sistema</div>
+      <div class="mb-titlebar" data-i18n="mobile.title">Aviso del sistema</div>
       <div class="mb-body">
         <svg viewBox="0 0 24 24" width="46" height="46" aria-hidden="true">
           <polygon points="12,2 22,20 2,20" fill="#ffcc00" stroke="#000" stroke-width="1"></polygon>
           <rect x="11" y="9" width="2" height="6" fill="#000"></rect>
           <rect x="11" y="16" width="2" height="2" fill="#000"></rect>
         </svg>
-        <p><span class="mb-strong">Este catálogo requiere una computadora de escritorio.</span>La emulación de DOS
+        <p data-i18n-html="mobile.body"><span class="mb-strong">Este catálogo requiere una computadora de escritorio.</span>La emulación de DOS
           necesita teclado, mouse y más potencia de la que un navegador móvil puede ofrecer. Abrí este sitio desde tu PC
           para continuar.</p>
       </div>
     </div>
   </div>
   <div id="shell">
-    <div id="siteTitle" class="head-frame">DOSVAULT</div>
+    <div id="siteTitle" class="head-frame">
+      <div id="langSwitch" class="lang-switch" role="group" aria-label="Idioma / Language">
+        <button type="button" class="lang-btn" id="langBtnEs" data-lang="es">ES</button><span class="lang-sep">/</span><button type="button" class="lang-btn" id="langBtnEn" data-lang="en">EN</button>
+      </div>
+      <span class="site-title-text">DOSVAULT</span>
+    </div>
     <div id="panels">
       <div class="panel nc-frame" id="panelLeft">
         <div class="panel-header" id="panelLeftHeader">C:\</div>
         <div class="panel-cols">
-          <div class="col-name">Nombre</div>
-          <div class="col-size">Tamaño</div>
-          <div class="col-date">Fecha</div>
-          <div class="col-time">Hora</div>
+          <div class="col-name" data-i18n="col.name">Nombre</div>
+          <div class="col-size" data-i18n="col.size">Tamaño</div>
+          <div class="col-date" data-i18n="col.date">Fecha</div>
+          <div class="col-time" data-i18n="col.time">Hora</div>
         </div>
         <div class="panel-list" id="panelLeftList"></div>
         <div class="panel-status" id="panelLeftStatus"></div>
@@ -44,10 +49,10 @@
       <div class="panel nc-frame" id="panelRight">
         <div class="panel-header" id="panelRightHeader">C:\</div>
         <div class="panel-cols">
-          <div class="col-name">Nombre</div>
-          <div class="col-size">Tamaño</div>
-          <div class="col-date">Fecha</div>
-          <div class="col-time">Hora</div>
+          <div class="col-name" data-i18n="col.name">Nombre</div>
+          <div class="col-size" data-i18n="col.size">Tamaño</div>
+          <div class="col-date" data-i18n="col.date">Fecha</div>
+          <div class="col-time" data-i18n="col.time">Hora</div>
         </div>
         <div class="panel-list" id="panelRightList"></div>
         <div class="panel-status" id="panelRightStatus"></div>
@@ -58,75 +63,75 @@
   </div>
   <div id="infoModal" class="modal-overlay">
     <div class="mb-dialog nc-frame info-dialog">
-      <div class="mb-titlebar">Info del juego</div>
+      <div class="mb-titlebar" data-i18n="modal.info.title">Info del juego</div>
       <div class="mb-body info-body" id="infoModalBody"></div>
       <div class="info-buttons">
-        <span class="info-btn" id="infoModalClose">[ Cerrar ]</span>
+        <span class="info-btn" id="infoModalClose" data-i18n="btn.close">[ Cerrar ]</span>
       </div>
     </div>
   </div>
   <div id="controlsModal" class="modal-overlay">
     <div class="mb-dialog nc-frame controls-dialog">
-      <div class="mb-titlebar">Controles</div>
+      <div class="mb-titlebar" data-i18n="modal.controls.title">Controles</div>
       <div class="mb-body controls-body" id="controlsModalBody"></div>
       <div class="info-buttons">
-        <span class="info-btn" id="controlsModalReset">[ Restaurar por defecto ]</span>
-        <span class="info-btn" id="controlsModalClose">[ Cerrar ]</span>
+        <span class="info-btn" id="controlsModalReset" data-i18n="btn.resetDefaults">[ Restaurar por defecto ]</span>
+        <span class="info-btn" id="controlsModalClose" data-i18n="btn.close">[ Cerrar ]</span>
       </div>
     </div>
   </div>
   <div id="helpModal" class="modal-overlay">
     <div class="mb-dialog nc-frame help-dialog">
-      <div class="mb-titlebar">Ayuda / Contacto</div>
+      <div class="mb-titlebar" data-i18n="modal.help.title">Ayuda / Contacto</div>
       <div class="mb-body help-body" id="helpModalBody">
-        <p class="dv-intro">
+        <p class="dv-intro" data-i18n-html="help.shortcuts">
           Flechas: moverse &nbsp;|&nbsp; Tab / &lt;- -&gt;: cambiar panel &nbsp;|&nbsp; Enter: abrir/ejecutar
           &nbsp;|&nbsp; F2: controles &nbsp;|&nbsp; F3: info del juego
         </p>
-        <p class="dv-intro">&iquest;Encontraste un error, tenes feedback o queres pedir un juego que falta? Dejalo aca
+        <p class="dv-intro" data-i18n="help.intro2">&iquest;Encontraste un error, tenes feedback o queres pedir un juego que falta? Dejalo aca
           abajo:</p>
         <form id="helpForm" class="dv-form" name="contacto" method="POST" data-netlify="true"
           netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="contacto">
-          <p class="dv-honeypot"><label>No completar este campo: <input name="bot-field"></label></p>
+          <p class="dv-honeypot"><label><span data-i18n="form.honeypot">No completar este campo:</span> <input name="bot-field"></label></p>
           <label class="dv-field">
-            <span>Nombre (opcional)</span>
+            <span data-i18n="form.name">Nombre (opcional)</span>
             <input class="dv-input" type="text" name="name" autocomplete="name">
           </label>
           <label class="dv-field">
-            <span>Email (opcional, para poder responderte)</span>
+            <span data-i18n="form.email">Email (opcional, para poder responderte)</span>
             <input class="dv-input" type="email" name="email" autocomplete="email">
           </label>
           <label class="dv-field">
-            <span>Tipo</span>
+            <span data-i18n="form.type">Tipo</span>
             <select class="dv-input dv-select" name="type">
-              <option value="feedback">Feedback general</option>
-              <option value="pedido">Pedido de un juego</option>
-              <option value="bug">Reporte de error</option>
-              <option value="otro">Otro</option>
+              <option value="feedback" data-i18n="form.type.feedback">Feedback general</option>
+              <option value="pedido" data-i18n="form.type.request">Pedido de un juego</option>
+              <option value="bug" data-i18n="form.type.bug">Reporte de error</option>
+              <option value="otro" data-i18n="form.type.other">Otro</option>
             </select>
           </label>
           <label class="dv-field">
-            <span>Mensaje</span>
+            <span data-i18n="form.message">Mensaje</span>
             <textarea class="dv-input dv-textarea" name="message" required></textarea>
           </label>
           <div class="dv-form-status" id="helpFormStatus"></div>
           <div class="info-buttons">
-            <button type="submit" class="info-btn dv-submit" id="helpFormSubmit">[ Enviar ]</button>
+            <button type="submit" class="info-btn dv-submit" id="helpFormSubmit" data-i18n="btn.submit">[ Enviar ]</button>
           </div>
         </form>
       </div>
       <div class="info-buttons">
-        <span class="info-btn" id="helpModalClose">[ Cerrar ]</span>
+        <span class="info-btn" id="helpModalClose" data-i18n="btn.close">[ Cerrar ]</span>
       </div>
     </div>
   </div>
   <div id="newGamesModal" class="modal-overlay">
     <div class="mb-dialog nc-frame newgames-dialog">
-      <div class="mb-titlebar">Novedades</div>
+      <div class="mb-titlebar" data-i18n="modal.newgames.title">Novedades</div>
       <div class="mb-body newgames-body" id="newGamesModalBody"></div>
       <div class="info-buttons">
-        <span class="info-btn" id="newGamesModalClose">[ Cerrar ]</span>
+        <span class="info-btn" id="newGamesModalClose" data-i18n="btn.close">[ Cerrar ]</span>
       </div>
     </div>
   </div>
@@ -137,6 +142,7 @@
     }
   </script>
   <script src="js/scummvm-engine.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/app.js"></script>
 </body>
 
