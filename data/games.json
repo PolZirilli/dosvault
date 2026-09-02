@@ -153,6 +153,26 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/loom.zip"
     },
     {
+      "id": "samandmax",
+      "name": "SAM&MAX",
+      "genre": "avg",
+      "added": "2026-09-02",
+      "year": "1993",
+      "engine": "scummvm",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sammaxhittheroad.zip"
+    },
+    {
+      "id": "cruiseforacorpose",
+      "name": "CRUISEFOR",
+      "genre": "avg",
+      "added": "2026-09-02",
+      "year": "1992",
+      "engine": "scummvm",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cruiseforacorpse.zip"
+    },
+    {
       "id": "eob",
       "name": "EYEOFB",
       "genre": "avg",
