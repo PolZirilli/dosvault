@@ -544,7 +544,7 @@
     {
       "id": "darkforces",
       "name": "DARKFORCES",
-      "genre": "shooter",
+      "genre": "fps",
       "added": "2026-08-23",
       "year": "1995",
       "cover": "empty",
@@ -553,7 +553,7 @@
     {
       "id": "desertstrike",
       "name": "DESERTSTRIKE",
-      "genre": "shooter",
+      "genre": "fps",
       "added": "2026-08-23",
       "year": "1992",
       "cover": "empty",
@@ -562,7 +562,7 @@
     {
       "id": "shadowwarrior",
       "name": "SHADOWWARRIOR",
-      "genre": "shooter",
+      "genre": "fps",
       "added": "2026-08-23",
       "year": "1996",
       "cover": "empty",
@@ -571,7 +571,7 @@
     {
       "id": "strife",
       "name": "STRIFE",
-      "genre": "shooter",
+      "genre": "fps",
       "added": "2026-08-23",
       "year": "1996",
       "cover": "empty",
