@@ -118,6 +118,7 @@ const I18N = {
     'err.loadGames': 'No se pudo cargar data/games.json. Si abriste el archivo directo (file://), corré un servidor local — ver README.md.',
 
     'common.na': 'N/D',
+    'common.loading': 'Cargando...',
     'cmd.categories': 'CATEGORIAS',
 
     'newgames.intro.one': 'Se agregó 1 juego nuevo desde tu última visita:',
@@ -227,6 +228,7 @@ const I18N = {
     'err.loadGames': "Couldn't load data/games.json. If you opened the file directly (file://), run a local server — see README.md.",
 
     'common.na': 'N/A',
+    'common.loading': 'Loading...',
     'cmd.categories': 'CATEGORIES',
 
     'newgames.intro.one': '1 new game was added since your last visit:',

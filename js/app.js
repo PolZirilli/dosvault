@@ -12,6 +12,7 @@ let GAMES = [];
 let LEFT_ITEMS = [];
 let RIGHT_ITEMS = [];
 let currentGenre = null;
+const GENRE_GAMES_CACHE = {};
 
 const state = { focus: 'left', leftIndex: 0, rightIndex: 0 };
 const openWins = {};
@@ -301,12 +302,17 @@ function toDosName(name) {
 // ahi, cae de vuelta al texto que ya trae el propio games.json.
 function genreLabel(id) {
   const dict = I18N_GENRES[currentLang] || I18N_GENRES.en;
-  return dict[id] || (GENRES && GENRES[id]) || id;
+  const entry = GENRES && GENRES[id];
+  const nameFromEntry = entry && (typeof entry === 'object' ? entry.name : entry);
+  return dict[id] || nameFromEntry || id;
 }
 
 function buildLeftItems() {
   LEFT_ITEMS = Object.keys(GENRES).map(id => {
-    const count = GAMES.filter(g => g.genre === id).length;
+    const item = GENRES[id] || {};
+    const count = typeof item === 'object' && typeof item.count === 'number'
+      ? item.count
+      : GAMES.filter(g => g.genre === id).length;
     return { id, label: genreLabel(id), count };
   }).filter(item => item.count > 0);
 }
@@ -328,7 +334,7 @@ function renderLeftPanel() {
       state.focus = 'left';
       state.leftIndex = i;
       selectGenre(item.id);
-      render();
+      renderLeftPanel();
     });
     row.addEventListener('dblclick', () => {
       state.focus = 'right';
@@ -353,17 +359,88 @@ function gameSortLabel(g) {
   return (g.title || g.name || '').toUpperCase();
 }
 
+let loadingGenreId = null;
+
 function selectGenre(genreId) {
   currentGenre = genreId;
   state.rightIndex = 0;
-  RIGHT_ITEMS = GAMES.filter(g => g.genre === genreId)
-    .sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
   const label = genreLabel(genreId);
   panelRightHeader.textContent = `C:\\${label.toUpperCase()}`;
+
+  // 1. Si ya tenemos en caché los juegos de este género, mostramos inmediatamente
+  if (GENRE_GAMES_CACHE[genreId]) {
+    loadingGenreId = null;
+    RIGHT_ITEMS = GENRE_GAMES_CACHE[genreId];
+    renderRightPanel();
+    updateCmdline();
+    updateStatusBars();
+    return;
+  }
+
+  // 2. Si los juegos venían en GAMES (compatibilidad / fallback)
+  const legacyGames = GAMES.filter(g => g.genre === genreId);
+  if (legacyGames.length > 0) {
+    loadingGenreId = null;
+    RIGHT_ITEMS = legacyGames.sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
+    GENRE_GAMES_CACHE[genreId] = RIGHT_ITEMS;
+    renderRightPanel();
+    updateCmdline();
+    updateStatusBars();
+    return;
+  }
+
+  // 3. Lazy Loading: indicador de carga en estilo DOS
+  loadingGenreId = genreId;
+  RIGHT_ITEMS = [];
+  renderRightPanel();
+  updateCmdline();
+  updateStatusBars();
+
+  const genreEntry = GENRES[genreId];
+  const url = genreEntry && typeof genreEntry === 'object' ? genreEntry.url : null;
+  if (!url) {
+    loadingGenreId = null;
+    RIGHT_ITEMS = [];
+    renderRightPanel();
+    return;
+  }
+
+  fetch(url)
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      const rawGames = Array.isArray(data) ? data : (data.games || []);
+      const sorted = rawGames.slice().sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
+      GENRE_GAMES_CACHE[genreId] = sorted;
+
+      // Condición de carrera: solo actualizamos el panel si el usuario sigue en este género
+      if (currentGenre === genreId) {
+        loadingGenreId = null;
+        RIGHT_ITEMS = sorted;
+        renderRightPanel();
+        updateCmdline();
+        updateStatusBars();
+      }
+    })
+    .catch(err => {
+      console.error(`No se pudieron cargar los juegos para el género ${genreId}:`, err);
+      if (currentGenre === genreId) {
+        loadingGenreId = null;
+        RIGHT_ITEMS = [];
+        panelRightList.innerHTML = `<div class="panel-row" style="color:#ff5555;padding:10px 14px;">${t('err.loadGames')}</div>`;
+      }
+    });
 }
 
 function renderRightPanel() {
   panelRightList.innerHTML = '';
+  if (loadingGenreId === currentGenre) {
+    const loadingText = (t('common.loading') || 'LOADING...').toUpperCase();
+    panelRightList.innerHTML = `<div class="panel-row" style="color:var(--dos-yellow);padding:10px 14px;font-style:italic;">C:\\DOS\\${loadingText}</div>`;
+    return;
+  }
   RIGHT_ITEMS.forEach((g, i) => {
     const row = document.createElement('div');
     row.className = 'panel-row is-file' + (state.focus === 'right' && i === state.rightIndex ? ' selected' : '');
@@ -606,14 +683,16 @@ function todayStr() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function checkNewGames() {
+function checkNewGames(recentList) {
   let lastVisit = null;
   try { lastVisit = localStorage.getItem(LAST_VISIT_KEY); } catch (err) {
     console.error('No se pudo leer la fecha de la ultima visita (localStorage no disponible):', err);
   }
 
+  const candidateGames = (Array.isArray(recentList) && recentList.length) ? recentList : GAMES;
+
   if (lastVisit) {
-    const newOnes = GAMES
+    const newOnes = candidateGames
       .filter(g => g.added && g.added > lastVisit)
       .sort((a, b) => a.added === b.added ? gameSortLabel(a).localeCompare(gameSortLabel(b), 'es') : a.added.localeCompare(b.added));
     if (newOnes.length) openNewGamesModal(newOnes);
@@ -1213,17 +1292,49 @@ renderFkeys();
 fetch('data/games.json')
   .then(r => r.json())
   .then(data => {
-    GENRES = data.genres;
-    GAMES = data.games;
+    GENRES = data.genres || {};
+    GAMES = data.games || [];
     buildLeftItems();
+    renderLeftPanel();
     if (LEFT_ITEMS.length) selectGenre(LEFT_ITEMS[0].id);
-    render();
-    checkNewGames();
+    updateCmdline();
+    updateStatusBars();
+    // data/games.json es ahora solo el indice (genero -> url del JSON de ese
+    // genero, ver GENRE_GAMES_CACHE / selectGenre mas arriba) -- ya no trae
+    // "games" ni "recentGames" embebidos, asi que para el popup de
+    // "novedades" hay que pedir los 9 archivos de genero una sola vez. Son
+    // chicos (unos pocos KB cada uno), asi que no vale la pena mantener a
+    // mano una lista aparte de "juegos recientes" que se puede desincronizar
+    // de los archivos reales. De paso, lo que se descarga aca queda en
+    // GENRE_GAMES_CACHE, asi que entrar a esa categoria despues no vuelve a
+    // pedir el archivo.
+    loadAllGamesForNewCheck(GENRES);
   })
   .catch(err => {
     panelRightList.innerHTML = `<div class="panel-row" style="color:#fff;padding:20px;">${t('err.loadGames')}</div>`;
     console.error(err);
   });
+
+function loadAllGamesForNewCheck(genres) {
+  const fetches = Object.keys(genres).map(gid => {
+    const entry = genres[gid];
+    const url = entry && typeof entry === 'object' ? entry.url : null;
+    if (!url) return Promise.resolve([]);
+    return fetch(url)
+      .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+      .then(data => {
+        const rawGames = Array.isArray(data) ? data : (data.games || []);
+        const sorted = rawGames.slice().sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
+        if (!GENRE_GAMES_CACHE[gid]) GENRE_GAMES_CACHE[gid] = sorted;
+        return sorted;
+      })
+      .catch(err => {
+        console.error(`No se pudieron precargar los juegos de "${gid}" para el chequeo de novedades:`, err);
+        return [];
+      });
+  });
+  Promise.all(fetches).then(lists => checkNewGames(lists.flat()));
+}
 
 // Cambio de idioma (switch ES/EN, ver js/i18n.js): todo lo que ya se haya
 // dibujado con texto hardcodeado (fkeys, paneles, popup de controles si

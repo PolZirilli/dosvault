@@ -1,0 +1,135 @@
+{
+  "id": "avg",
+  "name": "Aventuras",
+  "games": [
+    {
+      "id": "atlantis",
+      "name": "ATLANTIS",
+      "genre": "avg",
+      "added": "2026-08-15",
+      "year": "1989",
+      "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Indiana%20Jones%20and%20the%20Fate%20of%20Atlantis.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/atlantis.zip"
+    },
+    {
+      "id": "flightaq",
+      "name": "FLIGHTAQ",
+      "genre": "avg",
+      "added": "2026-08-15",
+      "year": "1991",
+      "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Flight%20of%20the%20Amazon%20Queen.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/flightamazonq.zip"
+    },
+    {
+      "id": "indy3",
+      "name": "INDY3",
+      "genre": "avg",
+      "added": "2026-08-10",
+      "year": "1989",
+      "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Indiana%20Jones%20and%20The%20Last%20Crusade%20(1989).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indy3.zip"
+    },
+    {
+      "id": "monkey1",
+      "name": "MONKEY1",
+      "genre": "avg",
+      "added": "2026-08-15",
+      "year": "1990",
+      "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Secret%20of%20Monkey%20Island,%20The%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/monkey1.zip"
+    },
+    {
+      "id": "monkey2",
+      "name": "MONKEY2",
+      "genre": "avg",
+      "added": "2026-08-15",
+      "year": "1991",
+      "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Monkey%20Island%202%20-%20LeChuck's%20Revenge%20(1991).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/monkey2.zip"
+    },
+    {
+      "id": "loom",
+      "name": "LOOM",
+      "genre": "avg",
+      "added": "2026-08-15",
+      "year": "1992",
+      "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Loom%20(CD-ROM).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/loom.zip"
+    },
+    {
+      "id": "samandmax",
+      "name": "SAM&MAX",
+      "title": "Sam & Max Hit the Road",
+      "genre": "avg",
+      "added": "2026-09-02",
+      "year": "1993",
+      "engine": "scummvm",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sammaxhittheroad.zip"
+    },
+    {
+      "id": "cruiseforacorpose",
+      "name": "CRUISEFOR",
+      "title": "Cruise for a Corpse",
+      "genre": "avg",
+      "added": "2026-09-02",
+      "year": "1992",
+      "engine": "scummvm",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cruiseforacorpse.zip"
+    },
+    {
+      "id": "eob",
+      "name": "EYEOFB",
+      "genre": "avg",
+      "added": "2026-08-11",
+      "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Eye%20of%20the%20Beholder.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/eob.jsdos"
+    },
+    {
+      "id": "mm",
+      "name": "MMANSION",
+      "genre": "avg",
+      "added": "2026-08-13",
+      "year": "1985",
+      "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Maniac%20Mansion%20Enhanced%20(1988).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/maniacmansion.zip"
+    },
+    {
+      "id": "lsl1",
+      "name": "LSL1",
+      "genre": "avg",
+      "added": "2026-08-13",
+      "year": "1985",
+      "engine": "scummvm",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Leisure%20Suit%20Larry%201%20-%20In%20the%20Land%20of%20the%20Lounge%20Lizards%20(1991).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/lsl1.scummvm.zip"
+    },
+    {
+      "id": "legendofkyrandia",
+      "name": "LEGENDOFKYRANDIA",
+      "genre": "avg",
+      "added": "2026-08-21",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/The%20Legend%20of%20Kyrandia%20-%20book%20one.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/legendofkyrandia.jsdos"
+    },
+    {
+      "id": "kgb",
+      "name": "KGB",
+      "genre": "avg",
+      "added": "2026-08-23",
+      "year": "1993",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/kgb.jsdos"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "id": "platformer",
+  "name": "Plataformas",
+  "games": [
+    {
+      "id": "arcticmoves",
+      "name": "ARCTICMOVES",
+      "genre": "platformer",
+      "added": "2026-08-23",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Arctic%20Moves%20(1995).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/arcticmoves.jsdos"
+    },
+    {
+      "id": "bluesbrothers",
+      "name": "BLUESBROTHERS",
+      "genre": "platformer",
+      "added": "2026-08-23",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Blues%20Brothers,%20The%20-%20Jukebox%20Adventure%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/bluesbrothers.jsdos"
+    },
+    {
+      "id": "biomenace",
+      "name": "BIOMENACE",
+      "genre": "platformer",
+      "added": "2026-08-23",
+      "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Bio%20Menace%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/biomenace.jsdos"
+    },
+    {
+      "id": "prince",
+      "name": "PRINCE",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Prince%20of%20Persia.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince.jsdos"
+    },
+    {
+      "id": "prince2",
+      "name": "PRINCE2",
+      "genre": "platformer",
+      "added": "2026-08-12",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Prince%20of%20Persia%202%20-%20The%20Shadow%20and%20The%20Flame%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince2.jsdos"
+    },
+    {
+      "id": "dangerousdave",
+      "name": "DANGERDAVE",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Dangerous%20Dave%20in%20the%20Haunted%20Mansion%20(1991).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dangerousdave.jsdos"
+    },
+    {
+      "id": "dukenukem2",
+      "name": "DUKENUKEM2",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Duke%20Nukem%20II%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dukenukem2.jsdos"
+    },
+    {
+      "id": "goldenaxe",
+      "name": "GOLDENAXE",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Golden%20Axe%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/goldenaxe.jsdos"
+    },
+    {
+      "id": "jazzjack",
+      "name": "JAZZJACK",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Jazz%20Jackrabbit%20(1994).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/jazz.jsdos"
+    },
+    {
+      "id": "tintinin",
+      "name": "TINTININ",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Tintin%20in%20Tibet%20(1996).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/tintinin.jsdos"
+    },
+    {
+      "id": "aliencarnage",
+      "name": "ALIENCARNAGE",
+      "genre": "platformer",
+      "added": "2026-08-21",
+      "year": "1993",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Alien%20Carnage.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/aliencarnage.jsdos"
+    },
+    {
+      "id": "totalcarnage",
+      "name": "TOTALCARNAGE",
+      "genre": "platformer",
+      "added": "2026-08-23",
+      "year": "1993",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Total%20Carnage%20(1994).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/totalcarnage.jsdos"
+    }
+  ]
+}
