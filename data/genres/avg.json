@@ -132,15 +132,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/kgb.jsdos"
     },
     {
-      "id": "carmensandiegoeneltiempo",
-      "name": "CARMENTIEMPO",
-      "genre": "avg",
-      "added": "2026-09-02",
-      "year": "1989",
-      "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/Where%20in%20Time%20is%20Carmen%20Sandiego%20(1989).png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/carmentiempo.jsdos"
-    },
-    {
       "id": "carmenusa",
       "name": "CARMENUSA",
       "genre": "avg",

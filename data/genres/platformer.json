@@ -111,15 +111,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/totalcarnage.jsdos"
     },
     {
-      "id": "judgedredd",
-      "name": "JUDGEDREED",
-      "genre": "platformer",
-      "added": "2026-09-02",
-      "year": "1993",
-      "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/Judge%20Dredd%20(1997).png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/judgedredd.jsdos"
-    },
-    {
       "id": "outofthisworld",
       "name": "OUTOFTHISWORLD",
       "genre": "platformer",

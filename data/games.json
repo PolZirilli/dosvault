@@ -17,12 +17,12 @@
     },
     "platformer": {
       "name": "Plataformas",
-      "count": 14,
+      "count": 13,
       "url": "data/genres/platformer.json"
     },
     "avg": {
       "name": "Aventuras",
-      "count": 15,
+      "count": 14,
       "url": "data/genres/avg.json"
     },
     "rpg": {
@@ -42,7 +42,7 @@
     },
     "race": {
       "name": "Carreras",
-      "count": 19,
+      "count": 17,
       "url": "data/genres/race.json"
     }
   }
