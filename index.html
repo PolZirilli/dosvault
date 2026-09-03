@@ -149,6 +149,20 @@
       </div>
     </div>
   </div>
+  <div id="testBundleModal" class="modal-overlay">
+    <div class="mb-dialog nc-frame testbundle-dialog">
+      <div class="mb-titlebar" data-i18n="modal.testBundle.title">Probar un bundle</div>
+      <div class="mb-body testbundle-body" id="testBundleModalBody"></div>
+      <div class="info-buttons">
+        <span class="info-btn" id="testBundleJsdosBtn" data-i18n="testbundle.jsdos">[ js-dos (.jsdos) ]</span>
+        <span class="info-btn" id="testBundleScummvmBtn" data-i18n="testbundle.scummvm">[ ScummVM (.zip) ]</span>
+      </div>
+      <div class="info-buttons">
+        <span class="info-btn" id="testBundleModalClose" data-i18n="btn.close">[ Cerrar ]</span>
+      </div>
+    </div>
+  </div>
+  <input type="file" id="testBundleFileInput" style="display:none">
   <script src="js/vendor/js-dos/js-dos.js"></script>
   <script>
     if (window.emulators) {

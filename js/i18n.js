@@ -86,6 +86,7 @@ const I18N = {
     'fkey.f3': 'Ejecutar',
     'fkey.f4': 'Refrescar',
     'fkey.f5': 'Ayuda',
+    'fkey.f9': 'Probar',
     'fkey.f10': 'Cerrar',
 
     'info.searching': 'Buscando información de {title}...',
@@ -109,6 +110,11 @@ const I18N = {
     'scummvmhint.body2': 'Mientras jugás, el botón <strong>[≡]</strong> de la barra de arriba de la ventana abre el menú de ScummVM (Guardar, Cargar, Opciones) — y sigue disponible aunque actives la pantalla completa con <strong>[⛶]</strong>.',
     'scummvmhint.dontShowAgain': 'No volver a mostrar este mensaje',
     'btn.continue': '[ Continuar ]',
+
+    'modal.testBundle.title': 'Probar un bundle',
+    'testbundle.body': 'Elegí el motor y después el archivo (.jsdos para js-dos, .zip para ScummVM). Se juega directo en tu navegador — el archivo no se sube a ningún servidor.',
+    'testbundle.jsdos': '[ js-dos (.jsdos) ]',
+    'testbundle.scummvm': '[ ScummVM (.zip) ]',
 
     'boot.scummEngine': 'ScummVM Engine v1.0',
     'boot.dosEngine': 'MS-DOS Emulator v1.0',
@@ -202,6 +208,7 @@ const I18N = {
     'fkey.f3': 'Run',
     'fkey.f4': 'Refresh',
     'fkey.f5': 'Help',
+    'fkey.f9': 'Test',
     'fkey.f10': 'Close',
 
     'info.searching': 'Searching for info on {title}...',
@@ -225,6 +232,11 @@ const I18N = {
     'scummvmhint.body2': 'While playing, the <strong>[≡]</strong> button on the window\'s title bar opens the ScummVM menu (Save, Load, Options) — it stays available even if you switch to fullscreen with <strong>[⛶]</strong>.',
     'scummvmhint.dontShowAgain': "Don't show this again",
     'btn.continue': '[ Continue ]',
+
+    'modal.testBundle.title': 'Test a bundle',
+    'testbundle.body': 'Pick the engine, then the file (.jsdos for js-dos, .zip for ScummVM). It plays straight in your browser — the file is never uploaded anywhere.',
+    'testbundle.jsdos': '[ js-dos (.jsdos) ]',
+    'testbundle.scummvm': '[ ScummVM (.zip) ]',
 
     'boot.scummEngine': 'ScummVM Engine v1.0',
     'boot.dosEngine': 'MS-DOS Emulator v1.0',

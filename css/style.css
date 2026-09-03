@@ -1066,3 +1066,22 @@ body {
   font-size: 0.85rem;
   cursor: pointer;
 }
+
+/* ---------- POPUP DE PROBAR BUNDLE LOCAL (F9) ---------- */
+.testbundle-dialog {
+  width: 100%;
+  max-width: 440px;
+  background: #00aaaa;
+  color: #000;
+}
+
+.testbundle-body {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.testbundle-body p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}

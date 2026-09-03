@@ -66,6 +66,12 @@ const scummvmHintModalEl = document.getElementById('scummvmHintModal');
 const scummvmHintModalBody = document.getElementById('scummvmHintModalBody');
 const scummvmHintDismissCheckbox = document.getElementById('scummvmHintDismissCheckbox');
 const scummvmHintModalCloseBtn = document.getElementById('scummvmHintModalClose');
+const testBundleModalEl = document.getElementById('testBundleModal');
+const testBundleModalBody = document.getElementById('testBundleModalBody');
+const testBundleModalCloseBtn = document.getElementById('testBundleModalClose');
+const testBundleJsdosBtn = document.getElementById('testBundleJsdosBtn');
+const testBundleScummvmBtn = document.getElementById('testBundleScummvmBtn');
+const testBundleFileInput = document.getElementById('testBundleFileInput');
 
 // Repo público de GitHub de donde sale la fecha real del último cambio a
 // data/games.json (columna Date/Time del panel izquierdo). Si el repo
@@ -781,6 +787,59 @@ function closeScummvmHintModal() {
 if (scummvmHintModalCloseBtn) scummvmHintModalCloseBtn.addEventListener('click', closeScummvmHintModal);
 if (scummvmHintModalEl) scummvmHintModalEl.addEventListener('click', e => { if (e.target === scummvmHintModalEl) closeScummvmHintModal(); });
 
+/* ---------- PROBAR UN BUNDLE LOCAL (F9) ----------
+ * Herramienta de testing: deja elegir un archivo LOCAL (.jsdos o .zip) y
+ * jugarlo directo, sin pasar por data/games.json ni por ningun storage --
+ * el archivo nunca sale del navegador. Se lee con la File API y se le pasa
+ * al motor una blob: URL (URL.createObjectURL), que tanto js-dos como el
+ * fetch() de scummvm-engine.js/launcher.html resuelven igual que una URL
+ * http normal. Sirve para probar un bundle recien armado con el skill
+ * dosvault-bundle-creator antes de subirlo a R2 y sumarlo al catalogo.
+ * El motor NO se auto-detecta por extension a proposito: se le pregunta
+ * siempre al usuario (dos botones), asi no hay ambiguedad si algun bundle
+ * no sigue la convencion .jsdos/.zip. */
+const testBundleBlobUrls = {}; // id de ventana -> blob: URL, para revocarla al cerrar (ver closeWin)
+let testBundlePendingEngine = null;
+
+function openTestBundleModal() {
+  if (!testBundleModalEl || !testBundleModalBody) return;
+  testBundleModalBody.innerHTML = `<p>${t('testbundle.body')}</p>`;
+  testBundleModalEl.classList.add('show');
+}
+
+function closeTestBundleModal() {
+  if (!testBundleModalEl) return;
+  testBundleModalEl.classList.remove('show');
+}
+
+function pickTestBundleFile(engine, accept) {
+  if (!testBundleFileInput) return;
+  testBundlePendingEngine = engine;
+  testBundleFileInput.accept = accept;
+  testBundleFileInput.value = '';
+  testBundleFileInput.click();
+}
+
+if (testBundleJsdosBtn) testBundleJsdosBtn.addEventListener('click', () => pickTestBundleFile('jsdos', '.jsdos'));
+if (testBundleScummvmBtn) testBundleScummvmBtn.addEventListener('click', () => pickTestBundleFile('scummvm', '.zip'));
+if (testBundleModalCloseBtn) testBundleModalCloseBtn.addEventListener('click', closeTestBundleModal);
+if (testBundleModalEl) testBundleModalEl.addEventListener('click', e => { if (e.target === testBundleModalEl) closeTestBundleModal(); });
+
+if (testBundleFileInput) {
+  testBundleFileInput.addEventListener('change', () => {
+    const file = testBundleFileInput.files && testBundleFileInput.files[0];
+    const engine = testBundlePendingEngine;
+    testBundlePendingEngine = null;
+    if (!file || !engine) return;
+    closeTestBundleModal();
+    const id = 'test-' + Date.now();
+    const blobUrl = URL.createObjectURL(file);
+    testBundleBlobUrls[id] = blobUrl;
+    const name = file.name.replace(/\.(jsdos|zip)$/i, '') || 'TEST';
+    launchGame({ id, name, engine, bundle: blobUrl });
+  });
+}
+
 /* ---------- FKEYS ----------
  * El texto de cada botón (fkey.f1..f5, en js/i18n.js) es el que el usuario
  * define como nombre visible; la acción de acá abajo tiene que corresponder
@@ -792,6 +851,7 @@ const FKEYS = [
   { key: 'F3', labelKey: 'fkey.f3', action: () => runSelection() },
   { key: 'F4', labelKey: 'fkey.f4', action: () => location.reload() },
   { key: 'F5', labelKey: 'fkey.f5', action: () => showHelp() },
+  { key: 'F9', labelKey: 'fkey.f9', action: () => openTestBundleModal() },
   {
     key: 'F10', labelKey: 'fkey.f10', action: () => {
       const ids = Object.keys(openWins);
@@ -1330,6 +1390,13 @@ function closeWin(id) {
     // no hace falta bifurcar acá según el motor.
     dosInstances[id].then(ci => { if (ci && ci.exit) ci.exit(); }).catch(() => { });
     delete dosInstances[id];
+  }
+  // Bundles de prueba (F9): la blob: URL vive solo mientras dura la
+  // ventana -- liberarla ahora evita ir acumulando memoria si se prueban
+  // varios archivos seguidos en la misma visita.
+  if (testBundleBlobUrls[id]) {
+    URL.revokeObjectURL(testBundleBlobUrls[id]);
+    delete testBundleBlobUrls[id];
   }
   const tab = runningEl ? runningEl.querySelector(`.running-tab[data-id="${id}"]`) : null;
   if (tab) tab.remove();
