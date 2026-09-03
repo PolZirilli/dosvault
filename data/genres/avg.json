@@ -74,17 +74,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sammaxhittheroad.zip"
     },
     {
-      "id": "cruiseforacorpose",
-      "name": "CRUISEFOR",
-      "title": "Cruise for a Corpse",
-      "genre": "avg",
-      "added": "2026-09-02",
-      "year": "1992",
-      "engine": "scummvm",
-      "cover": "empty",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cruiseforacorpse.zip"
-    },
-    {
       "id": "eob",
       "name": "EYEOFB",
       "genre": "avg",
@@ -139,6 +128,16 @@
       "year": "1989",
       "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/Where%20in%20the%20World%20is%20Carmen%20Sandiego%20CD%20(1995).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/carmenusa.jsdos"
-    }
+    },
+    {
+      "id": "test",
+      "name": "test",
+      "genre": "avg",
+      "added": "2026-09-02",
+      "year": "1989",
+      "cover": "",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/avg/sexonix.jsdos"
+    },
+    
   ]
 }
