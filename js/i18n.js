@@ -104,6 +104,12 @@ const I18N = {
     'win.fsExitTooltip': 'Salir de pantalla completa (ESC)',
     'win.noBundleHint': 'Todavía no hay un bundle asignado a este juego. Agregalo en data/games.json (campo "bundle") o dejalo local en la carpeta games/ para que arranque acá el motor real.',
 
+    'modal.scummvmHint.title': 'Cómo jugar con ScummVM',
+    'scummvmhint.body1': 'Este juego usa el motor <strong>ScummVM</strong>, que no corre el .EXE original: reimplementa el juego, así que no vas a ver su menú de guardado nativo.',
+    'scummvmhint.body2': 'Mientras jugás, el botón <strong>[≡]</strong> de la barra de arriba de la ventana abre el menú de ScummVM (Guardar, Cargar, Opciones) — y sigue disponible aunque actives la pantalla completa con <strong>[⛶]</strong>.',
+    'scummvmhint.dontShowAgain': 'No volver a mostrar este mensaje',
+    'btn.continue': '[ Continuar ]',
+
     'boot.scummEngine': 'ScummVM Engine v1.0',
     'boot.dosEngine': 'MS-DOS Emulator v1.0',
     'boot.detectingEngineScumm': 'Detectando motor del juego...',
@@ -213,6 +219,12 @@ const I18N = {
     'win.fsRealTooltip': 'Real fullscreen (ESC to exit)',
     'win.fsExitTooltip': 'Exit fullscreen (ESC)',
     'win.noBundleHint': 'There is no bundle assigned to this game yet. Add one in data/games.json (the "bundle" field), or drop it locally in the games/ folder so the real engine can boot it here.',
+
+    'modal.scummvmHint.title': 'How to play with ScummVM',
+    'scummvmhint.body1': 'This game runs on the <strong>ScummVM</strong> engine, which reimplements the game instead of running the original .EXE — so you won\'t see its native save menu.',
+    'scummvmhint.body2': 'While playing, the <strong>[≡]</strong> button on the window\'s title bar opens the ScummVM menu (Save, Load, Options) — it stays available even if you switch to fullscreen with <strong>[⛶]</strong>.',
+    'scummvmhint.dontShowAgain': "Don't show this again",
+    'btn.continue': '[ Continue ]',
 
     'boot.scummEngine': 'ScummVM Engine v1.0',
     'boot.dosEngine': 'MS-DOS Emulator v1.0',

@@ -62,6 +62,10 @@ const helpModalCloseBtn = document.getElementById('helpModalClose');
 const newGamesModalEl = document.getElementById('newGamesModal');
 const newGamesModalBody = document.getElementById('newGamesModalBody');
 const newGamesModalCloseBtn = document.getElementById('newGamesModalClose');
+const scummvmHintModalEl = document.getElementById('scummvmHintModal');
+const scummvmHintModalBody = document.getElementById('scummvmHintModalBody');
+const scummvmHintDismissCheckbox = document.getElementById('scummvmHintDismissCheckbox');
+const scummvmHintModalCloseBtn = document.getElementById('scummvmHintModalClose');
 
 // Repo público de GitHub de donde sale la fecha real del último cambio a
 // data/games.json (columna Date/Time del panel izquierdo). Si el repo
@@ -724,6 +728,59 @@ function closeNewGamesModal() {
 if (newGamesModalCloseBtn) newGamesModalCloseBtn.addEventListener('click', closeNewGamesModal);
 if (newGamesModalEl) newGamesModalEl.addEventListener('click', e => { if (e.target === newGamesModalEl) closeNewGamesModal(); });
 
+/* ---------- POPUP DE AYUDA SCUMMVM ----------
+ * ScummVM reimplementa el motor del juego (no corre el .EXE original), asi
+ * que no hay un menu nativo del juego separado del propio de ScummVM: el
+ * boton [≡] de la titlebar (ver launchGame) es la UNICA forma de llegar a
+ * Guardar/Cargar/Opciones, y no se explica en ningun otro lado del sitio.
+ * Por eso, antes de arrancar un juego con ese motor, se avisa que boton usar
+ * y que sigue disponible en pantalla completa (ver scummvm-engine.js). Se
+ * muestra SIEMPRE, salvo que el usuario tilde "No volver a mostrar" (se
+ * guarda en localStorage por navegador, mismo patron que CONTROLS_STORAGE_KEY
+ * / LAST_VISIT_KEY mas arriba/abajo). */
+const SCUMMVM_HINT_DISMISSED_KEY = 'dosvaultScummvmHintDismissed';
+
+function isScummvmHintDismissed() {
+  try {
+    return localStorage.getItem(SCUMMVM_HINT_DISMISSED_KEY) === '1';
+  } catch (err) {
+    console.error('No se pudo leer el estado del aviso de ScummVM (localStorage no disponible):', err);
+    return false;
+  }
+}
+
+// Se resuelve cuando el usuario cierra el modal, para que launchGame pueda
+// esperar (.then) antes de arrancar el juego de verdad.
+let scummvmHintResolve = null;
+
+function openScummvmHintModal() {
+  return new Promise(resolve => {
+    if (!scummvmHintModalEl || !scummvmHintModalBody) { resolve(); return; }
+    scummvmHintResolve = resolve;
+    scummvmHintModalBody.innerHTML = `<p>${t('scummvmhint.body1')}</p><p>${t('scummvmhint.body2')}</p>`;
+    if (scummvmHintDismissCheckbox) scummvmHintDismissCheckbox.checked = false;
+    scummvmHintModalEl.classList.add('show');
+  });
+}
+
+function closeScummvmHintModal() {
+  if (!scummvmHintModalEl) return;
+  scummvmHintModalEl.classList.remove('show');
+  try {
+    if (scummvmHintDismissCheckbox && scummvmHintDismissCheckbox.checked) {
+      localStorage.setItem(SCUMMVM_HINT_DISMISSED_KEY, '1');
+    }
+  } catch (err) {
+    console.error('No se pudo guardar el estado del aviso de ScummVM (localStorage no disponible):', err);
+  }
+  const resolve = scummvmHintResolve;
+  scummvmHintResolve = null;
+  if (resolve) resolve();
+}
+
+if (scummvmHintModalCloseBtn) scummvmHintModalCloseBtn.addEventListener('click', closeScummvmHintModal);
+if (scummvmHintModalEl) scummvmHintModalEl.addEventListener('click', e => { if (e.target === scummvmHintModalEl) closeScummvmHintModal(); });
+
 /* ---------- FKEYS ----------
  * El texto de cada botón (fkey.f1..f5, en js/i18n.js) es el que el usuario
  * define como nombre visible; la acción de acá abajo tiene que corresponder
@@ -1053,6 +1110,14 @@ function launchGame(g) {
     restoreWin(g.id);
     return;
   }
+  if (g.engine === 'scummvm' && !isScummvmHintDismissed()) {
+    openScummvmHintModal().then(() => doLaunchGame(g));
+    return;
+  }
+  doLaunchGame(g);
+}
+
+function doLaunchGame(g) {
   const win = document.createElement('div');
   win.className = 'window';
   const w = 520, h = 360;

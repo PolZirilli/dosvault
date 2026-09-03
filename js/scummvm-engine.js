@@ -58,11 +58,19 @@ window.ScummVMEngine = (function () {
         // y eso pisaba el ESC que usan los juegos para menús/cinemáticas.
         // Ahora se prioriza la pantalla completa real; el trade-off es que
         // un ESC te saca de pantalla completa en vez de llegarle al juego.
+        //
+        // El elemento que entra a fullscreen es TODA la ventana (.window,
+        // titlebar incluida) y no solo el iframe: si fullscreneamos nomas
+        // el iframe, la titlebar -- con el boton [≡] del menu de ScummVM,
+        // que es la unica forma de llegar a Guardar/Cargar -- queda fuera
+        // del subarbol que el navegador renderiza en fullscreen real, y se
+        // vuelve inalcanzable (ver css/style.css, regla .window:fullscreen).
         toggleFullscreen: () => {
-          if (document.fullscreenElement === iframe) {
+          const fsTarget = container.closest('.window') || iframe;
+          if (document.fullscreenElement === fsTarget) {
             document.exitFullscreen();
-          } else if (iframe.requestFullscreen) {
-            iframe.requestFullscreen().catch(err => console.warn('[scummvm] no se pudo entrar a pantalla completa', err));
+          } else if (fsTarget.requestFullscreen) {
+            fsTarget.requestFullscreen().catch(err => console.warn('[scummvm] no se pudo entrar a pantalla completa', err));
           }
         },
         // Simula Ctrl+F5 (Global Main Menu: Guardar/Cargar/Opciones) sin

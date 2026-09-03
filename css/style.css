@@ -417,6 +417,25 @@ body {
   z-index: 99998;
 }
 
+/* Pantalla completa real de ScummVM (ver toggleFullscreen en
+   scummvm-engine.js): a diferencia de antes, ahora se le pide fullscreen a
+   TODA la ventana (.window), no solo al iframe -- asi la titlebar (con el
+   boton [≡] del menu de ScummVM, [⛶] y [X]) sigue visible arriba mientras
+   se juega en pantalla completa real, en vez de quedar fuera del subarbol
+   que el navegador renderiza. Mismos !important que .window.pseudo-fs de
+   arriba, por la misma razon: pisar el left/top/width/height en linea que
+   launchGame le pone al abrir la ventana. */
+.window:fullscreen,
+.window:-webkit-full-screen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+
 .titlebar {
   height: 24px;
   flex-shrink: 0;
@@ -1018,4 +1037,32 @@ body {
   opacity: 0.8;
   white-space: nowrap;
   font-size: 0.85rem;
+}
+
+/* ---------- POPUP DE AYUDA SCUMMVM (antes de jugar) ---------- */
+.scummvm-hint-dialog {
+  width: 100%;
+  max-width: 480px;
+  background: #00aaaa;
+  color: #000;
+}
+
+.scummvm-hint-body {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.scummvm-hint-body p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+
+.scummvm-hint-dismiss {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 16px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
 }
