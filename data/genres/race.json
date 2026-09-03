@@ -154,6 +154,24 @@
       "year": "1990",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Team%20Suzuki%20(1991).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/teamsuzuki.jsdos"
+    },
+    {
+      "id": "indycar2",
+      "name": "INDYCAR2",
+      "genre": "race",
+      "added": "2026-09-02",
+      "year": "1993",
+      "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/IndyCar%20Racing%20II%20(1996).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indycar2.jsdos"
+    },
+    {
+      "id": "grandprix2",
+      "name": "GRANDPRIX2",
+      "genre": "race",
+      "added": "2026-09-02",
+      "year": "1995",
+      "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/Grand%20Prix%202%20(1995).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/grandprix2.jsdos"
     }
   ]
 }

@@ -2,7 +2,7 @@
   "genres": {
     "fps": {
       "name": "FPS",
-      "count": 13,
+      "count": 14,
       "url": "data/genres/fps.json"
     },
     "accion": {
@@ -17,12 +17,12 @@
     },
     "platformer": {
       "name": "Plataformas",
-      "count": 12,
+      "count": 14,
       "url": "data/genres/platformer.json"
     },
     "avg": {
       "name": "Aventuras",
-      "count": 14,
+      "count": 15,
       "url": "data/genres/avg.json"
     },
     "rpg": {
@@ -42,7 +42,7 @@
     },
     "race": {
       "name": "Carreras",
-      "count": 17,
+      "count": 19,
       "url": "data/genres/race.json"
     }
   }

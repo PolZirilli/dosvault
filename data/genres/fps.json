@@ -105,10 +105,28 @@
       "id": "strife",
       "name": "STRIFE",
       "genre": "fps",
-      "added": "2026-08-23",
+      "added": "2026-09-02",
       "year": "1996",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Strife%20(1996).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/strife.jsdos"
+    },
+    {
+      "id": "terminatorrampage",
+      "name": "TERMINATOR",
+      "genre": "fps",
+      "added": "2026-09-02",
+      "year": "1996",
+      "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/Terminator%2C%20The%20-%20Rampage%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/terminatorrampage.jsdos"
+    },
+    {
+      "id": "systemshock",
+      "name": "SYSTEMSHOCK",
+      "genre": "fps",
+      "added": "2026-09-02",
+      "year": "1996",
+      "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/System%20Shock.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/systemshock.jsdos"
     }
   ]
 }
