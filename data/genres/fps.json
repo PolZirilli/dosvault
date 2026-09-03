@@ -109,15 +109,6 @@
       "year": "1996",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Strife%20(1996).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/strife.jsdos"
-    },
-    {
-      "id": "desertstrike",
-      "name": "DESERTSTRIKE",
-      "genre": "fps",
-      "added": "2026-08-23",
-      "year": "1992",
-      "cover": "empty",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/desertstrike.jsdos"
     }
   ]
 }
