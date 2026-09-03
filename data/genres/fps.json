@@ -1,0 +1,123 @@
+{
+  "id": "fps",
+  "name": "FPS",
+  "games": [
+    {
+      "id": "quake",
+      "name": "QUAKE",
+      "genre": "fps",
+      "added": "2026-08-09",
+      "year": "1996",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Quake%20(1996).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/quake.jsdos"
+    },
+    {
+      "id": "doom",
+      "name": "DOOM",
+      "genre": "fps",
+      "added": "2026-08-09",
+      "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/DOOM%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/doom.jsdos"
+    },
+    {
+      "id": "doom2",
+      "name": "DOOM2",
+      "genre": "fps",
+      "added": "2026-08-09",
+      "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/DOOM%20II%20(1994).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/doom2.jsdos"
+    },
+    {
+      "id": "blood",
+      "name": "BLOOD",
+      "genre": "fps",
+      "added": "2026-08-09",
+      "year": "1997",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Blood%20(1997).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blood.jsdos"
+    },
+    {
+      "id": "hexen",
+      "name": "HEXEN",
+      "genre": "fps",
+      "added": "2026-08-20",
+      "year": "1997",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Hexen.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/hexen.jsdos"
+    },
+    {
+      "id": "wolf3d",
+      "name": "WOLF3D",
+      "genre": "fps",
+      "added": "2026-08-09",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Wolfenstein%203D%20(1992).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/wolf3d.jsdos"
+    },
+    {
+      "id": "duke",
+      "name": "DUKE3D",
+      "genre": "fps",
+      "added": "2026-08-11",
+      "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Duke%20Nukem%203D%20(1996).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dukenukem3D.jsdos"
+    },
+    {
+      "id": "heretic",
+      "name": "HERETIC",
+      "genre": "fps",
+      "added": "2026-08-12",
+      "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Heretic%20(1994).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/heretic.jsdos"
+    },
+    {
+      "id": "riseofthetriad",
+      "name": "RISEOFTHETRIAD",
+      "genre": "fps",
+      "added": "2026-08-23",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Extreme%20Rise%20of%20the%20Triad%20(1995).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/riseofthetriad.jsdos"
+    },
+    {
+      "id": "darkforces",
+      "name": "DARKFORCES",
+      "genre": "fps",
+      "added": "2026-08-23",
+      "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Star%20Wars%20-%20Dark%20Forces%20(1995).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/darkforces.jsdos"
+    },
+    {
+      "id": "shadowwarrior",
+      "name": "SHADOWWARRIOR",
+      "genre": "fps",
+      "added": "2026-08-23",
+      "year": "1996",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Shadow%20Warrior%20(1997).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/shadowwarrior.jsdos"
+    },
+    {
+      "id": "strife",
+      "name": "STRIFE",
+      "genre": "fps",
+      "added": "2026-08-23",
+      "year": "1996",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Strife%20(1996).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/strife.jsdos"
+    },
+    {
+      "id": "desertstrike",
+      "name": "DESERTSTRIKE",
+      "genre": "fps",
+      "added": "2026-08-23",
+      "year": "1992",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/desertstrike.jsdos"
+    }
+  ]
+}

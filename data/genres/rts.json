@@ -1,0 +1,24 @@
+{
+  "id": "rts",
+  "name": "Estrategia",
+  "games": [
+    {
+      "id": "warcraft",
+      "name": "WARCRAFT",
+      "genre": "rts",
+      "added": "2026-08-10",
+      "year": "1997",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft.jsdos"
+    },
+    {
+      "id": "warcraft2",
+      "name": "WARCRAFT2",
+      "genre": "rts",
+      "added": "2026-08-09",
+      "year": "1999",
+      "cover": "empty",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft2.jsdos"
+    }
+  ]
+}

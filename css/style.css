@@ -692,10 +692,10 @@ body {
 }
 
 .info-image {
-  width: 180px;
-  height: 135px;
-  object-fit: cover;
-  border: 2px solid #000;
+  width: 170px;
+  height: 230px;
+  object-fit: inherit;
+  border: 0px solid #000;
   background: #000;
   flex-shrink: 0;
   image-rendering: pixelated;

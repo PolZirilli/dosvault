@@ -1,0 +1,60 @@
+{
+  "id": "arcade",
+  "name": "Arcade",
+  "games": [
+    {
+      "id": "battlechess",
+      "name": "BATTLECHESS",
+      "genre": "arcade",
+      "added": "2026-08-11",
+      "year": "1999",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Battle%20Chess%20(1988).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/battlechess.jsdos"
+    },
+    {
+      "id": "blockout",
+      "name": "BLOCKOUT",
+      "genre": "arcade",
+      "added": "2026-08-21",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Blockout%20(1989).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/blockout.jsdos"
+    },
+    {
+      "id": "epicpinball",
+      "name": "EPICPINBALL",
+      "genre": "arcade",
+      "added": "2026-08-23",
+      "year": "1993",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Epic%20Pinball.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/epicpinball.jsdos"
+    },
+    {
+      "id": "pinball",
+      "name": "PINBALL",
+      "genre": "arcade",
+      "added": "2026-08-23",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Pinball%20Dreams%20(1992).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinblld.jsdos"
+    },
+    {
+      "id": "pinball2",
+      "name": "PINBALL2",
+      "genre": "arcade",
+      "added": "2026-08-23",
+      "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Pinball%20Dreams%20II%20(1994).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinblld2.jsdos"
+    },
+    {
+      "id": "pinball3",
+      "name": "PINBALL3",
+      "genre": "arcade",
+      "added": "2026-08-23",
+      "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Pinball%20Fantasies%20(1992).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinbllf.jsdos"
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "id": "race",
+  "name": "Carreras",
+  "games": [
+    {
+      "id": "deathrally",
+      "name": "DEATHRALLY",
+      "genre": "race",
+      "added": "2026-08-11",
+      "year": "1996",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Death%20Rally.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/deathrally.jsdos"
+    },
+    {
+      "id": "gpcircuit",
+      "name": "GPCIRCUIT",
+      "genre": "race",
+      "added": "2026-08-15",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Grand%20Prix%20Circuit%20(1988).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/gpcircuit.jsdos"
+    },
+    {
+      "id": "superoffroads",
+      "name": "SUPEROFFROADS",
+      "genre": "race",
+      "added": "2026-08-20",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Ivan%20Iron%20Man%20Stewart's%20Super%20Off%20Road%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/superoffroads.jsdos"
+    },
+    {
+      "id": "streetroads",
+      "name": "STREETROADS",
+      "genre": "race",
+      "added": "2026-08-23",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Street%20Rod%20(1989).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/streetroads.jsdos"
+    },
+    {
+      "id": "streetroads2",
+      "name": "STREETROADS2",
+      "genre": "race",
+      "added": "2026-08-23",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Street%20Rod%202%20The%20Next%20Generation%20(1991).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/streetroads2.jsdos"
+    },
+    {
+      "id": "harddrivin",
+      "name": "HARDDRIVIN",
+      "genre": "race",
+      "added": "2026-08-20",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Hard%20Drivin'%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/harddrivin.jsdos"
+    },
+    {
+      "id": "stunts",
+      "name": "STUNTS",
+      "genre": "race",
+      "added": "2026-08-15",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Stunts%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/stunts.jsdos"
+    },
+    {
+      "id": "ciscoheat",
+      "name": "CISCOHEAT",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Cisco%20Heat%20-%20All%20American%20Police%20Car%20Race%20(1991).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/ciscoheat.jsdos"
+    },
+    {
+      "id": "indy500",
+      "name": "INDY500",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Indianapolis%20500%20The%20Simulation%20(1989).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/indy500.jsdos"
+    },
+    {
+      "id": "lamborghini",
+      "name": "LAMBORGHINI",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Lamborghini%20-%20American%20Challenge%20(1992).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/lamborghini.jsdos"
+    },
+    {
+      "id": "micromachines2",
+      "name": "MICROMACHINES2",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Micro%20Machines%202%20-%20Turbo%20Tournament%20(1995).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/micromachines2.jsdos"
+    },
+    {
+      "id": "needforspeed",
+      "name": "NEEDFORSPEED",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Need%20for%20Speed,%20The%20(1995).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/needforspeed.jsdos"
+    },
+    {
+      "id": "quarantine2",
+      "name": "QUARANTINE2",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Quarantine%20II%20-%20Road%20Warrior%20(1995).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/quarantine2.jsdos"
+    },
+    {
+      "id": "testdrive2",
+      "name": "TESTDRIVE2",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Test%20Drive%20II%20-%20The%20Collection%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive2.jsdos"
+    },
+    {
+      "id": "testdrive3",
+      "name": "TESTDRIVE3",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Test%20Drive%20III%20The%20Passion%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive3.jsdos"
+    },
+    {
+      "id": "f40pursuitsimulator",
+      "name": "F40PURSUITSIMULATOR",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/F40%20Pursuit%20Simulator%20(1989).pg",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/f40pursuitsimulator.jsdos"
+    },
+    {
+      "id": "teamsuzuki",
+      "name": "TEAMSUZUKI",
+      "genre": "race",
+      "added": "2026-08-21",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Team%20Suzuki%20(1991).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/teamsuzuki.jsdos"
+    }
+  ]
+}
