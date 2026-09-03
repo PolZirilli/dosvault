@@ -2,7 +2,7 @@
   "genres": {
     "fps": {
       "name": "FPS",
-      "count": 14,
+      "count": 13,
       "url": "data/genres/fps.json"
     },
     "accion": {
