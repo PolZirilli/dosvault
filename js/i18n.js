@@ -106,13 +106,12 @@ const I18N = {
     'win.noBundleHint': 'Todavía no hay un bundle asignado a este juego. Agregalo en data/games.json (campo "bundle") o dejalo local en la carpeta games/ para que arranque acá el motor real.',
 
     'modal.scummvmHint.title': 'Cómo jugar con ScummVM',
-    'scummvmhint.body1': 'Este juego usa el motor <strong>ScummVM</strong>, que no corre el .EXE original: reimplementa el juego, así que no vas a ver su menú de guardado nativo.',
-    'scummvmhint.body2': 'Mientras jugás, el botón <strong>[≡]</strong> de la barra de arriba de la ventana abre el menú de ScummVM (Guardar, Cargar, Opciones) — y sigue disponible aunque actives la pantalla completa con <strong>[⛶]</strong>.',
+    'scummvmhint.body1': 'Mientras jugás, el botón <strong>[≡]</strong> de la barra de arriba de la ventana abre el menú de ScummVM (Guardar, Cargar, Opciones) — y sigue disponible aunque actives la pantalla completa con <strong>[⛶]</strong>.',
     'scummvmhint.dontShowAgain': 'No volver a mostrar este mensaje',
     'btn.continue': '[ Continuar ]',
 
-    'modal.testBundle.title': 'Probar un bundle',
-    'testbundle.body': 'Elegí el motor y después el archivo (.jsdos para js-dos, .zip para ScummVM). Se juega directo en tu navegador — el archivo no se sube a ningún servidor.',
+    'modal.testBundle.title': 'Probar un juego',
+    'testbundle.body': 'Elegí el motor y después el archivo del juego en tu equipo. Se juega directo en tu navegador — el archivo no se sube a ningún servidor.',
     'testbundle.jsdos': '[ js-dos (.jsdos) ]',
     'testbundle.scummvm': '[ ScummVM (.zip) ]',
 
