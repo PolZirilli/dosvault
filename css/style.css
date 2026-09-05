@@ -162,11 +162,16 @@ body {
   text-transform: uppercase;
 }
 
-/* columnas Size / Date / Time, iguales en header (.panel-cols) y en cada
-   fila (.panel-row) para que queden alineadas verticalmente */
+/* columnas Size / Files / Date / Time / Lang, iguales en header (.panel-cols)
+   y en cada fila (.panel-row) para que queden alineadas verticalmente.
+   col-files solo existe en el panel izquierdo (categorias) y col-lang solo
+   en el panel derecho (juegos); al no repetirse en el otro panel, no hace
+   falta separar reglas por id de panel. */
 .col-size,
+.col-files,
 .col-date,
-.col-time {
+.col-time,
+.col-lang {
   flex-shrink: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -177,6 +182,12 @@ body {
   text-align: right;
 }
 
+.col-files {
+  width: 70px;
+  text-align: right;
+  padding-left: 10px;
+}
+
 .col-date {
   width: 96px;
   text-align: right;
@@ -185,6 +196,12 @@ body {
 
 .col-time {
   width: 74px;
+  text-align: right;
+  padding-left: 10px;
+}
+
+.col-lang {
+  width: 70px;
   text-align: right;
   padding-left: 10px;
 }
@@ -215,8 +232,10 @@ body {
 }
 
 .panel-row .col-size,
+.panel-row .col-files,
 .panel-row .col-date,
-.panel-row .col-time {
+.panel-row .col-time,
+.panel-row .col-lang {
   color: #7ab0ff;
 }
 
@@ -235,8 +254,10 @@ body {
 
 .panel-row.selected .col-name,
 .panel-row.selected .col-size,
+.panel-row.selected .col-files,
 .panel-row.selected .col-date,
-.panel-row.selected .col-time {
+.panel-row.selected .col-time,
+.panel-row.selected .col-lang {
   color: #000;
 }
 

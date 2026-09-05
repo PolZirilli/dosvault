@@ -21,8 +21,10 @@ const I18N = {
 
     'col.name': 'Nombre',
     'col.size': 'Tamaño',
+    'col.files': 'Archivos',
     'col.date': 'Fecha',
     'col.time': 'Hora',
+    'col.lang': 'Idioma',
 
     'modal.info.title': 'Info del juego',
     'modal.controls.title': 'Controles',
@@ -142,8 +144,10 @@ const I18N = {
 
     'col.name': 'Name',
     'col.size': 'Size',
+    'col.files': 'Files',
     'col.date': 'Date',
     'col.time': 'Time',
+    'col.lang': 'Language',
 
     'modal.info.title': 'Game info',
     'modal.controls.title': 'Controls',

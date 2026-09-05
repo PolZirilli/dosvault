@@ -1,0 +1,150 @@
+diff --git a/css/style.css b/css/style.css
+index b8a72d0..c4bc006 100644
+--- a/css/style.css
++++ b/css/style.css
+@@ -162,11 +162,16 @@ body {
+   text-transform: uppercase;
+ }
+ 
+-/* columnas Size / Date / Time, iguales en header (.panel-cols) y en cada
+-   fila (.panel-row) para que queden alineadas verticalmente */
++/* columnas Size / Files / Date / Time / Lang, iguales en header (.panel-cols)
++   y en cada fila (.panel-row) para que queden alineadas verticalmente.
++   col-files solo existe en el panel izquierdo (categorias) y col-lang solo
++   en el panel derecho (juegos); al no repetirse en el otro panel, no hace
++   falta separar reglas por id de panel. */
+ .col-size,
++.col-files,
+ .col-date,
+-.col-time {
++.col-time,
++.col-lang {
+   flex-shrink: 0;
+   overflow: hidden;
+   white-space: nowrap;
+@@ -177,6 +182,12 @@ body {
+   text-align: right;
+ }
+ 
++.col-files {
++  width: 70px;
++  text-align: right;
++  padding-left: 10px;
++}
++
+ .col-date {
+   width: 96px;
+   text-align: right;
+@@ -189,6 +200,12 @@ body {
+   padding-left: 10px;
+ }
+ 
++.col-lang {
++  width: 70px;
++  text-align: right;
++  padding-left: 10px;
++}
++
+ .panel-list {
+   flex: 1;
+   overflow-y: auto;
+@@ -215,8 +232,10 @@ body {
+ }
+ 
+ .panel-row .col-size,
++.panel-row .col-files,
+ .panel-row .col-date,
+-.panel-row .col-time {
++.panel-row .col-time,
++.panel-row .col-lang {
+   color: #7ab0ff;
+ }
+ 
+@@ -235,8 +254,10 @@ body {
+ 
+ .panel-row.selected .col-name,
+ .panel-row.selected .col-size,
++.panel-row.selected .col-files,
+ .panel-row.selected .col-date,
+-.panel-row.selected .col-time {
++.panel-row.selected .col-time,
++.panel-row.selected .col-lang {
+   color: #000;
+ }
+ 
+diff --git a/index.html b/index.html
+index f079692..fd0dfc1 100644
+--- a/index.html
++++ b/index.html
+@@ -40,6 +40,7 @@
+         <div class="panel-cols">
+           <div class="col-name" data-i18n="col.name">Nombre</div>
+           <div class="col-size" data-i18n="col.size">Tamaño</div>
++          <div class="col-files" data-i18n="col.files">Archivos</div>
+           <div class="col-date" data-i18n="col.date">Fecha</div>
+           <div class="col-time" data-i18n="col.time">Hora</div>
+         </div>
+@@ -50,6 +51,7 @@
+         <div class="panel-header" id="panelRightHeader">C:\</div>
+         <div class="panel-cols">
+           <div class="col-name" data-i18n="col.name">Nombre</div>
++          <div class="col-lang" data-i18n="col.lang">Idioma</div>
+           <div class="col-size" data-i18n="col.size">Tamaño</div>
+           <div class="col-date" data-i18n="col.date">Fecha</div>
+           <div class="col-time" data-i18n="col.time">Hora</div>
+diff --git a/js/app.js b/js/app.js
+index f8f7222..979b280 100644
+--- a/js/app.js
++++ b/js/app.js
+@@ -338,6 +338,7 @@ function renderLeftPanel() {
+     row.innerHTML = `
+       <div class="col-name">${item.label.toUpperCase()}\\</div>
+       <div class="col-size">SUB-DIR</div>
++      <div class="col-files">${item.count}</div>
+       <div class="col-date">...</div>
+       <div class="col-time">...</div>`;
+     row.addEventListener('click', () => {
+@@ -459,10 +460,17 @@ function renderRightPanel() {
+     // muestran el título completo.
+     const dosName = toDosName(g.name);
+     row.title = g.title || g.name;
++    // Idioma del juego: viene de g.lang en data/genres/*.json ("es"/"en").
++    // Si el juego no tiene el campo todavia (caso por defecto: la gran
++    // mayoria del catalogo son titulos originales en ingles), se muestra
++    // "EN" sin necesidad de tocar el JSON de cada uno -- alcanza con
++    // agregar "lang": "es" a mano en las excepciones puntuales.
++    const langCode = (g.lang || 'en').toUpperCase();
+     row.innerHTML = `
+       <div class="col-name">
+         <span>${dosName}<span style="opacity:.6">.EXE</span></span>
+       </div>
++      <div class="col-lang">${langCode}</div>
+       <div class="col-size">...</div>
+       <div class="col-date">...</div>
+       <div class="col-time">...</div>`;
+diff --git a/js/i18n.js b/js/i18n.js
+index d8e9f22..5d1dd19 100644
+--- a/js/i18n.js
++++ b/js/i18n.js
+@@ -21,8 +21,10 @@ const I18N = {
+ 
+     'col.name': 'Nombre',
+     'col.size': 'Tamaño',
++    'col.files': 'Archivos',
+     'col.date': 'Fecha',
+     'col.time': 'Hora',
++    'col.lang': 'Idioma',
+ 
+     'modal.info.title': 'Info del juego',
+     'modal.controls.title': 'Controles',
+@@ -142,8 +144,10 @@ const I18N = {
+ 
+     'col.name': 'Name',
+     'col.size': 'Size',
++    'col.files': 'Files',
+     'col.date': 'Date',
+     'col.time': 'Time',
++    'col.lang': 'Language',
+ 
+     'modal.info.title': 'Game info',
+     'modal.controls.title': 'Controls',

@@ -338,6 +338,7 @@ function renderLeftPanel() {
     row.innerHTML = `
       <div class="col-name">${item.label.toUpperCase()}\\</div>
       <div class="col-size">SUB-DIR</div>
+      <div class="col-files">${item.count}</div>
       <div class="col-date">...</div>
       <div class="col-time">...</div>`;
     row.addEventListener('click', () => {
@@ -459,10 +460,17 @@ function renderRightPanel() {
     // muestran el título completo.
     const dosName = toDosName(g.name);
     row.title = g.title || g.name;
+    // Idioma del juego: viene de g.lang en data/genres/*.json ("es"/"en").
+    // Si el juego no tiene el campo todavia (caso por defecto: la gran
+    // mayoria del catalogo son titulos originales en ingles), se muestra
+    // "EN" sin necesidad de tocar el JSON de cada uno -- alcanza con
+    // agregar "lang": "es" a mano en las excepciones puntuales.
+    const langCode = (g.lang || 'en').toUpperCase();
     row.innerHTML = `
       <div class="col-name">
         <span>${dosName}<span style="opacity:.6">.EXE</span></span>
       </div>
+      <div class="col-lang">${langCode}</div>
       <div class="col-size">...</div>
       <div class="col-date">...</div>
       <div class="col-time">...</div>`;
