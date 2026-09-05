@@ -74,15 +74,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sammaxhittheroad.zip"
     },
     {
-      "id": "eob",
-      "name": "EYEOFB",
-      "genre": "avg",
-      "added": "2026-08-11",
-      "year": "1991",
-      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Eye%20of%20the%20Beholder.png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/eob.jsdos"
-    },
-    {
       "id": "mm",
       "name": "MMANSION",
       "genre": "avg",
@@ -131,15 +122,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/kgb.jsdos"
     },
     {
-      "id": "carmenusa",
-      "name": "CARMENUSA",
-      "genre": "avg",
-      "added": "2026-09-02",
-      "year": "1989",
-      "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/Where%20in%20the%20World%20is%20Carmen%20Sandiego%20CD%20(1995).png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/carmenusa.jsdos"
-    },
-    {
       "id": "elviramistressofthedark",
       "name": "ELVIRA1",
       "genre": "avg",
@@ -147,7 +129,7 @@
       "year": "1990",
       "engine": "scummvm",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Elvira%20-%20Mistress%20of%20the%20Dark%20(1990).png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/elviramistressofthedark.zip"
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/elvira2jawsofcerberus.zip"
     },
     {
       "id": "kingsquestv",
