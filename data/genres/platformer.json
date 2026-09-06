@@ -12,6 +12,15 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/arcticmoves.jsdos"
     },
     {
+      "id": "aliencarnage",
+      "name": "ALIENCARNAGE",
+      "genre": "platformer",
+      "added": "2026-08-21",
+      "year": "1993",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Alien%20Carnage.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/aliencarnage.jsdos"
+    },
+    {
       "id": "bluesbrothers",
       "name": "BLUESBROTHERS",
       "genre": "platformer",
@@ -30,22 +39,13 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/biomenace.jsdos"
     },
     {
-      "id": "prince",
-      "name": "PRINCE",
+      "id": "cosmicspacehead",
+      "name": "COSMICSPACEHEAD",
       "genre": "platformer",
-      "added": "2026-08-11",
-      "year": "1989",
-      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Prince%20of%20Persia.png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince.jsdos"
-    },
-    {
-      "id": "prince2",
-      "name": "PRINCE2",
-      "genre": "platformer",
-      "added": "2026-08-12",
-      "year": "1992",
-      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Prince%20of%20Persia%202%20-%20The%20Shadow%20and%20The%20Flame%20(1993).png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince2.jsdos"
+      "added": "2026-08-23",
+      "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Cosmic%20Spacehead%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cosmicspacehead.jsdos"
     },
     {
       "id": "dangerousdave",
@@ -64,6 +64,24 @@
       "year": "1991",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Duke%20Nukem%20II%20(1993).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/dukenukem2.jsdos"
+    },
+    {
+      "id": "prince",
+      "name": "PRINCE",
+      "genre": "platformer",
+      "added": "2026-08-11",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Prince%20of%20Persia.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince.jsdos"
+    },
+    {
+      "id": "prince2",
+      "name": "PRINCE2",
+      "genre": "platformer",
+      "added": "2026-08-12",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Prince%20of%20Persia%202%20-%20The%20Shadow%20and%20The%20Flame%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/prince2.jsdos"
     },
     {
       "id": "goldenaxe",
@@ -93,15 +111,6 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/tintinin.jsdos"
     },
     {
-      "id": "aliencarnage",
-      "name": "ALIENCARNAGE",
-      "genre": "platformer",
-      "added": "2026-08-21",
-      "year": "1993",
-      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Alien%20Carnage.png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/aliencarnage.jsdos"
-    },
-    {
       "id": "totalcarnage",
       "name": "TOTALCARNAGE",
       "genre": "platformer",
@@ -118,6 +127,15 @@
       "year": "1992",
       "cover": "https://raw.githubusercontent.com/libretro-thumbnails/DOS/ff04cf498ae5b9ee503747de77ca9c652ad3ad4d/Named_Boxarts/Out%20of%20This%20World%20(1991).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/outofthisworld.jsdos"
+    },
+    {
+      "id": "luckyluke",
+      "name": "LUCKYL",
+      "genre": "platformer",
+      "added": "2026-09-02",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Lucky%20Luke%20(1997).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/luckyluke.jsdos"
     }
   ]
 }

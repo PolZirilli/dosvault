@@ -120,6 +120,15 @@
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/quarantine2.jsdos"
     },
     {
+      "id": "testdrive",
+      "name": "TESTDRIVE",
+      "genre": "race",
+      "added": "2026-09-07",
+      "year": "1987",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Test%20Drive%20(1987).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/testdrive.jsdos"
+    },
+    {
       "id": "testdrive2",
       "name": "TESTDRIVE2",
       "genre": "race",

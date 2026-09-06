@@ -7,8 +7,8 @@
       "name": "WARCRAFT",
       "genre": "rts",
       "added": "2026-08-10",
-      "year": "1997",
-      "cover": "empty",
+      "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/WarCraft%20-%20Orcs%20and%20Humans%20(1994).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft.jsdos"
     },
     {
@@ -16,9 +16,36 @@
       "name": "WARCRAFT2",
       "genre": "rts",
       "added": "2026-08-09",
-      "year": "1999",
-      "cover": "empty",
+      "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Warcraft%20II%20-%20Tides%20of%20Darkness%20(1995).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/warcraft2.jsdos"
+    },
+    {
+      "id": "centurion",
+      "name": "CENTURION",
+      "genre": "rts",
+      "added": "2026-09-06",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Centurion%20-%20Defender%20of%20Rome%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/centurion.jsdos"
+    },
+    {
+      "id": "gobliiins2",
+      "name": "GOBLIIINS2",
+      "genre": "rts",
+      "added": "2026-09-06",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Gobliins%202%20(1992).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/gobliiins2.jsdos"
+    },
+    {
+      "id": "gobliiins3",
+      "name": "GOBLIIIINS3",
+      "genre": "rts",
+      "added": "2026-09-06",
+      "year": "1993",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Goblins%203%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/gobliiins3.jsdos"
     }
   ]
 }
