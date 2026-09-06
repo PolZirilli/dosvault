@@ -1014,6 +1014,190 @@ if (infoModalCloseBtn) infoModalCloseBtn.addEventListener('click', closeInfoModa
 // Click en el fondo oscuro (fuera del diálogo) también cierra.
 if (infoModalEl) infoModalEl.addEventListener('click', e => { if (e.target === infoModalEl) closeInfoModal(); });
 
+/* ---------- GAMEPAD (mando de control) ----------
+ * Detección/lectura vía Gamepad API estándar del navegador (sin librerías
+ * externas). No existe hoy ningún puente entre el navegador y el motor de
+ * emulación (DOSBox/js-dos) para joystick real -- lo que se hace acá es
+ * mapear cada botón del mando a una tecla física (KeyboardEvent.code) y
+ * sintetizar keydown/keyup hacia donde el juego esté escuchando cuando hay
+ * una ventana con foco (gamePlaying). Reutiliza el mismo concepto que
+ * CONTROL_ACTIONS/KEYMAP de arriba, pero en su propia tabla porque el
+ * valor guardado es un índice de botón (número), no un KeyboardEvent.code.
+ *
+ * Índices por defecto asumen el "standard gamepad mapping" del Gamepad API
+ * (https://www.w3.org/TR/gamepad/#remapping) -- confirmado en este mismo
+ * proyecto con un Xbox Series X vía navigator.getGamepads(), mapping:
+ * "standard". Con un mando no reconocido como estándar por el navegador
+ * (mapping === ""), estos índices pueden no corresponder; ver codeLabel-
+ * equivalente gamepadButtonLabel() más abajo, que degrada a "Botón N" en
+ * vez de un nombre. */
+const GAMEPAD_ACTIONS = [
+  { id: 'padUp', keyCode: 'ArrowUp', default: 12 },     // D-pad arriba
+  { id: 'padDown', keyCode: 'ArrowDown', default: 13 }, // D-pad abajo
+  { id: 'padLeft', keyCode: 'ArrowLeft', default: 14 }, // D-pad izquierda
+  { id: 'padRight', keyCode: 'ArrowRight', default: 15 }, // D-pad derecha
+  { id: 'fire1', keyCode: 'ControlLeft', default: 0 },  // A
+  { id: 'fire2', keyCode: 'AltLeft', default: 1 },      // B
+  { id: 'fire3', keyCode: 'Space', default: 2 },        // X
+  { id: 'start', keyCode: 'Enter', default: 9 },        // Start/Menu
+  { id: 'select', keyCode: 'Escape', default: 8 },      // Back/View
+];
+
+const GAMEPAD_STORAGE_KEY = 'dosvaultGamepadControls';
+// Umbral del stick analógico izquierdo para tratarlo como dirección
+// digital (arriba/abajo/izq/der). 0.5 es un punto de partida razonable;
+// ajustar acá si en la práctica queda sensible o poco responsivo.
+const GAMEPAD_STICK_DEADZONE = 0.5;
+
+function defaultGamepadMap() {
+  const map = {};
+  GAMEPAD_ACTIONS.forEach(a => { map[a.id] = a.default; });
+  return map;
+}
+
+function loadGamepadMap() {
+  const map = defaultGamepadMap();
+  try {
+    const raw = localStorage.getItem(GAMEPAD_STORAGE_KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      GAMEPAD_ACTIONS.forEach(a => {
+        // null es válido (el usuario dejó esa acción sin asignar a propósito).
+        if (a.id in saved && (saved[a.id] === null || typeof saved[a.id] === 'number')) {
+          map[a.id] = saved[a.id];
+        }
+      });
+    }
+  } catch (err) {
+    console.error('No se pudo leer la configuración de gamepad guardada, uso los valores por defecto:', err);
+  }
+  return map;
+}
+
+let GAMEPAD_MAP = loadGamepadMap();
+function saveGamepadMap() {
+  try {
+    localStorage.setItem(GAMEPAD_STORAGE_KEY, JSON.stringify(GAMEPAD_MAP));
+  } catch (err) {
+    console.error('No se pudo guardar la configuración de gamepad (localStorage no disponible):', err);
+  }
+}
+
+function gamepadButtonLabel(idx) {
+  if (idx == null) return t('ctrl.unassigned');
+  return t('ctrl.gamepad.button', { n: idx });
+}
+
+// Estado del mando activo. Solo se sigue el primero que se conecta -- no
+// hay necesidad de multiplayer/split-screen acá.
+let activeGamepadIndex = null;
+let activeGamepadLabel = null;
+// Frame anterior de cada acción mapeada (botones) + de las 4 direcciones
+// del stick analógico, para poder detectar transiciones (press/release) en
+// vez de solo el estado actual.
+const gamepadPrevPressed = {};
+const STICK_DIRECTIONS = ['padUp', 'padDown', 'padLeft', 'padRight'];
+// Acción en modo "esperando que se apriete un botón nuevo" desde el popup
+// de Controles > Mando, o null si no se está capturando nada. Mismo
+// concepto que `controlsCapture` para teclado, pero separado porque la
+// fuente del evento es el loop de polling (rAF), no un listener de keydown.
+let gamepadCapture = null;
+
+window.addEventListener('gamepadconnected', e => {
+  // Si ya había un mando activo, no lo reemplazamos por uno nuevo que se
+  // conecte después -- evita que conectar unos parlantes USB con mando
+  // integrado, un volante, etc. le saque el control al mando que la
+  // persona ya estaba usando.
+  if (activeGamepadIndex != null) return;
+  activeGamepadIndex = e.gamepad.index;
+  activeGamepadLabel = e.gamepad.id;
+  console.log('Gamepad conectado:', e.gamepad.id, '(mapping:', e.gamepad.mapping || 'ninguno', ')');
+  if (controlsModalEl && controlsModalEl.classList.contains('show') && controlsActiveTab === 'gamepad') {
+    renderControlsModal();
+  }
+});
+
+window.addEventListener('gamepaddisconnected', e => {
+  if (e.gamepad.index !== activeGamepadIndex) return;
+  activeGamepadIndex = null;
+  activeGamepadLabel = null;
+  gamepadCapture = null;
+  for (const k in gamepadPrevPressed) delete gamepadPrevPressed[k];
+  if (controlsModalEl && controlsModalEl.classList.contains('show') && controlsActiveTab === 'gamepad') {
+    renderControlsModal();
+  }
+});
+
+// Sintetiza un evento de teclado real hacia donde el juego esté
+// escuchando. document.activeElement es el punto de partida razonable
+// (js-dos/ScummVM suelen enfocar su propio canvas/iframe al arrancar), pero
+// EN CASO DE QUE EL MANDO NO MUEVA EL JUEGO, verificar en la consola del
+// navegador con el juego corriendo y con foco real (click adentro):
+//   document.activeElement.dispatchEvent(new KeyboardEvent('keydown', {code:'ArrowUp', bubbles:true, cancelable:true}))
+// Si eso no mueve el personaje, hay que inspeccionar con DevTools qué nodo
+// dentro de .jsdos-container tiene el foco real y reemplazar `target` de
+// abajo por una referencia explícita a ese nodo.
+function dispatchSyntheticKey(code, down) {
+  const target = document.activeElement || window;
+  target.dispatchEvent(new KeyboardEvent(down ? 'keydown' : 'keyup', {
+    code,
+    bubbles: true,
+    cancelable: true,
+  }));
+}
+
+function pollGamepad() {
+  if (activeGamepadIndex != null) {
+    const gp = navigator.getGamepads()[activeGamepadIndex];
+    if (gp) {
+      // 1. Botones normales (todo lo que no sea el stick analógico).
+      GAMEPAD_ACTIONS.forEach(a => {
+        if (STICK_DIRECTIONS.includes(a.id)) return; // el stick se resuelve aparte, más abajo
+        const idx = GAMEPAD_MAP[a.id];
+        const btn = idx != null ? gp.buttons[idx] : null;
+        const pressed = !!(btn && btn.pressed);
+        handleGamepadTransition(a, pressed);
+      });
+
+      // 2. Stick analógico izquierdo (axes[0]=X, axes[1]=Y) traducido a las
+      // 4 direcciones digitales, mismo patrón de transición que un botón.
+      const x = gp.axes[0] || 0;
+      const y = gp.axes[1] || 0;
+      handleGamepadTransition(GAMEPAD_ACTIONS.find(a => a.id === 'padLeft'), x < -GAMEPAD_STICK_DEADZONE);
+      handleGamepadTransition(GAMEPAD_ACTIONS.find(a => a.id === 'padRight'), x > GAMEPAD_STICK_DEADZONE);
+      handleGamepadTransition(GAMEPAD_ACTIONS.find(a => a.id === 'padUp'), y < -GAMEPAD_STICK_DEADZONE);
+      handleGamepadTransition(GAMEPAD_ACTIONS.find(a => a.id === 'padDown'), y > GAMEPAD_STICK_DEADZONE);
+
+      // 3. Modo captura desde el popup de Controles > Mando: cualquier
+      // botón nuevo que se presione (sin importar si ya estaba mapeado a
+      // otra acción) queda asignado a la acción que se está esperando.
+      if (gamepadCapture) {
+        for (let i = 0; i < gp.buttons.length; i++) {
+          if (gp.buttons[i].pressed) {
+            GAMEPAD_MAP[gamepadCapture] = i;
+            saveGamepadMap();
+            gamepadCapture = null;
+            renderControlsModal();
+            break;
+          }
+        }
+      }
+    }
+  }
+  requestAnimationFrame(pollGamepad);
+}
+
+function handleGamepadTransition(action, pressed) {
+  if (!action) return;
+  const was = !!gamepadPrevPressed[action.id];
+  if (gamepadCapture == null && gamePlaying && pressed !== was) {
+    dispatchSyntheticKey(action.keyCode, pressed);
+  }
+  gamepadPrevPressed[action.id] = pressed;
+}
+
+requestAnimationFrame(pollGamepad);
+
 /* ---------- POPUP DE CONTROLES (F2) ---------- */
 // controlsCapture: null cuando el popup no está esperando una tecla nueva
 // para reasignar; si no, { actionId, btnEl, keyEl } de la fila que está
@@ -1021,17 +1205,20 @@ if (infoModalEl) infoModalEl.addEventListener('click', e => { if (e.target === i
 // de keydown más arriba, que intercepta esa tecla entera y la manda a
 // handleControlsCapture en vez de dejarla navegar/disparar acciones).
 let controlsCapture = null;
-// Qué tab del popup está activo: "nav" (controles de navegación del sitio)
-// o "game" (controles básicos dentro del juego -- ESC/CTRL/ALT/Espacio).
-// Separados en tabs porque son dos cosas conceptualmente distintas: nav ya
-// está conectado a la UI del shell, game queda guardado/asignable pero
-// todavía no le llega al juego (ver nota en CONTROL_ACTIONS más arriba).
+// Qué tab del popup está activo: "nav" (controles de navegación del sitio),
+// "game" (controles básicos dentro del juego -- ESC/CTRL/ALT/Espacio) o
+// "gamepad" (asignación de botones de mando). Separados en tabs porque son
+// tres cosas conceptualmente distintas: nav ya está conectado a la UI del
+// shell, game queda guardado/asignable pero todavía no le llega al juego
+// (ver nota en CONTROL_ACTIONS más arriba), y gamepad sí llega al juego
+// (ver bloque GAMEPAD más arriba) pero con su propio storage/UI.
 let controlsActiveTab = 'nav';
 
 function openControlsModal() {
   if (!controlsModalEl) return;
   if (infoModalEl && infoModalEl.classList.contains('show')) closeInfoModal();
   controlsCapture = null;
+  gamepadCapture = null;
   controlsActiveTab = 'nav';
   renderControlsModal();
   controlsModalEl.classList.add('show');
@@ -1039,13 +1226,15 @@ function openControlsModal() {
 
 function closeControlsModal() {
   controlsCapture = null;
+  gamepadCapture = null;
   if (controlsModalEl) controlsModalEl.classList.remove('show');
 }
 
 function setControlsTab(tab) {
-  if (tab !== 'nav' && tab !== 'game') return;
+  if (tab !== 'nav' && tab !== 'game' && tab !== 'gamepad') return;
   if (tab === controlsActiveTab) return;
   controlsCapture = null;
+  gamepadCapture = null;
   controlsActiveTab = tab;
   renderControlsModal();
 }
@@ -1061,12 +1250,18 @@ function renderControlsModal() {
 
   const tabNavEl = document.getElementById('controlsTabNav');
   const tabGameEl = document.getElementById('controlsTabGame');
-  [[tabNavEl, 'nav'], [tabGameEl, 'game']].forEach(([el, id]) => {
+  const tabGamepadEl = document.getElementById('controlsTabGamepad');
+  [[tabNavEl, 'nav'], [tabGameEl, 'game'], [tabGamepadEl, 'gamepad']].forEach(([el, id]) => {
     if (!el) return;
     const isActive = controlsActiveTab === id;
     el.classList.toggle('active', isActive);
     el.setAttribute('aria-selected', String(isActive));
   });
+
+  if (controlsActiveTab === 'gamepad') {
+    renderGamepadTab();
+    return;
+  }
 
   const note = controlsActiveTab === 'game' ? t('ctrl.group.game.note') : '';
   const actions = CONTROL_ACTIONS.filter(a => a.group === controlsActiveTab);
@@ -1084,6 +1279,32 @@ function renderControlsModal() {
       const row = btn.closest('.controls-row');
       const keyEl = row && row.querySelector('.cr-key');
       startCapture(actionId, btn, keyEl);
+    });
+  });
+}
+
+function renderGamepadTab() {
+  const status = activeGamepadIndex != null
+    ? t('ctrl.gamepad.detected', { name: activeGamepadLabel })
+    : t('ctrl.gamepad.none');
+
+  const rows = GAMEPAD_ACTIONS.map(a => `
+      <div class="controls-row">
+        <div class="cr-label">${t('ctrl.' + a.id + '.label')}</div>
+        <span class="cr-key">${gamepadCapture === a.id ? t('ctrl.pressKey') : gamepadButtonLabel(GAMEPAD_MAP[a.id])}</span>
+        <span class="cr-btn" data-gamepad-action="${a.id}">${t('btn.change')}</span>
+      </div>`).join('');
+
+  controlsModalBody.innerHTML = `<div class="controls-group-note">${status}</div>${rows}`;
+
+  controlsModalBody.querySelectorAll('[data-gamepad-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (activeGamepadIndex == null) {
+        showToast(t('ctrl.gamepad.none'));
+        return;
+      }
+      gamepadCapture = btn.dataset.gamepadAction;
+      renderGamepadTab();
     });
   });
 }
@@ -1126,8 +1347,13 @@ function handleControlsCapture(e) {
 }
 
 if (controlsModalResetBtn) controlsModalResetBtn.addEventListener('click', () => {
-  KEYMAP = defaultKeyMap();
-  saveKeyMap();
+  if (controlsActiveTab === 'gamepad') {
+    GAMEPAD_MAP = defaultGamepadMap();
+    saveGamepadMap();
+  } else {
+    KEYMAP = defaultKeyMap();
+    saveKeyMap();
+  }
   renderControlsModal();
 });
 if (controlsModalCloseBtn) controlsModalCloseBtn.addEventListener('click', closeControlsModal);
