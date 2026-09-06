@@ -37,15 +37,6 @@
       "year": "1992",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/California%20Games%20II%20(1990).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/californiagames2.jsdos"
-    },
-    {
-      "id": "cannonfodder",
-      "name": "CANNONFODDER",
-      "genre": "sports",
-      "added": "2026-09-06",
-      "year": "1993",
-      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Cannon%20Fodder%20(1993).png",
-      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cannonfodder.jsdos"
     }
   ]
 }
