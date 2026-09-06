@@ -6,7 +6,7 @@
       "url": "data/genres/fps.json"
     },
     "accion": {
-      "name": "Acción",
+      "name": "Accion",
       "count": 1,
       "url": "data/genre/action.json"
     },
