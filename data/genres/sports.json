@@ -1,0 +1,33 @@
+{
+  "id": "sports",
+  "name": "Deportes",
+  "games": [
+    {
+      "id": "pcargentina",
+      "name": "PCARGENT",
+      "genre": "sports",
+      "added": "2026-09-06",
+      "year": "1990",
+      "cover": "https://computeremuzone.com/cache/fichas-caratulas/p/742b00ab81cf1782b9282def84489f4d.webp",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pcargentina.jsdos"
+    },
+    {
+      "id": "pcfutbol30",
+      "name": "PC FUTBOL30",
+      "genre": "sports",
+      "added": "2026-09-06",
+      "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/PC%20Futbol%203.0%20(1994).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pcfutbol30.jsdos"
+    },
+    {
+      "id": "pcfutbol45",
+      "name": "PC FUTBOL45",
+      "genre": "sports",
+      "added": "2026-09-06",
+      "year": "1995",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/PC%20Futbol%204.0%20(1995).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pcfutbol45.jsdos"
+    }
+  ]
+}

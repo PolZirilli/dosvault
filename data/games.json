@@ -44,6 +44,11 @@
       "name": "Carreras",
       "count": 17,
       "url": "data/genres/race.json"
+    },
+    "sports": {
+      "name": "Deportes",
+      "count": 3,
+      "url": "data/genres/sports.json"
     }
   }
 }
