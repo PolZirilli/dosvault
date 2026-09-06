@@ -7,8 +7,8 @@
     },
     "accion": {
       "name": "Acción",
-      "count": 0,
-      "url": "data/genres/accion.json"
+      "count": 1,
+      "url": "data/genre/action.json"
     },
     "rts": {
       "name": "Estrategia",
@@ -47,7 +47,7 @@
     },
     "sports": {
       "name": "Deportes",
-      "count": 3,
+      "count": 4,
       "url": "data/genres/sports.json"
     }
   }
