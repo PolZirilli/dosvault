@@ -55,6 +55,24 @@
       "year": "1994",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Pinball%20Fantasies%20(1992).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/pinbllf.jsdos"
+    },
+    {
+      "id": "bombjack",
+      "name": "BOMBJACK",
+      "genre": "arcade",
+      "added": "2026-09-06",
+      "year": "1985",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Mighty%20Bombjack%20(1990).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/bombjack.jsdos"
+    },
+    {
+      "id": "bubblebobble",
+      "name": "BUBBLE BOBBLE",
+      "genre": "arcade",
+      "added": "2026-09-06",
+      "year": "1990",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Bubble%20Bobble%20(1988).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/bubblebobble.jsdos"
     }
   ]
 }
