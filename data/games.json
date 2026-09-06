@@ -5,11 +5,6 @@
       "count": 13,
       "url": "data/genres/fps.json"
     },
-    "accion": {
-      "name": "Accion",
-      "count": 1,
-      "url": "data/genres/action.json"
-    },
     "rts": {
       "name": "Estrategia",
       "count": 2,
@@ -39,6 +34,11 @@
       "name": "Arcade",
       "count": 6,
       "url": "data/genres/arcade.json"
+    },
+    "action": {
+      "name": "Accion",
+      "count": 1,
+      "url": "data/genres/accion.json"
     },
     "race": {
       "name": "Carreras",
