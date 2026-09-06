@@ -73,6 +73,15 @@
       "year": "1990",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Bubble%20Bobble%20(1988).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/bubblebobble.jsdos"
+    },
+    {
+      "id": "cannonfodder",
+      "name": "CANNONFODDER",
+      "genre": "sports",
+      "added": "2026-09-06",
+      "year": "1993",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Cannon%20Fodder%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cannonfodder.jsdos"
     }
   ]
 }
