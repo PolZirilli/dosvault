@@ -8,7 +8,7 @@
     "accion": {
       "name": "Accion",
       "count": 1,
-      "url": "data/genre/action.json"
+      "url": "data/genres/action.json"
     },
     "rts": {
       "name": "Estrategia",
