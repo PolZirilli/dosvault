@@ -38,7 +38,7 @@
     "action": {
       "name": "Accion",
       "count": 1,
-      "url": "data/genres/accion.json"
+      "url": "data/genres/action.json"
     },
     "race": {
       "name": "Carreras",
