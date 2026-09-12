@@ -64,6 +64,60 @@
       "year": "1992",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/American%20Gladiators%20(1992).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sports/americangladiators.jsdos"
+    },
+    {
+      "id": "league",
+      "name": "LEAGUE",
+      "genre": "sports",
+      "added": "2026-09-11",
+      "year": "1989",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Superleague%20Soccer%20(1989).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sports/league.jsdos"
+    },
+    {
+      "id": "olympic",
+      "name": "OLYMPIC",
+      "genre": "sports",
+      "added": "2026-09-11",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Olimpiadas%2092%20-%20Atletismo%20(1992).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sports/olympic.jsdos"
+    },
+    {
+      "id": "pcbasket",
+      "name": "PCBASKET",
+      "genre": "sports",
+      "added": "2026-09-11",
+      "year": "1993",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/PC%20Basket%20(1993).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sports/pcbasket.jsdos"
+    },
+    {
+      "id": "pcgol",
+      "name": "PCGOL",
+      "genre": "sports",
+      "added": "2026-09-11",
+      "year": "1993",
+      "cover": "https://computeremuzone.com/fichas-caratulas/p/629-pc-gol-cd.jpg",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sports/pcgol.jsdos"
+    },
+    {
+      "id": "skateordie",
+      "name": "SKATEORDIE",
+      "genre": "sports",
+      "added": "2026-09-11",
+      "year": "1988",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Skate%20or%20Die%20(1988).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sports/skateordie.jsdos"
+    },
+    {
+      "id": "tenniselbow",
+      "name": "TENNISELBOW",
+      "genre": "sports",
+      "added": "2026-09-11",
+      "year": "1997",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Tennis%20Elbow%20(1997).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/sports/tenniselbow.jsdos"
     }
   ]
 }
