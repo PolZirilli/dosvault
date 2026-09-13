@@ -5,11 +5,20 @@
         {
             "id": "cannonfodder",
             "name": "CANNONFODDER",
-            "genre": "sports",
-            "added": "2026-09-06",
+            "genre": "action",
+            "added": "2026-09-13",
             "year": "1993",
             "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Cannon%20Fodder%20(1993).png",
             "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/cannonfodder.jsdos"
+        },
+        {
+            "id": "gta",
+            "name": "GRAND THEFT AUTO",
+            "genre": "action",
+            "added": "2026-09-13",
+            "year": "1997",
+            "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Grand%20Theft%20Auto.png",
+            "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/gta.jsdos"
         }
     ]
 }

@@ -163,6 +163,60 @@
       "year": "1990",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Team%20Suzuki%20(1991).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/teamsuzuki.jsdos"
+    },
+    {
+      "id": "carmageddon",
+      "name": "CARMAGEDDON",
+      "genre": "race",
+      "added": "2026-08-13",
+      "year": "1997",
+      "cover": "",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/race/carmageddon.jsdos"
+    },
+    {
+      "id": "fatalracing",
+      "name": "FATALRACING",
+      "genre": "race",
+      "added": "2026-08-13",
+      "year": "1995",
+      "cover": "https://en.wikipedia.org/wiki/Fatal_Racing#/media/File:Fatal_Racing_Coverart.png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/race/fatalracing.jsdos"
+    },
+    {
+      "id": "hotspeed",
+      "name": "HOTSPEED",
+      "genre": "race",
+      "added": "2026-08-13",
+      "year": "",
+      "cover": "",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/race/hotspeed.jsdos"
+    },
+    {
+      "id": "nascar",
+      "name": "NASCARRACING",
+      "genre": "race",
+      "added": "2026-08-13",
+      "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/NASCAR%20Racing%20(1994).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/race/nascarracing.jsdos"
+    },
+    {
+      "id": "pcrally",
+      "name": "PCRALLY",
+      "genre": "race",
+      "added": "2026-08-13",
+      "year": "1996",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Rallye%20Racing%2097%20(1996).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/race/pcrally.jsdos"
+    },
+    {
+      "id": "rally",
+      "name": "RALLY",
+      "genre": "race",
+      "added": "2026-08-13",
+      "year": "1994",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Rally%20Championships%20(1994).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/race/rally.jsdos"
     }
   ]
 }

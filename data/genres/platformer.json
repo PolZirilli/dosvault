@@ -136,6 +136,33 @@
       "year": "1992",
       "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Lucky%20Luke%20(1997).png",
       "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/luckyluke.jsdos"
+    },
+    {
+      "id": "riskywoods",
+      "name": "RISKYWOODS",
+      "genre": "platformer",
+      "added": "2026-09-13",
+      "year": "1992",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Risky%20Woods%20(1992).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/riskywoods.jsdos"
+    },
+    {
+      "id": "babyjoingoing",
+      "name": "BABYJOINGOING",
+      "genre": "platformer",
+      "added": "2026-09-13",
+      "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Baby%20Jo%20in%20-%20Going%20Home%20(1991).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/babyjoingoing.jsdos"
+    },
+    {
+      "id": "arachnophobia",
+      "name": "ARACHNOPHOBIA",
+      "genre": "platformer",
+      "added": "2026-09-13",
+      "year": "1991",
+      "cover": "https://thumbnails.libretro.com/DOS/Named_Boxarts/Arachnophobia%20(1991).png",
+      "bundle": "https://pub-13140bd15eda49b4a3f35bc937ab1c58.r2.dev/projects/dosvault/arachnophobia.jsdos"
     }
   ]
 }
