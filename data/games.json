@@ -7,17 +7,17 @@
     },
     "rts": {
       "name": "Estrategia",
-      "count": 2,
+      "count": 5,
       "url": "data/genres/rts.json"
     },
     "platformer": {
       "name": "Plataformas",
-      "count": 13,
+      "count": 18,
       "url": "data/genres/platformer.json"
     },
     "avg": {
       "name": "Aventuras",
-      "count": 13,
+      "count": 16,
       "url": "data/genres/avg.json"
     },
     "rpg": {
@@ -32,22 +32,22 @@
     },
     "arcade": {
       "name": "Arcade",
-      "count": 6,
+      "count": 8,
       "url": "data/genres/arcade.json"
     },
     "action": {
       "name": "Accion",
-      "count": 1,
+      "count": 2,
       "url": "data/genres/action.json"
     },
     "race": {
       "name": "Carreras",
-      "count": 17,
+      "count": 24,
       "url": "data/genres/race.json"
     },
     "sports": {
       "name": "Deportes",
-      "count": 4,
+      "count": 13,
       "url": "data/genres/sports.json"
     }
   }
