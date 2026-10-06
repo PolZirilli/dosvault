@@ -1,0 +1,68 @@
+{
+  "url": "http://127.0.0.1:8612/",
+  "out": "/opt/dosvault/qa-shots/latest",
+  "viewport": [
+    1366,
+    768
+  ],
+  "locale": "es-AR",
+  "steps": [
+    {
+      "waitFor": "#panelLeftList > *"
+    },
+    {
+      "wait": 800
+    },
+    {
+      "shot": "01-inicio-es"
+    },
+    {
+      "eval": "document.querySelectorAll('#panelLeftList > *').length"
+    },
+    {
+      "key": "Enter"
+    },
+    {
+      "waitFor": "#panelRightList > *"
+    },
+    {
+      "wait": 1500
+    },
+    {
+      "shot": "02-primer-genero-abierto"
+    },
+    {
+      "eval": "document.querySelectorAll('#panelRightList > *').length"
+    },
+    {
+      "click": "#langBtnEn"
+    },
+    {
+      "wait": 800
+    },
+    {
+      "shot": "03-idioma-en"
+    },
+    {
+      "click": "#langBtnEs"
+    },
+    {
+      "wait": 500
+    },
+    {
+      "key": "Enter"
+    },
+    {
+      "waitFor": ".window"
+    },
+    {
+      "wait": 12000
+    },
+    {
+      "shot": "04-primer-juego-abierto"
+    },
+    {
+      "eval": "document.querySelector('.window .titlebar-title')?.textContent"
+    }
+  ]
+}
