@@ -1040,6 +1040,10 @@ body {
   margin-bottom: 10px;
 }
 
+.ng-intro.ng-section {
+  margin-top: 16px;
+}
+
 .newgame-row {
   display: flex;
   align-items: baseline;

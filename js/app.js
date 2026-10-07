@@ -278,26 +278,146 @@ function fetchGamesJsonDateTime() {
 // bundle -- Content-Length y Last-Modified son headers "CORS-safelisted",
 // así que se pueden leer aunque el bucket no exponga headers custom,
 // siempre que el bucket permita el origen del sitio en su política CORS.
+//
+// Ese mismo HEAD sirve para saber si el bundle EXISTE en R2 (ver
+// BUNDLE_STATUS): un juego se oculta del catalogo SOLO si R2 contesta con
+// un "no existe" definitivo (404/410). Cualquier otra cosa -- error de red,
+// CORS (TypeError sin respuesta), timeout, 403, 5xx, 429 -- deja el juego
+// visible: si no, un problema de CORS o de permisos del bucket vaciaria el
+// catalogo entero. 403 NO cuenta como "no existe" a proposito: R2 contesta
+// 404 para objetos inexistentes, y un 403 indica un problema de acceso al
+// bucket entero (afectaria a los 99 juegos a la vez).
 const BUNDLE_INFO_CACHE = {};
-function fetchBundleInfo(g) {
-  if (!g.bundle) return Promise.resolve(null);
-  if (!(g.id in BUNDLE_INFO_CACHE)) {
-    BUNDLE_INFO_CACHE[g.id] = fetch(g.bundle, { method: 'HEAD' })
-      .then(res => {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const len = res.headers.get('content-length');
-        const lastMod = res.headers.get('last-modified');
-        return {
-          size: len != null ? parseInt(len, 10) : null,
-          dateTime: lastMod ? toDosDateTime(new Date(lastMod)) : null,
-        };
-      })
-      .catch(err => {
-        console.error(`No se pudo leer tamaño/fecha real de ${g.bundle}:`, err);
+// id -> 'ok' | 'missing' | 'unknown' | 'nobundle'. Sin entrada = todavia no
+// se verifico (se trata como visible).
+const BUNDLE_STATUS = {};
+const BUNDLE_MISSING_HTTP = [404, 410];
+const BUNDLE_HEAD_TIMEOUT_MS = 15000;
+const BUNDLE_HEAD_CONCURRENCY = 6;
+
+// Cola con concurrencia limitada para los HEAD (al cargar se verifican los
+// ~99 juegos; sin limite serian 99 pedidos en paralelo contra r2.dev). Las
+// filas que se estan mostrando en el panel derecho piden con prioridad
+// (pasan al frente de la cola) para que Size/Date no esperen a todo el resto.
+const bundleHeadQueue = [];
+let bundleHeadActive = 0;
+
+function pumpBundleHeadQueue() {
+  while (bundleHeadActive < BUNDLE_HEAD_CONCURRENCY && bundleHeadQueue.length) {
+    const task = bundleHeadQueue.shift();
+    bundleHeadActive++;
+    task.run().finally(() => {
+      bundleHeadActive--;
+      pumpBundleHeadQueue();
+    });
+  }
+}
+
+function headBundle(g) {
+  const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(() => ctrl.abort(), BUNDLE_HEAD_TIMEOUT_MS) : null;
+  return fetch(g.bundle, { method: 'HEAD', signal: ctrl ? ctrl.signal : undefined })
+    .then(res => {
+      if (BUNDLE_MISSING_HTTP.includes(res.status)) {
+        BUNDLE_STATUS[g.id] = 'missing';
+        console.warn(`Bundle inexistente en R2 (HTTP ${res.status}), se oculta "${g.id}": ${g.bundle}`);
+        scheduleAvailabilityRefresh();
         return null;
-      });
+      }
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      BUNDLE_STATUS[g.id] = 'ok';
+      const len = res.headers.get('content-length');
+      const lastMod = res.headers.get('last-modified');
+      return {
+        size: len != null ? parseInt(len, 10) : null,
+        dateTime: lastMod ? toDosDateTime(new Date(lastMod)) : null,
+      };
+    })
+    .catch(err => {
+      BUNDLE_STATUS[g.id] = 'unknown';
+      console.error(`No se pudo leer tamaño/fecha real de ${g.bundle}:`, err);
+      return null;
+    })
+    .finally(() => { if (timer) clearTimeout(timer); });
+}
+
+// Devuelve una promise con { size, dateTime } o null (sin bundle, bundle
+// inexistente o no se pudo verificar). El estado queda en BUNDLE_STATUS.
+// priority=true: si el HEAD todavia esta en cola, lo pasa al frente.
+function fetchBundleInfo(g, priority) {
+  if (!g.bundle) {
+    BUNDLE_STATUS[g.id] = 'nobundle';
+    return Promise.resolve(null);
+  }
+  if (!(g.id in BUNDLE_INFO_CACHE)) {
+    BUNDLE_INFO_CACHE[g.id] = new Promise(resolve => {
+      const task = { id: g.id, run: () => headBundle(g).then(resolve) };
+      if (priority) bundleHeadQueue.unshift(task); else bundleHeadQueue.push(task);
+    });
+    pumpBundleHeadQueue();
+  } else if (priority) {
+    const i = bundleHeadQueue.findIndex(task => task.id === g.id);
+    if (i > 0) bundleHeadQueue.unshift(bundleHeadQueue.splice(i, 1)[0]);
   }
   return BUNDLE_INFO_CACHE[g.id];
+}
+
+// Un juego se muestra salvo que su bundle haya dado 404/410.
+function isGameVisible(g) {
+  return BUNDLE_STATUS[g.id] !== 'missing';
+}
+
+function visibleGames(list) {
+  return (list || []).filter(isGameVisible);
+}
+
+// Cuando un HEAD descubre un bundle inexistente se recalculan los counts del
+// panel izquierdo y la lista del panel derecho. Se agrupan los cambios que
+// lleguen juntos en un solo re-render (setTimeout 0) y se conserva la
+// seleccion por id (genero y juego), no por posicion.
+let availabilityRefreshTimer = null;
+function scheduleAvailabilityRefresh() {
+  if (availabilityRefreshTimer) return;
+  availabilityRefreshTimer = setTimeout(() => {
+    availabilityRefreshTimer = null;
+    refreshAvailability();
+  }, 0);
+}
+
+function refreshAvailability() {
+  const prevLeft = LEFT_ITEMS[state.leftIndex];
+  const prevLeftId = prevLeft ? prevLeft.id : null;
+  buildLeftItems();
+  if (!LEFT_ITEMS.length) {
+    // No quedo ningun genero con juegos visibles: tambien se vacia el panel
+    // derecho (si no, seguiria mostrando la lista vieja con juegos ocultos).
+    state.leftIndex = 0;
+    state.rightIndex = 0;
+    state.focus = 'left';
+    currentGenre = null;
+    loadingGenreId = null;
+    RIGHT_ITEMS = [];
+    render();
+    return;
+  }
+  let li = LEFT_ITEMS.findIndex(item => item.id === prevLeftId);
+  if (li < 0) li = Math.min(state.leftIndex, LEFT_ITEMS.length - 1);
+  state.leftIndex = li;
+
+  const genreStillListed = currentGenre && LEFT_ITEMS.some(item => item.id === currentGenre);
+  if (currentGenre && !genreStillListed) {
+    // El genero abierto quedo sin juegos visibles: se abre el que quedo en
+    // su lugar en el panel izquierdo.
+    selectGenre(LEFT_ITEMS[li].id);
+  } else if (currentGenre && loadingGenreId !== currentGenre && GENRE_GAMES_CACHE[currentGenre]) {
+    const prevGame = RIGHT_ITEMS[state.rightIndex];
+    const next = visibleGames(GENRE_GAMES_CACHE[currentGenre]);
+    let ri = prevGame ? next.findIndex(g => g.id === prevGame.id) : -1;
+    if (ri < 0) ri = Math.max(0, Math.min(state.rightIndex, next.length - 1));
+    RIGHT_ITEMS = next;
+    state.rightIndex = ri;
+  }
+  render();
 }
 
 // Nombre en mayúsculas, sin truncar -- se muestra el título completo del
@@ -320,9 +440,15 @@ function genreLabel(id) {
 function buildLeftItems() {
   LEFT_ITEMS = Object.keys(GENRES).map(id => {
     const item = GENRES[id] || {};
-    const count = typeof item === 'object' && typeof item.count === 'number'
-      ? item.count
-      : GAMES.filter(g => g.genre === id).length;
+    // Si ya se cargo el archivo del genero, el count es la cantidad de
+    // juegos VISIBLES (sin los que dieron 404 en R2), asi coincide con las
+    // filas del panel derecho. Mientras no se cargo, se usa el count de
+    // data/games.json como antes.
+    const count = GENRE_GAMES_CACHE[id]
+      ? visibleGames(GENRE_GAMES_CACHE[id]).length
+      : typeof item === 'object' && typeof item.count === 'number'
+        ? item.count
+        : visibleGames(GAMES.filter(g => g.genre === id)).length;
     return { id, label: genreLabel(id), count };
   }).filter(item => item.count > 0);
 }
@@ -352,6 +478,9 @@ function renderLeftPanel() {
       render();
     });
     panelLeftList.appendChild(row);
+    // Con muchas filas la lista scrollea: se asegura que la fila
+    // seleccionada quede a la vista (nearest = no mueve nada si ya se ve).
+    if (row.classList.contains('selected')) row.scrollIntoView({ block: 'nearest' });
   });
 
   // Una sola consulta a GitHub (cacheada) alcanza para las 6-9 filas: todas
@@ -381,7 +510,7 @@ function selectGenre(genreId) {
   // 1. Si ya tenemos en caché los juegos de este género, mostramos inmediatamente
   if (GENRE_GAMES_CACHE[genreId]) {
     loadingGenreId = null;
-    RIGHT_ITEMS = GENRE_GAMES_CACHE[genreId];
+    RIGHT_ITEMS = visibleGames(GENRE_GAMES_CACHE[genreId]);
     renderRightPanel();
     updateCmdline();
     updateStatusBars();
@@ -392,8 +521,8 @@ function selectGenre(genreId) {
   const legacyGames = GAMES.filter(g => g.genre === genreId);
   if (legacyGames.length > 0) {
     loadingGenreId = null;
-    RIGHT_ITEMS = legacyGames.sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
-    GENRE_GAMES_CACHE[genreId] = RIGHT_ITEMS;
+    GENRE_GAMES_CACHE[genreId] = legacyGames.sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
+    RIGHT_ITEMS = visibleGames(GENRE_GAMES_CACHE[genreId]);
     renderRightPanel();
     updateCmdline();
     updateStatusBars();
@@ -424,12 +553,12 @@ function selectGenre(genreId) {
     .then(data => {
       const rawGames = Array.isArray(data) ? data : (data.games || []);
       const sorted = rawGames.slice().sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
-      GENRE_GAMES_CACHE[genreId] = sorted;
+      if (!GENRE_GAMES_CACHE[genreId]) GENRE_GAMES_CACHE[genreId] = sorted;
 
       // Condición de carrera: solo actualizamos el panel si el usuario sigue en este género
       if (currentGenre === genreId) {
         loadingGenreId = null;
-        RIGHT_ITEMS = sorted;
+        RIGHT_ITEMS = visibleGames(GENRE_GAMES_CACHE[genreId]);
         renderRightPanel();
         updateCmdline();
         updateStatusBars();
@@ -481,12 +610,13 @@ function renderRightPanel() {
     });
     row.addEventListener('dblclick', () => launchGame(g));
     panelRightList.appendChild(row);
+    if (row.classList.contains('selected')) row.scrollIntoView({ block: 'nearest' });
 
     // Tamaño y fecha reales del bundle -- llegan async (HEAD request), se
     // completan en el lugar sin re-renderizar todo el panel. Si para cuando
     // responde ya se navegó a otra categoría, la fila ya no está en el DOM
     // y no se toca nada (evita pisar datos de otro juego).
-    fetchBundleInfo(g).then(info => {
+    fetchBundleInfo(g, true).then(info => {
       if (!row.isConnected) return;
       const sizeEl = row.querySelector('.col-size');
       const dateEl = row.querySelector('.col-date');
@@ -611,10 +741,34 @@ document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { e.preventDefault(); closeNewGamesModal(); }
     return;
   }
+  // Probar bundle local (F9): Escape cierra sin elegir archivo.
+  if (testBundleModalEl && testBundleModalEl.classList.contains('show')) {
+    if (e.key === 'Escape') { e.preventDefault(); closeTestBundleModal(); }
+    return;
+  }
+  // Aviso de ScummVM: Escape equivale al boton de cerrar/continuar (resuelve
+  // la promise y el juego arranca, igual que con el mouse). Bloquear el resto
+  // evita ademas que un segundo Enter vuelva a llamar a launchGame mientras
+  // el aviso sigue abierto.
+  if (scummvmHintModalEl && scummvmHintModalEl.classList.contains('show')) {
+    if (e.key === 'Escape') { e.preventDefault(); closeScummvmHintModal(); }
+    return;
+  }
 
   // Alias fijos que siempre funcionan además de lo que esté configurado en
-  // "switchPanel", para no perder la navegación base aunque se reasigne.
-  if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') { e.preventDefault(); switchFocus(); return; }
+  // "switchPanel", para no perder la navegación base aunque se reasigne:
+  // <- lleva al panel izquierdo (generos) y -> al derecho (juegos). Si el
+  // foco ya esta en ese panel no hace nada.
+  if (e.code === 'ArrowLeft') {
+    e.preventDefault();
+    if (state.focus !== 'left') switchFocus();
+    return;
+  }
+  if (e.code === 'ArrowRight') {
+    e.preventDefault();
+    if (state.focus !== 'right') switchFocus();
+    return;
+  }
 
   const actionId = CODE_TO_ACTION[e.code];
   const handler = actionId && ACTION_HANDLERS[actionId];
@@ -689,35 +843,119 @@ if (helpForm) {
 }
 
 /* ---------- POPUP DE NOVEDADES ---------- */
-// Compara el campo "added" ("YYYY-MM-DD") de cada juego en data/games.json
-// contra la fecha de la ultima visita guardada en localStorage (por
-// navegador). Si hay juegos con "added" mas nuevo, los lista en un popup al
-// entrar. La primera vez que alguien entra (sin fecha guardada todavia) no
-// se muestra nada -- solo se guarda la fecha de hoy como punto de partida,
-// para no mostrar los 52 juegos existentes como si fueran "nuevos".
+// Avisa los juegos que se SUBIERON y los que se BAJARON desde la visita
+// anterior de este navegador:
+//  - "Subido": disponible ahora y no disponible en la visita anterior.
+//  - "Bajado": disponible en la visita anterior y ahora no (se quito del
+//    catalogo o su bundle dio 404/410 en R2).
+// "Disponible" = esta en data/genres/*.json y su bundle no dio 404/410 (ver
+// isGameVisible). Un juego que no se pudo verificar por red/CORS cuenta como
+// disponible, asi que nunca se reporta como bajado por un problema de red.
+// Simetricamente, tampoco se reporta como SUBIDO: para eso hace falta que el
+// HEAD haya confirmado el bundle (o que el juego no tenga bundle, igual que
+// hoy se muestra). Un juego sin verificar conserva el estado que tenia en la
+// lista guardada; asi un fallo de CORS pasajero no genera avisos falsos ni
+// en esta visita ni en la siguiente.
+//
+// Se guarda en localStorage (AVAILABLE_GAMES_KEY) la lista de juegos
+// disponibles de cada visita, con nombre/genero/anio para poder mostrar los
+// bajados aunque ya no esten en el catalogo. Casos:
+//  - Primera visita (sin nada guardado): no se muestra nada, solo se guarda.
+//  - Migracion (hay LAST_VISIT_KEY pero no la lista nueva): se usa el
+//    criterio anterior -- "added" posterior a la ultima visita -- y no se
+//    reportan bajados; desde la proxima visita ya se compara por lista.
+// El chequeo corre una sola vez por carga, cuando terminaron de cargar los
+// archivos de genero y todos los HEAD a R2 (ver loadAllGamesForNewCheck).
 const LAST_VISIT_KEY = 'dosvaultLastVisit';
+const AVAILABLE_GAMES_KEY = 'dosvaultAvailableGames';
+let catalogChangesChecked = false;
 
 function todayStr() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function checkNewGames(recentList) {
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function readSavedAvailableGames() {
+  try {
+    const raw = localStorage.getItem(AVAILABLE_GAMES_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && parsed.games && typeof parsed.games === 'object' ? parsed.games : null;
+  } catch (err) {
+    console.error('No se pudo leer la lista de juegos de la ultima visita (localStorage no disponible o dato corrupto):', err);
+    return null;
+  }
+}
+
+// allGames: todos los juegos de los archivos de genero que se pudieron
+// cargar. failedGenres: Set de generos cuyo archivo NO se pudo cargar. Si
+// fallo aunque sea uno, en esta visita no se reporta NINGUN bajado y todos
+// los juegos guardados que no se vieron se conservan en la lista: un juego
+// que se movio de genero al que justo no cargo no se puede distinguir de uno
+// quitado, y es preferible no avisar a avisar algo falso.
+function checkCatalogChanges(allGames, failedGenres) {
+  if (catalogChangesChecked) return;
+  catalogChangesChecked = true;
+  failedGenres = failedGenres || new Set();
+
   let lastVisit = null;
   try { lastVisit = localStorage.getItem(LAST_VISIT_KEY); } catch (err) {
     console.error('No se pudo leer la fecha de la ultima visita (localStorage no disponible):', err);
   }
+  const prev = readSavedAvailableGames();
 
-  const candidateGames = (Array.isArray(recentList) && recentList.length) ? recentList : GAMES;
+  const seen = new Set();
+  const available = (allGames || []).filter(g => {
+    if (!g || !g.id || seen.has(g.id) || !isGameVisible(g)) return false;
+    seen.add(g.id);
+    return true;
+  });
 
-  if (lastVisit) {
-    const newOnes = candidateGames
-      .filter(g => g.added && g.added > lastVisit)
-      .sort((a, b) => a.added === b.added ? gameSortLabel(a).localeCompare(gameSortLabel(b), 'es') : a.added.localeCompare(b.added));
-    if (newOnes.length) openNewGamesModal(newOnes);
+  const inPrev = id => !!prev && Object.prototype.hasOwnProperty.call(prev, id);
+  // Confirmado = el HEAD dio OK, o el juego no tiene bundle (se muestra
+  // igual que siempre). 'unknown' = red/CORS/timeout/otro HTTP.
+  const confirmed = g => BUNDLE_STATUS[g.id] === 'ok' || BUNDLE_STATUS[g.id] === 'nobundle';
+
+  let added = [];
+  let removed = [];
+  if (prev) {
+    added = available.filter(g => confirmed(g) && !inPrev(g.id));
+    removed = failedGenres.size ? [] : Object.keys(prev)
+      .filter(id => !seen.has(id))
+      .map(id => Object.assign({ id }, prev[id]))
+      .sort((a, b) => String(a.n || a.id).toUpperCase().localeCompare(String(b.n || b.id).toUpperCase(), 'es'));
+  } else if (lastVisit) {
+    added = available.filter(g => confirmed(g) && g.added && g.added > lastVisit);
   }
+  added.sort((a, b) => (a.added || '') === (b.added || '')
+    ? gameSortLabel(a).localeCompare(gameSortLabel(b), 'es')
+    : (a.added || '').localeCompare(b.added || ''));
 
-  try { localStorage.setItem(LAST_VISIT_KEY, todayStr()); } catch (err) {
-    console.error('No se pudo guardar la fecha de esta visita (localStorage no disponible):', err);
+  if (added.length || removed.length) openNewGamesModal(added, removed);
+
+  const next = {};
+  available.forEach(g => {
+    // Sin verificar y no estaba en la lista anterior: no se agrega todavia
+    // (se agregara, y se avisara como subido, cuando se confirme). En la
+    // primera visita / migracion no hay lista anterior y se guarda igual.
+    if (prev && !confirmed(g) && !inPrev(g.id)) return;
+    next[g.id] = { n: g.title || g.name, g: g.genre, y: g.year };
+  });
+  if (prev) {
+    Object.keys(prev).forEach(id => {
+      if (!next[id] && prev[id] && failedGenres.size) next[id] = prev[id];
+    });
+  }
+  try {
+    localStorage.setItem(AVAILABLE_GAMES_KEY, JSON.stringify({ v: 1, games: next }));
+    localStorage.setItem(LAST_VISIT_KEY, todayStr());
+  } catch (err) {
+    console.error('No se pudo guardar el estado de esta visita (localStorage no disponible):', err);
   }
 }
 
@@ -725,13 +963,30 @@ function newGamesIntro(n) {
   return n === 1 ? t('newgames.intro.one') : t('newgames.intro.many', { n });
 }
 
-function openNewGamesModal(list) {
+function removedGamesIntro(n) {
+  return n === 1 ? t('newgames.removed.one') : t('newgames.removed.many', { n });
+}
+
+function newGameRow(name, genre, year) {
+  const genreText = genre ? genreLabel(genre).toUpperCase() : '';
+  const meta = [genreText, year].filter(Boolean).join(' · ');
+  return `<div class="newgame-row"><span class="ng-name">${escapeHtml(toDosName(name))}</span><span class="ng-meta">${escapeHtml(meta)}</span></div>`;
+}
+
+function openNewGamesModal(added, removed) {
   if (!newGamesModalEl || !newGamesModalBody) return;
-  const rows = list.map(g => {
-    const genreText = genreLabel(g.genre).toUpperCase();
-    return `<div class="newgame-row"><span class="ng-name">${toDosName(g.title || g.name)}</span><span class="ng-meta">${genreText} · ${g.year}</span></div>`;
-  }).join('');
-  newGamesModalBody.innerHTML = `<p class="ng-intro">${newGamesIntro(list.length)}</p>${rows}`;
+  added = added || [];
+  removed = removed || [];
+  let html = '';
+  if (added.length) {
+    html += `<p class="ng-intro">${newGamesIntro(added.length)}</p>`;
+    html += added.map(g => newGameRow(g.title || g.name, g.genre, g.year)).join('');
+  }
+  if (removed.length) {
+    html += `<p class="ng-intro${added.length ? ' ng-section' : ''}">${removedGamesIntro(removed.length)}</p>`;
+    html += removed.map(r => newGameRow(r.n || r.id, r.g, r.y)).join('');
+  }
+  newGamesModalBody.innerHTML = html;
   newGamesModalEl.classList.add('show');
 }
 
@@ -1682,6 +1937,7 @@ fetch('data/games.json')
   });
 
 function loadAllGamesForNewCheck(genres) {
+  const failedGenres = new Set();
   const fetches = Object.keys(genres).map(gid => {
     const entry = genres[gid];
     const url = entry && typeof entry === 'object' ? entry.url : null;
@@ -1692,14 +1948,29 @@ function loadAllGamesForNewCheck(genres) {
         const rawGames = Array.isArray(data) ? data : (data.games || []);
         const sorted = rawGames.slice().sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
         if (!GENRE_GAMES_CACHE[gid]) GENRE_GAMES_CACHE[gid] = sorted;
-        return sorted;
+        return GENRE_GAMES_CACHE[gid];
       })
       .catch(err => {
+        failedGenres.add(gid);
         console.error(`No se pudieron precargar los juegos de "${gid}" para el chequeo de novedades:`, err);
         return [];
       });
   });
-  Promise.all(fetches).then(lists => checkNewGames(lists.flat()));
+  Promise.all(fetches).then(lists => {
+    const all = lists.flat();
+    // Con los archivos de genero cargados, los counts pasan a ser la cantidad
+    // real de juegos (antes de esto se mostraba el count de games.json).
+    refreshAvailability();
+    // Verificacion en segundo plano de todos los bundles contra R2 (HEAD con
+    // concurrencia limitada, ver fetchBundleInfo). No bloquea el render: el
+    // panel ya esta dibujado y se va actualizando a medida que aparecen
+    // bundles inexistentes (scheduleAvailabilityRefresh). Recien cuando
+    // terminaron TODOS se arma el aviso de subidos/bajados.
+    return Promise.all(all.map(g => fetchBundleInfo(g)))
+      .then(() => checkCatalogChanges(all, failedGenres));
+  }).catch(err => {
+    console.error('Fallo el chequeo de novedades del catalogo:', err);
+  });
 }
 
 // Cambio de idioma (switch ES/EN, ver js/i18n.js): todo lo que ya se haya
@@ -1709,7 +1980,17 @@ function loadAllGamesForNewCheck(genres) {
 // applyStaticI18n() en i18n.js -- no hace falta tocarlo desde aca.
 document.addEventListener('dv:langchange', () => {
   buildLeftItems();
-  if (currentGenre) selectGenre(currentGenre);
+  if (currentGenre) {
+    // selectGenre pone rightIndex en 0; se conserva el juego seleccionado
+    // (por id, no por posicion) para que cambiar de idioma no mueva la
+    // seleccion.
+    const prevGame = RIGHT_ITEMS[state.rightIndex];
+    selectGenre(currentGenre);
+    if (prevGame) {
+      const ri = RIGHT_ITEMS.findIndex(g => g.id === prevGame.id);
+      if (ri >= 0) state.rightIndex = ri;
+    }
+  }
   renderFkeys();
   render();
   if (controlsModalEl && controlsModalEl.classList.contains('show')) renderControlsModal();

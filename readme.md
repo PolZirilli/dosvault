@@ -87,7 +87,7 @@ dosvault/
 ```
 
 - `name`: fallback label (the visible label normally comes from `I18N_GENRES` in `js/i18n.js`).
-- `count`: shown in the **Files** column of the left panel. Genres with `count: 0` are hidden. It is maintained **by hand**.
+- `count`: maintained **by hand**. It is shown in the **Files** column only until the genre files finish loading; from then on the column shows the number of **visible** games of the genre (games whose bundle returned 404/410 on R2 are not counted). Genres with 0 games are hidden.
 - `url`: genre file, loaded only when the visitor opens that genre (lazy loading with in-memory cache).
 
 Current genre ids: `fps`, `rts`, `platformer`, `avg`, `rpg`, `sim`, `arcade`, `action`, `race`, `sports`.
@@ -127,6 +127,8 @@ Current genre ids: `fps`, `rts`, `platformer`, `avg`, `rpg`, `sim`, `arcade`, `a
 
 Size and date shown in the right panel are **not** stored in JSON: they are read live from the bundle with an HTTP `HEAD` request (`Content-Length` / `Last-Modified`), which requires the R2 bucket's CORS policy to allow the site's origin.
 
+The same `HEAD` decides whether a game is listed. On load, every bundle in the catalog is checked in the background (at most 6 requests at a time, 15 s timeout each). A game is **hidden** only when R2 answers a definitive 404 or 410. Network errors, CORS errors, timeouts and any other status (403, 5xx, 429) keep the game visible, so a CORS or bucket problem never empties the catalog. Games without a `bundle` field stay visible, as before. `data/` is never modified: the filter is applied at runtime.
+
 Catalog snapshot at the time of this review: **99 games**, 85 on js-dos and 14 on ScummVM.
 
 ## 6. Emulation engines
@@ -151,13 +153,13 @@ Catalog snapshot at the time of this review: **99 games**, 85 on js-dos and 14 o
 
 | Feature | How it works |
 |---|---|
-| Two-panel navigation | Genres on the left, games on the right; arrows / Tab / Enter. Keyboard goes entirely to the game while a game window has focus; clicking outside returns it to the shell. |
+| Two-panel navigation | Genres on the left, games on the right; ↑/↓ move, ← goes to the left panel, → to the right panel, Tab switches, Enter opens/runs. The selected row is kept scrolled into view, and switching ES/EN keeps the selected game. While any popup is open (Info, Controls, Help, New games, F9 Test bundle, ScummVM hint) navigation is blocked and `Esc` closes it (on the ScummVM hint, `Esc` works like its close button and the game starts). Keyboard goes entirely to the game while a game window has focus; clicking outside returns it to the shell. |
 | F-key bar | F1 Controls · F2 Info · F3 Run · F4 Refresh · F5 Help · F9 Test bundle · F10 Close. |
 | Game windows | Draggable, maximizable, multiple at once; z-ordering and focus handling in `app.js`. |
 | Info popup | Wikipedia summary + Wikidata publisher, fetched client-side, with a Google search fallback link. |
 | Key remapping | "Controls" popup: Navigation tab (wired), In-game tab (`action1`/`action2` reserved, not wired yet), Gamepad tab. Uses `KeyboardEvent.code`. |
 | Gamepad support | Browser Gamepad API (tested with Xbox Series X, "standard" mapping). Buttons are mapped to keyboard keys and sent to the game as synthetic key events. Remappable. |
-| New games popup | Compares each game's `added` date against the visitor's last visit date. |
+| New games popup | Shown once per load, after all R2 checks finish. Lists games **added** (available now, not available on this browser's previous visit) and games **removed** (available on the previous visit, now gone from the catalog or 404/410 on R2). Games that could not be checked (network/CORS) count as available and are never reported as removed; they are reported as added only once R2 confirms the bundle. If any genre file fails to load, no removals are reported on that visit. First visit: no popup. Visitors with only the old `dosvaultLastVisit` key get the old `added`-date criterion once, without removals. |
 | Help / Contact | Netlify Forms (`name="contacto"`, honeypot field): feedback, game requests, bug reports. |
 | Test a local bundle (F9) | Loads a local `.jsdos` or ScummVM zip through a `blob:` URL; the file never leaves the browser. Used to test a bundle before uploading it to R2. |
 | i18n | Spanish for any `es-*` browser language, English for everything else; manual ES/EN switch saved per browser. |
@@ -171,6 +173,7 @@ Catalog snapshot at the time of this review: **99 games**, 85 on js-dos and 14 o
 | `dosvaultGamepadControls` | Gamepad remapping |
 | `dosvaultLang` | Chosen UI language |
 | `dosvaultLastVisit` | Date of last visit (for "New games") |
+| `dosvaultAvailableGames` | Games available on the last visit: `{ v: 1, games: { <id>: { n: name, g: genre, y: year } } }` (for "New games") |
 | `dosvaultScummvmHintDismissed` | ScummVM hint dismissed |
 
 ## 8. Content pipeline: adding a game
