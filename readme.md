@@ -45,8 +45,6 @@ Visitor's browser
  ├─ ScummVM WASM (vendored, iframe)  ← adventure game engines
  └─ Third-party lookups (client-side, no keys):
      • GitHub API   → date of last commit to data/games.json
-     • Wikipedia / Wikidata → game info popup (F2)
-     • libretro thumbnails → box art covers
      • Netlify Forms → Help/Contact form submissions
 ```
 
@@ -116,18 +114,25 @@ Current genre ids: `fps`, `rts`, `platformer`, `avg`, `rpg`, `sim`, `arcade`, `a
 |---|---|---|
 | `id` | yes | Unique key; also used for window ids and cache keys |
 | `name` | yes | Short DOS-style name shown in the list and window title |
-| `title` | no | Full display title; preferred over `name` for sorting, tooltip and info lookup |
+| `title` | no | Full display title; preferred over `name` for sorting and tooltip |
 | `genre` | yes | Must match the genre id |
 | `added` | yes | `YYYY-MM-DD`; drives the "New games" popup |
-| `year` | yes | Release year, shown in info/new-games popups |
-| `cover` | yes | Box-art image URL (libretro thumbnails) |
+| `year` | yes | Release year, shown in the new-games popup |
+| `cover` | yes | Box-art image URL (libretro thumbnails). Not displayed anywhere at the moment (it was only used by the removed Info popup) |
 | `bundle` | yes | Absolute URL of the bundle on R2 |
 | `engine` | no | `"scummvm"` to use ScummVM; omitted = js-dos |
 | `lang` | no | `"es"`/`"en"`, shown in the **Language** column; defaults to `EN` |
 
 Size and date shown in the right panel are **not** stored in JSON: they are read live from the bundle with an HTTP `HEAD` request (`Content-Length` / `Last-Modified`), which requires the R2 bucket's CORS policy to allow the site's origin.
 
-The same `HEAD` decides whether a game is listed. On load, every bundle in the catalog is checked in the background (at most 6 requests at a time, 15 s timeout each). A game is **hidden** only when R2 answers a definitive 404 or 410. Network errors, CORS errors, timeouts and any other status (403, 5xx, 429) keep the game visible, so a CORS or bucket problem never empties the catalog. Games without a `bundle` field stay visible, as before. `data/` is never modified: the filter is applied at runtime.
+The same `HEAD` decides whether a game is listed. Rule: **a game whose bundle is not on R2 must never be visible, not even for an instant.** On load, every bundle in the catalog is checked in the background (at most 6 requests at a time, 15 s timeout each; the games of the open genre jump the queue and skip the 6-request limit). A game with a `bundle` is shown only once its `HEAD` has finished:
+
+- 200 OK: visible.
+- 404 or 410: hidden.
+- Network error, CORS error, timeout or any other status (403, 5xx, 429): visible, so a CORS or bucket problem never empties the catalog (at worst the games appear after the 15 s timeout).
+- Not checked yet: hidden.
+
+Games without a `bundle` field are always visible, as before. While the open genre still has unchecked games, the right panel shows "Checking games…" ("Verificando juegos…") instead of a partial list, and Enter/Run do nothing until it fills. The **Files** count of a genre uses the `count` from `games.json` until all its games are checked, then the number of visible games; a genre with 0 visible games is hidden. `data/` is never modified: the filter is applied at runtime.
 
 Catalog snapshot at the time of this review: **99 games**, 85 on js-dos and 14 on ScummVM.
 
@@ -153,13 +158,12 @@ Catalog snapshot at the time of this review: **99 games**, 85 on js-dos and 14 o
 
 | Feature | How it works |
 |---|---|
-| Two-panel navigation | Genres on the left, games on the right; ↑/↓ move, ← goes to the left panel, → to the right panel, Tab switches, Enter opens/runs. The selected row is kept scrolled into view, and switching ES/EN keeps the selected game. While any popup is open (Info, Controls, Help, New games, F9 Test bundle, ScummVM hint) navigation is blocked and `Esc` closes it (on the ScummVM hint, `Esc` works like its close button and the game starts). Keyboard goes entirely to the game while a game window has focus; clicking outside returns it to the shell. |
-| F-key bar | F1 Controls · F2 Info · F3 Run · F4 Refresh · F5 Help · F9 Test bundle · F10 Close. |
+| Two-panel navigation | Genres on the left, games on the right; ↑/↓ move, ← goes to the left panel, → to the right panel, Tab switches, Enter opens/runs. The selected row is kept scrolled into view, and switching ES/EN keeps the selected game. While any popup is open (Controls, Help, New games, F9 Test bundle, ScummVM hint) navigation is blocked and `Esc` closes it (on the ScummVM hint, `Esc` works like its close button and the game starts). Keyboard goes entirely to the game while a game window has focus; clicking outside returns it to the shell. |
+| F-key bar | F1 Controls · F3 Run · F4 Refresh · F5 Help · F9 Test bundle · F10 Close. |
 | Game windows | Draggable, maximizable, multiple at once; z-ordering and focus handling in `app.js`. |
-| Info popup | Wikipedia summary + Wikidata publisher, fetched client-side, with a Google search fallback link. |
 | Key remapping | "Controls" popup: Navigation tab (wired), In-game tab (`action1`/`action2` reserved, not wired yet), Gamepad tab. Uses `KeyboardEvent.code`. |
 | Gamepad support | Browser Gamepad API (tested with Xbox Series X, "standard" mapping). Buttons are mapped to keyboard keys and sent to the game as synthetic key events. Remappable. |
-| New games popup | Shown once per load, after all R2 checks finish. Lists games **added** (available now, not available on this browser's previous visit) and games **removed** (available on the previous visit, now gone from the catalog or 404/410 on R2). Games that could not be checked (network/CORS) count as available and are never reported as removed; they are reported as added only once R2 confirms the bundle. If any genre file fails to load, no removals are reported on that visit. First visit: no popup. Visitors with only the old `dosvaultLastVisit` key get the old `added`-date criterion once, without removals. |
+| New games popup | Shown once per load, after all R2 checks finish. Lists only games **added** (available now, not available on this browser's previous visit). A game is listed only when R2 confirmed its bundle (or it has no `bundle` field); games that could not be checked (network/CORS) are reported once R2 confirms them, and a game whose bundle is 404/410 is never listed. Removed games are **not** shown: a game whose bundle is not on R2 must not appear anywhere on the site. First visit: no popup. Visitors with only the old `dosvaultLastVisit` key get the old `added`-date criterion once, with the same R2 filter. |
 | Help / Contact | Netlify Forms (`name="contacto"`, honeypot field): feedback, game requests, bug reports. |
 | Test a local bundle (F9) | Loads a local `.jsdos` or ScummVM zip through a `blob:` URL; the file never leaves the browser. Used to test a bundle before uploading it to R2. |
 | i18n | Spanish for any `es-*` browser language, English for everything else; manual ES/EN switch saved per browser. |
@@ -173,7 +177,7 @@ Catalog snapshot at the time of this review: **99 games**, 85 on js-dos and 14 o
 | `dosvaultGamepadControls` | Gamepad remapping |
 | `dosvaultLang` | Chosen UI language |
 | `dosvaultLastVisit` | Date of last visit (for "New games") |
-| `dosvaultAvailableGames` | Games available on the last visit: `{ v: 1, games: { <id>: { n: name, g: genre, y: year } } }` (for "New games") |
+| `dosvaultAvailableGames` | Ids of the games available on the last visit: `{ v: 2, ids: [<id>, ...] }` (for "New games"). The older `{ v: 1, games: { <id>: {...} } }` format is still read (only its keys are used) |
 | `dosvaultScummvmHintDismissed` | ScummVM hint dismissed |
 
 ## 8. Content pipeline: adding a game
@@ -218,7 +222,7 @@ Skill updates only take effect once the `.skill` file delivered in a session is 
 These were noticed while reading the code. None has been modified.
 
 1. **Genre counts are out of date.** `count` in `games.json` totals 69, but the genre files contain 99 games (e.g. `sports` says 4, has 13; `race` says 17, has 24). The **Files** column therefore shows wrong numbers.
-2. **F-key bar vs. physical keys mismatch.** The on-screen bar (click) maps F1=Controls, F2=Info, F3=Run, F4=Refresh, F5=Help, but the keyboard defaults in `CONTROL_ACTIONS` are F1=Help, F2=Controls, F3=Info, F4=Run, F5=Refresh. Pressing F1 on the keyboard likely opens a different popup than the bar label says **(to confirm in the browser)**.
+2. **F-key bar vs. physical keys mismatch.** The on-screen bar (click) maps F1=Controls, F3=Run, F4=Refresh, F5=Help (no F2 button since the Info popup was removed), but the keyboard defaults in `CONTROL_ACTIONS` are F1=Help, F2=Controls, F4=Run, F5=Refresh (F3 unbound). Pressing F1 on the keyboard likely opens a different popup than the bar label says **(to confirm in the browser)**.
 3. **F9 and F10 on the keyboard.** F9 (Test bundle) has no keyboard binding, so it only works by clicking the bar. F10 is bound.
 4. **ScummVM extension.** The catalog uses `.zip` for its 14 ScummVM bundles and the F9 picker filters to `.zip`, while the skill and builder now output `.scummvm`. New `.scummvm` files will be hidden by default in the F9 file picker.
 5. **Genre label keys.** The genre id is `action`, but `I18N_GENRES` uses the key `accion`, and `sports` has no entry at all. Both fall back to the Spanish `name` from `games.json`, so they won't be translated in English mode.

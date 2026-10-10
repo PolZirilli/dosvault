@@ -635,7 +635,7 @@ body {
   transform: translateX(-50%) translateY(0);
 }
 
-/* ---------- MODAL OVERLAY (compartido: aviso mobile + popup de info F3) ---------- */
+/* ---------- MODAL OVERLAY (compartido: aviso mobile y popups) ---------- */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -703,97 +703,7 @@ body {
   background: #000;
 }
 
-/* ---------- POPUP DE INFO DE JUEGO (F3) ---------- */
-/* Mismo esqueleto visual que .mb-dialog (dialogo NC tipo "Help"), pero mas
-   ancho y con el texto alineado a la izquierda -- .mb-body de mas arriba
-   centra el texto porque el aviso mobile es corto; acá lo pisamos. */
-.info-dialog {
-  width: 100%;
-  max-width: 560px;
-  background: #00aaaa;
-  color: #000;
-}
-
-.info-body {
-  padding: 14px 16px;
-  text-align: left;
-  min-height: 60px;
-}
-
-.info-loading {
-  font-size: 1.1rem;
-  padding: 10px 0;
-}
-
-.info-cols {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-
-.info-image {
-  width: 170px;
-  height: 230px;
-  object-fit: inherit;
-  border: 0px solid #000;
-  background: #000;
-  flex-shrink: 0;
-  image-rendering: pixelated;
-}
-
-.info-image-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 0.95rem;
-  text-align: center;
-  padding: 6px;
-}
-
-.info-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.info-title {
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
-
-.info-meta {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.info-synopsis {
-  font-size: 0.95rem;
-  line-height: 1.4;
-  max-height: 170px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.info-more {
-  display: inline-block;
-  margin-top: 8px;
-  background: #00000000;
-  color: #000;
-  border: 2px solid #000;
-  padding: 3px 10px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  text-decoration: none;
-}
-
-.info-more:hover {
-  background: #000;
-  color: #55ffff;
-}
-
+/* ---------- BOTONERA DE LOS POPUPS (compartida por todos los modales) ---------- */
 .info-buttons {
   display: flex;
   justify-content: center;
@@ -1038,10 +948,6 @@ body {
   font-size: 0.9rem;
   line-height: 1.4;
   margin-bottom: 10px;
-}
-
-.ng-intro.ng-section {
-  margin-top: 16px;
 }
 
 .newgame-row {

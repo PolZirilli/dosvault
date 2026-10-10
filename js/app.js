@@ -47,9 +47,6 @@ const toastEl = document.getElementById('toast');
 // null primero, así una falta de sincronía nunca tira abajo el resto del
 // script (que es justo lo que pasó: F3 no abría nada y las columnas
 // quedaban vacías porque este app.js estaba desactualizado en el server).
-const infoModalEl = document.getElementById('infoModal');
-const infoModalBody = document.getElementById('infoModalBody');
-const infoModalCloseBtn = document.getElementById('infoModalClose');
 const controlsModalEl = document.getElementById('controlsModal');
 const controlsModalBody = document.getElementById('controlsModalBody');
 const controlsModalResetBtn = document.getElementById('controlsModalReset');
@@ -101,7 +98,6 @@ const CONTROL_ACTIONS = [
   { id: 'run', hint: true, group: 'nav', default: 'F4' },
   { id: 'help', group: 'nav', default: 'F1' },
   { id: 'controls', group: 'nav', default: 'F2' },
-  { id: 'info', group: 'nav', default: 'F3' },
   { id: 'refresh', group: 'nav', default: 'F5' },
   { id: 'closeActive', group: 'nav', default: 'F10' },
   { id: 'action1', hint: true, group: 'game', default: 'ControlLeft' },
@@ -197,7 +193,6 @@ const ACTION_HANDLERS = {
   run: () => runSelection(),
   help: () => showHelp(),
   controls: () => openControlsModal(),
-  info: () => openInfoModalForSelection(),
   refresh: () => location.reload(),
   closeActive: () => {
     const ids = Object.keys(openWins);
@@ -279,31 +274,38 @@ function fetchGamesJsonDateTime() {
 // así que se pueden leer aunque el bucket no exponga headers custom,
 // siempre que el bucket permita el origen del sitio en su política CORS.
 //
-// Ese mismo HEAD sirve para saber si el bundle EXISTE en R2 (ver
-// BUNDLE_STATUS): un juego se oculta del catalogo SOLO si R2 contesta con
-// un "no existe" definitivo (404/410). Cualquier otra cosa -- error de red,
-// CORS (TypeError sin respuesta), timeout, 403, 5xx, 429 -- deja el juego
-// visible: si no, un problema de CORS o de permisos del bucket vaciaria el
-// catalogo entero. 403 NO cuenta como "no existe" a proposito: R2 contesta
-// 404 para objetos inexistentes, y un 403 indica un problema de acceso al
-// bucket entero (afectaria a los 99 juegos a la vez).
+// Ese mismo HEAD decide si el juego se muestra (ver BUNDLE_STATUS e
+// isGameVisible). Regla de producto: un juego cuyo bundle no esta en R2 no
+// puede verse NUNCA, ni un instante. Por eso un juego con bundle se muestra
+// recien cuando su HEAD termino:
+//  - 404/410 ('missing'): oculto para siempre en esta carga.
+//  - OK ('ok'): visible.
+//  - Cualquier otra cosa -- error de red, CORS (TypeError sin respuesta),
+//    timeout, 403, 5xx, 429 ('unknown'): visible, para que un problema de
+//    CORS o de permisos del bucket no vacie el catalogo (como mucho tarda lo
+//    que dura el timeout en aparecer). 403 NO cuenta como "no existe" a
+//    proposito: R2 contesta 404 para objetos inexistentes, y un 403 indica un
+//    problema de acceso al bucket entero.
+//  - Sin entrada todavia (pendiente): oculto.
 const BUNDLE_INFO_CACHE = {};
 // id -> 'ok' | 'missing' | 'unknown' | 'nobundle'. Sin entrada = todavia no
-// se verifico (se trata como visible).
+// se verifico (se trata como oculto).
 const BUNDLE_STATUS = {};
 const BUNDLE_MISSING_HTTP = [404, 410];
 const BUNDLE_HEAD_TIMEOUT_MS = 15000;
 const BUNDLE_HEAD_CONCURRENCY = 6;
 
 // Cola con concurrencia limitada para los HEAD (al cargar se verifican los
-// ~99 juegos; sin limite serian 99 pedidos en paralelo contra r2.dev). Las
-// filas que se estan mostrando en el panel derecho piden con prioridad
-// (pasan al frente de la cola) para que Size/Date no esperen a todo el resto.
+// ~99 juegos; sin limite serian 99 pedidos en paralelo contra r2.dev). Los
+// juegos del genero abierto piden con prioridad: pasan al frente de la cola y
+// arrancan aunque ya esten ocupados los 6 lugares, asi el panel derecho no
+// espera a todo el resto (ni a que venzan los timeouts de otros generos si
+// r2.dev no contesta).
 const bundleHeadQueue = [];
 let bundleHeadActive = 0;
 
 function pumpBundleHeadQueue() {
-  while (bundleHeadActive < BUNDLE_HEAD_CONCURRENCY && bundleHeadQueue.length) {
+  while (bundleHeadQueue.length && (bundleHeadActive < BUNDLE_HEAD_CONCURRENCY || bundleHeadQueue[0].priority)) {
     const task = bundleHeadQueue.shift();
     bundleHeadActive++;
     task.run().finally(() => {
@@ -321,7 +323,6 @@ function headBundle(g) {
       if (BUNDLE_MISSING_HTTP.includes(res.status)) {
         BUNDLE_STATUS[g.id] = 'missing';
         console.warn(`Bundle inexistente en R2 (HTTP ${res.status}), se oculta "${g.id}": ${g.bundle}`);
-        scheduleAvailabilityRefresh();
         return null;
       }
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -338,7 +339,11 @@ function headBundle(g) {
       console.error(`No se pudo leer tamaño/fecha real de ${g.bundle}:`, err);
       return null;
     })
-    .finally(() => { if (timer) clearTimeout(timer); });
+    .finally(() => {
+      if (timer) clearTimeout(timer);
+      // Cualquier resultado cambia la visibilidad (aparece o se oculta).
+      scheduleAvailabilityRefresh();
+    });
 }
 
 // Devuelve una promise con { size, dateTime } o null (sin bundle, bundle
@@ -351,24 +356,56 @@ function fetchBundleInfo(g, priority) {
   }
   if (!(g.id in BUNDLE_INFO_CACHE)) {
     BUNDLE_INFO_CACHE[g.id] = new Promise(resolve => {
-      const task = { id: g.id, run: () => headBundle(g).then(resolve) };
+      const task = { id: g.id, priority: !!priority, run: () => headBundle(g).then(resolve) };
       if (priority) bundleHeadQueue.unshift(task); else bundleHeadQueue.push(task);
     });
     pumpBundleHeadQueue();
   } else if (priority) {
     const i = bundleHeadQueue.findIndex(task => task.id === g.id);
-    if (i > 0) bundleHeadQueue.unshift(bundleHeadQueue.splice(i, 1)[0]);
+    if (i >= 0) {
+      const task = bundleHeadQueue.splice(i, 1)[0];
+      task.priority = true;
+      bundleHeadQueue.unshift(task);
+      pumpBundleHeadQueue();
+    }
   }
   return BUNDLE_INFO_CACHE[g.id];
 }
 
-// Un juego se muestra salvo que su bundle haya dado 404/410.
+// Un juego sin bundle se muestra siempre (igual que antes). Uno con bundle
+// solo cuando su HEAD termino y no dio 404/410 (ver comentario de arriba).
+function isGameVerified(g) {
+  return !g.bundle || ['ok', 'unknown', 'missing'].includes(BUNDLE_STATUS[g.id]);
+}
+
 function isGameVisible(g) {
-  return BUNDLE_STATUS[g.id] !== 'missing';
+  if (!g.bundle) return true;
+  const st = BUNDLE_STATUS[g.id];
+  return st === 'ok' || st === 'unknown';
 }
 
 function visibleGames(list) {
   return (list || []).filter(isGameVisible);
+}
+
+// true si ya se cargo el archivo del genero y terminaron todos sus HEAD.
+function isGenreVerified(genreId) {
+  const list = GENRE_GAMES_CACHE[genreId];
+  return !!list && list.every(isGameVerified);
+}
+
+// Juegos para el panel derecho: mientras el genero tenga algun juego sin
+// verificar no se lista ninguno (se muestra "Verificando juegos..."), asi
+// las filas no aparecen de a una ni saltan de lugar. Ademas se piden con
+// prioridad los HEAD de ese genero.
+function genreGamesForPanel(genreId) {
+  const list = GENRE_GAMES_CACHE[genreId];
+  if (!list) return [];
+  if (!isGenreVerified(genreId)) {
+    list.forEach(g => fetchBundleInfo(g, true));
+    return [];
+  }
+  return visibleGames(list);
 }
 
 // Cuando un HEAD descubre un bundle inexistente se recalculan los counts del
@@ -411,7 +448,7 @@ function refreshAvailability() {
     selectGenre(LEFT_ITEMS[li].id);
   } else if (currentGenre && loadingGenreId !== currentGenre && GENRE_GAMES_CACHE[currentGenre]) {
     const prevGame = RIGHT_ITEMS[state.rightIndex];
-    const next = visibleGames(GENRE_GAMES_CACHE[currentGenre]);
+    const next = genreGamesForPanel(currentGenre);
     let ri = prevGame ? next.findIndex(g => g.id === prevGame.id) : -1;
     if (ri < 0) ri = Math.max(0, Math.min(state.rightIndex, next.length - 1));
     RIGHT_ITEMS = next;
@@ -440,15 +477,19 @@ function genreLabel(id) {
 function buildLeftItems() {
   LEFT_ITEMS = Object.keys(GENRES).map(id => {
     const item = GENRES[id] || {};
-    // Si ya se cargo el archivo del genero, el count es la cantidad de
-    // juegos VISIBLES (sin los que dieron 404 en R2), asi coincide con las
-    // filas del panel derecho. Mientras no se cargo, se usa el count de
-    // data/games.json como antes.
-    const count = GENRE_GAMES_CACHE[id]
+    // Si ya se cargo el archivo del genero y terminaron todos sus HEAD, el
+    // count es la cantidad de juegos VISIBLES, asi coincide con las filas del
+    // panel derecho. Mientras tanto se usa el count de data/games.json como
+    // antes (es un numero, no nombra ningun juego), asi un genero no se
+    // oculta solo porque todavia no se verifico.
+    const fallbackCount = typeof item === 'object' && typeof item.count === 'number'
+      ? item.count
+      : GENRE_GAMES_CACHE[id]
+        ? GENRE_GAMES_CACHE[id].length
+        : GAMES.filter(g => g.genre === id).length;
+    const count = isGenreVerified(id)
       ? visibleGames(GENRE_GAMES_CACHE[id]).length
-      : typeof item === 'object' && typeof item.count === 'number'
-        ? item.count
-        : visibleGames(GAMES.filter(g => g.genre === id)).length;
+      : fallbackCount;
     return { id, label: genreLabel(id), count };
   }).filter(item => item.count > 0);
 }
@@ -510,7 +551,7 @@ function selectGenre(genreId) {
   // 1. Si ya tenemos en caché los juegos de este género, mostramos inmediatamente
   if (GENRE_GAMES_CACHE[genreId]) {
     loadingGenreId = null;
-    RIGHT_ITEMS = visibleGames(GENRE_GAMES_CACHE[genreId]);
+    RIGHT_ITEMS = genreGamesForPanel(genreId);
     renderRightPanel();
     updateCmdline();
     updateStatusBars();
@@ -522,7 +563,7 @@ function selectGenre(genreId) {
   if (legacyGames.length > 0) {
     loadingGenreId = null;
     GENRE_GAMES_CACHE[genreId] = legacyGames.sort((a, b) => gameSortLabel(a).localeCompare(gameSortLabel(b), 'es'));
-    RIGHT_ITEMS = visibleGames(GENRE_GAMES_CACHE[genreId]);
+    RIGHT_ITEMS = genreGamesForPanel(genreId);
     renderRightPanel();
     updateCmdline();
     updateStatusBars();
@@ -558,7 +599,7 @@ function selectGenre(genreId) {
       // Condición de carrera: solo actualizamos el panel si el usuario sigue en este género
       if (currentGenre === genreId) {
         loadingGenreId = null;
-        RIGHT_ITEMS = visibleGames(GENRE_GAMES_CACHE[genreId]);
+        RIGHT_ITEMS = genreGamesForPanel(genreId);
         renderRightPanel();
         updateCmdline();
         updateStatusBars();
@@ -581,12 +622,17 @@ function renderRightPanel() {
     panelRightList.innerHTML = `<div class="panel-row" style="color:var(--dos-yellow);padding:10px 14px;font-style:italic;">C:\\DOS\\${loadingText}</div>`;
     return;
   }
+  if (currentGenre && GENRE_GAMES_CACHE[currentGenre] && !isGenreVerified(currentGenre)) {
+    const checkingText = t('common.checkingGames').toUpperCase();
+    panelRightList.innerHTML = `<div class="panel-row" style="color:#ffff55;padding:10px 14px;font-style:italic;">C:\\DOS\\${checkingText}</div>`;
+    return;
+  }
   RIGHT_ITEMS.forEach((g, i) => {
     const row = document.createElement('div');
     row.className = 'panel-row is-file' + (state.focus === 'right' && i === state.rightIndex ? ' selected' : '');
     // Nombre siempre en mayúsculas, sin límite de caracteres -- se ve el
-    // título completo. El tooltip (title=) y el popup de info (F3) también
-    // muestran el título completo.
+    // título completo. El tooltip (title=) también muestra el título
+    // completo.
     const dosName = toDosName(g.name);
     row.title = g.title || g.name;
     // Idioma del juego: viene de g.lang en data/genres/*.json ("es"/"en").
@@ -722,13 +768,9 @@ document.addEventListener('keydown', e => {
   // acción: se la lleva entera, no debe disparar nada ni navegar atrás.
   if (controlsCapture) { e.preventDefault(); handleControlsCapture(e); return; }
 
-  // Con algun popup abierto (info F3, Controles F2, Ayuda F1 o Novedades),
-  // Escape lo cierra y el resto de los atajos de navegación quedan
-  // bloqueados para no mover la selección de atrás sin que se vea.
-  if (infoModalEl && infoModalEl.classList.contains('show')) {
-    if (e.key === 'Escape') { e.preventDefault(); closeInfoModal(); }
-    return;
-  }
+  // Con algun popup abierto (Controles F2, Ayuda F1 o Novedades), Escape
+  // lo cierra y el resto de los atajos de navegación quedan bloqueados para
+  // no mover la selección de atrás sin que se vea.
   if (controlsModalEl && controlsModalEl.classList.contains('show')) {
     if (e.key === 'Escape') { e.preventDefault(); closeControlsModal(); }
     return;
@@ -792,7 +834,6 @@ function showHelp() {
 
 function openHelpModal() {
   if (!helpModalEl) return;
-  if (infoModalEl) closeInfoModal();
   if (controlsModalEl) closeControlsModal();
   helpModalEl.classList.add('show');
 }
@@ -843,29 +884,29 @@ if (helpForm) {
 }
 
 /* ---------- POPUP DE NOVEDADES ---------- */
-// Avisa los juegos que se SUBIERON y los que se BAJARON desde la visita
-// anterior de este navegador:
-//  - "Subido": disponible ahora y no disponible en la visita anterior.
-//  - "Bajado": disponible en la visita anterior y ahora no (se quito del
-//    catalogo o su bundle dio 404/410 en R2).
+// Avisa los juegos que se SUBIERON desde la visita anterior de este
+// navegador: disponibles ahora y no disponibles en la visita anterior.
 // "Disponible" = esta en data/genres/*.json y su bundle no dio 404/410 (ver
-// isGameVisible). Un juego que no se pudo verificar por red/CORS cuenta como
-// disponible, asi que nunca se reporta como bajado por un problema de red.
-// Simetricamente, tampoco se reporta como SUBIDO: para eso hace falta que el
-// HEAD haya confirmado el bundle (o que el juego no tenga bundle, igual que
-// hoy se muestra). Un juego sin verificar conserva el estado que tenia en la
-// lista guardada; asi un fallo de CORS pasajero no genera avisos falsos ni
-// en esta visita ni en la siguiente.
+// isGameVisible). Para avisar un juego como subido ademas hace falta que el
+// HEAD haya confirmado el bundle ('ok') o que el juego no tenga bundle
+// ('nobundle'): uno sin verificar (red/CORS/timeout) no se avisa, y uno con
+// bundle inexistente ('missing') nunca aparece en ningun lado del sitio.
 //
-// Se guarda en localStorage (AVAILABLE_GAMES_KEY) la lista de juegos
-// disponibles de cada visita, con nombre/genero/anio para poder mostrar los
-// bajados aunque ya no esten en el catalogo. Casos:
+// Regla de producto: el popup NO lista juegos quitados. Un juego cuyo
+// bundle no esta en R2 no se nombra en ninguna parte del sitio.
+//
+// Se guarda en localStorage (AVAILABLE_GAMES_KEY) solo la lista de ids
+// disponibles de cada visita: { v: 2, ids: [...] }. Se sigue leyendo el
+// formato anterior { v: 1, games: { <id>: {...} } } (se usan solo las
+// claves). Casos:
 //  - Primera visita (sin nada guardado): no se muestra nada, solo se guarda.
-//  - Migracion (hay LAST_VISIT_KEY pero no la lista nueva): se usa el
-//    criterio anterior -- "added" posterior a la ultima visita -- y no se
-//    reportan bajados; desde la proxima visita ya se compara por lista.
+//  - Migracion (hay LAST_VISIT_KEY pero no la lista): se usa el criterio
+//    anterior -- "added" posterior a la ultima visita --, con el mismo
+//    filtro de bundle confirmado; desde la proxima visita ya se compara por
+//    lista.
 // El chequeo corre una sola vez por carga, cuando terminaron de cargar los
-// archivos de genero y todos los HEAD a R2 (ver loadAllGamesForNewCheck).
+// archivos de genero y TODOS los HEAD a R2 (ver loadAllGamesForNewCheck),
+// asi que cuando se arma el aviso el estado de cada bundle ya se conoce.
 const LAST_VISIT_KEY = 'dosvaultLastVisit';
 const AVAILABLE_GAMES_KEY = 'dosvaultAvailableGames';
 let catalogChangesChecked = false;
@@ -880,12 +921,16 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
+// Devuelve un Set con los ids guardados en la visita anterior, o null si no
+// hay lista (primera visita, migracion o dato corrupto).
 function readSavedAvailableGames() {
   try {
     const raw = localStorage.getItem(AVAILABLE_GAMES_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    return parsed && parsed.games && typeof parsed.games === 'object' ? parsed.games : null;
+    if (parsed && Array.isArray(parsed.ids)) return new Set(parsed.ids.filter(id => typeof id === 'string'));
+    if (parsed && parsed.games && typeof parsed.games === 'object') return new Set(Object.keys(parsed.games));
+    return null;
   } catch (err) {
     console.error('No se pudo leer la lista de juegos de la ultima visita (localStorage no disponible o dato corrupto):', err);
     return null;
@@ -894,10 +939,9 @@ function readSavedAvailableGames() {
 
 // allGames: todos los juegos de los archivos de genero que se pudieron
 // cargar. failedGenres: Set de generos cuyo archivo NO se pudo cargar. Si
-// fallo aunque sea uno, en esta visita no se reporta NINGUN bajado y todos
-// los juegos guardados que no se vieron se conservan en la lista: un juego
-// que se movio de genero al que justo no cargo no se puede distinguir de uno
-// quitado, y es preferible no avisar a avisar algo falso.
+// fallo aunque sea uno, los ids guardados que no se vieron se conservan en
+// la lista: un juego que esta en el genero que no cargo no tiene que
+// avisarse como subido en la proxima visita.
 function checkCatalogChanges(allGames, failedGenres) {
   if (catalogChangesChecked) return;
   catalogChangesChecked = true;
@@ -916,19 +960,13 @@ function checkCatalogChanges(allGames, failedGenres) {
     return true;
   });
 
-  const inPrev = id => !!prev && Object.prototype.hasOwnProperty.call(prev, id);
   // Confirmado = el HEAD dio OK, o el juego no tiene bundle (se muestra
   // igual que siempre). 'unknown' = red/CORS/timeout/otro HTTP.
   const confirmed = g => BUNDLE_STATUS[g.id] === 'ok' || BUNDLE_STATUS[g.id] === 'nobundle';
 
   let added = [];
-  let removed = [];
   if (prev) {
-    added = available.filter(g => confirmed(g) && !inPrev(g.id));
-    removed = failedGenres.size ? [] : Object.keys(prev)
-      .filter(id => !seen.has(id))
-      .map(id => Object.assign({ id }, prev[id]))
-      .sort((a, b) => String(a.n || a.id).toUpperCase().localeCompare(String(b.n || b.id).toUpperCase(), 'es'));
+    added = available.filter(g => confirmed(g) && !prev.has(g.id));
   } else if (lastVisit) {
     added = available.filter(g => confirmed(g) && g.added && g.added > lastVisit);
   }
@@ -936,23 +974,19 @@ function checkCatalogChanges(allGames, failedGenres) {
     ? gameSortLabel(a).localeCompare(gameSortLabel(b), 'es')
     : (a.added || '').localeCompare(b.added || ''));
 
-  if (added.length || removed.length) openNewGamesModal(added, removed);
+  if (added.length) openNewGamesModal(added);
 
-  const next = {};
+  // Sin verificar y no estaba en la lista anterior: no se guarda todavia
+  // (se guardara, y se avisara como subido, cuando se confirme). En la
+  // primera visita / migracion no hay lista anterior y se guarda igual.
+  const next = new Set();
   available.forEach(g => {
-    // Sin verificar y no estaba en la lista anterior: no se agrega todavia
-    // (se agregara, y se avisara como subido, cuando se confirme). En la
-    // primera visita / migracion no hay lista anterior y se guarda igual.
-    if (prev && !confirmed(g) && !inPrev(g.id)) return;
-    next[g.id] = { n: g.title || g.name, g: g.genre, y: g.year };
+    if (prev && !confirmed(g) && !prev.has(g.id)) return;
+    next.add(g.id);
   });
-  if (prev) {
-    Object.keys(prev).forEach(id => {
-      if (!next[id] && prev[id] && failedGenres.size) next[id] = prev[id];
-    });
-  }
+  if (prev && failedGenres.size) prev.forEach(id => { if (!seen.has(id)) next.add(id); });
   try {
-    localStorage.setItem(AVAILABLE_GAMES_KEY, JSON.stringify({ v: 1, games: next }));
+    localStorage.setItem(AVAILABLE_GAMES_KEY, JSON.stringify({ v: 2, ids: Array.from(next) }));
     localStorage.setItem(LAST_VISIT_KEY, todayStr());
   } catch (err) {
     console.error('No se pudo guardar el estado de esta visita (localStorage no disponible):', err);
@@ -963,30 +997,16 @@ function newGamesIntro(n) {
   return n === 1 ? t('newgames.intro.one') : t('newgames.intro.many', { n });
 }
 
-function removedGamesIntro(n) {
-  return n === 1 ? t('newgames.removed.one') : t('newgames.removed.many', { n });
-}
-
 function newGameRow(name, genre, year) {
   const genreText = genre ? genreLabel(genre).toUpperCase() : '';
   const meta = [genreText, year].filter(Boolean).join(' · ');
   return `<div class="newgame-row"><span class="ng-name">${escapeHtml(toDosName(name))}</span><span class="ng-meta">${escapeHtml(meta)}</span></div>`;
 }
 
-function openNewGamesModal(added, removed) {
-  if (!newGamesModalEl || !newGamesModalBody) return;
-  added = added || [];
-  removed = removed || [];
-  let html = '';
-  if (added.length) {
-    html += `<p class="ng-intro">${newGamesIntro(added.length)}</p>`;
-    html += added.map(g => newGameRow(g.title || g.name, g.genre, g.year)).join('');
-  }
-  if (removed.length) {
-    html += `<p class="ng-intro${added.length ? ' ng-section' : ''}">${removedGamesIntro(removed.length)}</p>`;
-    html += removed.map(r => newGameRow(r.n || r.id, r.g, r.y)).join('');
-  }
-  newGamesModalBody.innerHTML = html;
+function openNewGamesModal(added) {
+  if (!newGamesModalEl || !newGamesModalBody || !added || !added.length) return;
+  newGamesModalBody.innerHTML = `<p class="ng-intro">${newGamesIntro(added.length)}</p>` +
+    added.map(g => newGameRow(g.title || g.name, g.genre, g.year)).join('');
   newGamesModalEl.classList.add('show');
 }
 
@@ -1104,13 +1124,13 @@ if (testBundleFileInput) {
 }
 
 /* ---------- FKEYS ----------
- * El texto de cada botón (fkey.f1..f5, en js/i18n.js) es el que el usuario
- * define como nombre visible; la acción de acá abajo tiene que corresponder
- * a ESE nombre, no al número de F-key original. Con la traducción actual:
- * F1=Controles, F2=Información, F3=Ejecutar, F4=Refrescar, F5=Ayuda. */
+ * El texto de cada botón (fkey.f1, fkey.f3..f5, en js/i18n.js) es el que el
+ * usuario define como nombre visible; la acción de acá abajo tiene que
+ * corresponder a ESE nombre, no al número de F-key original. Con la
+ * traducción actual: F1=Controles, F3=Ejecutar, F4=Refrescar, F5=Ayuda (F2
+ * quedó sin botón). */
 const FKEYS = [
   { key: 'F1', labelKey: 'fkey.f1', action: () => openControlsModal() },
-  { key: 'F2', labelKey: 'fkey.f2', action: () => openInfoModalForSelection() },
   { key: 'F3', labelKey: 'fkey.f3', action: () => runSelection() },
   { key: 'F4', labelKey: 'fkey.f4', action: () => location.reload() },
   { key: 'F5', labelKey: 'fkey.f5', action: () => showHelp() },
@@ -1133,141 +1153,6 @@ function renderFkeys() {
     fkeysEl.appendChild(el);
   });
 }
-
-/* ---------- POPUP DE INFO (F3): Wikipedia + Wikidata ---------- */
-// Título, sinopsis e imagen salen de la API pública de Wikipedia
-// (action=query, sin API key, con &origin=* para que funcione con fetch()
-// desde cualquier dominio). La distribuidora sale de Wikidata (propiedad
-// P123 "publisher") a partir del mismo artículo. Se busca primero en
-// Wikipedia en español y, si no hay resultado, en inglés (muchos juegos DOS
-// viejos tienen mejor cobertura ahí). Resultado en caché por juego para no
-// repetir la búsqueda cada vez que se abre el popup.
-const WIKI_CACHE = {};
-
-async function wikiFetchJson(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
-
-async function fetchWikidataPublisher(wikidataId, lang) {
-  try {
-    const claimsUrl = `https://www.wikidata.org/w/api.php?action=wbgetclaims&entity=${wikidataId}&property=P123&format=json&origin=*`;
-    const claims = (await wikiFetchJson(claimsUrl)).claims;
-    const targetId = claims && claims.P123 && claims.P123[0] &&
-      claims.P123[0].mainsnak && claims.P123[0].mainsnak.datavalue &&
-      claims.P123[0].mainsnak.datavalue.value && claims.P123[0].mainsnak.datavalue.value.id;
-    if (!targetId) return null;
-    const labelUrl = `https://www.wikidata.org/w/api.php?action=wbgetentities&ids=${targetId}&props=labels&languages=${lang}|en&format=json&origin=*`;
-    const labels = (await wikiFetchJson(labelUrl)).entities[targetId].labels;
-    return (labels[lang] && labels[lang].value) || (labels.en && labels.en.value) || null;
-  } catch (err) {
-    console.error('No se pudo obtener la distribuidora desde Wikidata:', err);
-    return null;
-  }
-}
-
-async function fetchWikiInfo(query) {
-  // Se busca primero en el idioma activo del sitio y despues en el otro --
-  // asi alguien viendo el sitio en ingles recibe la sinopsis en ingles
-  // cuando existe (muchos juegos DOS viejos tienen mejor cobertura ahi).
-  const langOrder = currentLang === 'en' ? ['en', 'es'] : ['es', 'en'];
-  for (const lang of langOrder) {
-    try {
-      const searchUrl = `https://${lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query + ' video game')}&srlimit=1&format=json&origin=*`;
-      const search = (await wikiFetchJson(searchUrl)).query.search;
-      if (!search || !search.length) continue;
-      const pageId = search[0].pageid;
-
-      const sumUrl = `https://${lang}.wikipedia.org/w/api.php?action=query&pageids=${pageId}&prop=extracts%7Cpageimages%7Cpageprops&exintro=1&explaintext=1&piprop=original&format=json&origin=*`;
-      const page = (await wikiFetchJson(sumUrl)).query.pages[pageId];
-      if (!page) continue;
-
-      const wikidataId = page.pageprops && page.pageprops.wikibase_item;
-      const publisher = wikidataId ? await fetchWikidataPublisher(wikidataId, lang) : null;
-
-      return {
-        title: page.title,
-        extract: (page.extract || '').trim(),
-        image: page.original ? page.original.source : null,
-        publisher,
-        sourceUrl: `https://${lang}.wikipedia.org/?curid=${pageId}`,
-      };
-    } catch (err) {
-      console.error(`Búsqueda en Wikipedia (${lang}) falló:`, err);
-    }
-  }
-  return null;
-}
-
-function openInfoModalForSelection() {
-  const g = RIGHT_ITEMS[state.rightIndex];
-  if (state.focus === 'right' && g) openInfoModal(g);
-}
-
-async function openInfoModal(g) {
-  if (!g || !infoModalEl || !infoModalBody) return;
-  const displayTitle = g.title || g.name;
-  infoModalBody.innerHTML = `<div class="info-loading">${t('info.searching', { title: displayTitle })}<span class="cursor-blink"></span></div>`;
-  infoModalEl.classList.add('show');
-
-  // La cache se indexa tambien por idioma: si el visitante cambia de
-  // idioma y vuelve a abrir el mismo juego, se busca de nuevo en vez de
-  // mostrar la sinopsis que habia quedado en el idioma anterior.
-  const cacheKey = currentLang + ':' + g.id;
-  if (!(cacheKey in WIKI_CACHE)) {
-    WIKI_CACHE[cacheKey] = await fetchWikiInfo(g.title || g.name);
-  }
-  // Por si se cerró el popup mientras la búsqueda seguía en vuelo.
-  if (infoModalEl.classList.contains('show')) renderInfoModal(g, WIKI_CACHE[cacheKey]);
-}
-
-// Largo máximo de la sinopsis antes de cortar (y ofrecer "ver más"). Corta
-// en el espacio más cercano para no partir una palabra a la mitad.
-const INFO_SYNOPSIS_LIMIT = 260;
-function truncateSynopsis(text) {
-  if (!text || text.length <= INFO_SYNOPSIS_LIMIT) return text;
-  const cut = text.slice(0, INFO_SYNOPSIS_LIMIT);
-  const lastSpace = cut.lastIndexOf(' ');
-  return (lastSpace > 40 ? cut.slice(0, lastSpace) : cut) + '…';
-}
-
-function renderInfoModal(g, data) {
-  if (!infoModalBody) return;
-  const titleText = (data && data.title) || g.title || g.name;
-  const publisher = (data && data.publisher) || t('info.unknownPublisher');
-  const fullSynopsis = (data && data.extract) ? data.extract : t('info.noSynopsis');
-  const synopsis = truncateSynopsis(fullSynopsis);
-  // Portada: primero la de data/games.json (campo "cover", curada a mano),
-  // y si no hay ("empty" o vacío) la que haya traído la búsqueda en
-  // Wikipedia.
-  const cover = (g.cover && g.cover !== 'empty') ? g.cover : (data && data.image);
-  // "Ver más": a la página de Wikipedia si se encontró una, si no a una
-  // búsqueda en Google -- así el botón siempre lleva a algún lado.
-  const moreUrl = (data && data.sourceUrl) ||
-    `https://www.google.com/search?q=${encodeURIComponent((g.title || g.name) + ' DOS video game')}`;
-
-  infoModalBody.innerHTML = `
-    <div class="info-cols">
-      ${cover
-      ? `<img class="info-image" src="${cover}" alt="${titleText}">`
-      : `<div class="info-image info-image-empty">${t('info.noImage')}</div>`}
-      <div class="info-text">
-        <div class="info-title">${titleText}</div>
-        <div class="info-meta"><b>${t('info.year')}</b> ${g.year} &nbsp;&nbsp; <b>${t('info.publisher')}</b> ${publisher}</div>
-        <div class="info-synopsis">${synopsis}</div>
-        <a class="info-more" href="${moreUrl}" target="_blank" rel="noopener">${t('info.more')}</a>
-      </div>
-    </div>`;
-}
-
-function closeInfoModal() {
-  if (infoModalEl) infoModalEl.classList.remove('show');
-}
-
-if (infoModalCloseBtn) infoModalCloseBtn.addEventListener('click', closeInfoModal);
-// Click en el fondo oscuro (fuera del diálogo) también cierra.
-if (infoModalEl) infoModalEl.addEventListener('click', e => { if (e.target === infoModalEl) closeInfoModal(); });
 
 /* ---------- GAMEPAD (mando de control) ----------
  * Detección/lectura vía Gamepad API estándar del navegador (sin librerías
@@ -1471,7 +1356,6 @@ let controlsActiveTab = 'nav';
 
 function openControlsModal() {
   if (!controlsModalEl) return;
-  if (infoModalEl && infoModalEl.classList.contains('show')) closeInfoModal();
   controlsCapture = null;
   gamepadCapture = null;
   controlsActiveTab = 'nav';
@@ -1963,9 +1847,9 @@ function loadAllGamesForNewCheck(genres) {
     refreshAvailability();
     // Verificacion en segundo plano de todos los bundles contra R2 (HEAD con
     // concurrencia limitada, ver fetchBundleInfo). No bloquea el render: el
-    // panel ya esta dibujado y se va actualizando a medida que aparecen
-    // bundles inexistentes (scheduleAvailabilityRefresh). Recien cuando
-    // terminaron TODOS se arma el aviso de subidos/bajados.
+    // panel ya esta dibujado y se va actualizando a medida que terminan los
+    // HEAD (scheduleAvailabilityRefresh). Recien cuando
+    // terminaron TODOS se arma el aviso de juegos subidos.
     return Promise.all(all.map(g => fetchBundleInfo(g)))
       .then(() => checkCatalogChanges(all, failedGenres));
   }).catch(err => {

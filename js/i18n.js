@@ -26,7 +26,6 @@ const I18N = {
     'col.time': 'Hora',
     'col.lang': 'Idioma',
 
-    'modal.info.title': 'Info del juego',
     'modal.controls.title': 'Controles',
     'modal.help.title': 'Ayuda / Contacto',
     'modal.newgames.title': 'Novedades',
@@ -61,7 +60,6 @@ const I18N = {
     'ctrl.run.hint': 'Igual que Confirmar, con un juego seleccionado',
     'ctrl.help.label': 'Ayuda',
     'ctrl.controls.label': 'Controles',
-    'ctrl.info.label': 'Info del juego',
     'ctrl.refresh.label': 'Refrescar',
     'ctrl.closeActive.label': 'Cerrar ventana activa',
     'ctrl.action1.label': 'Acción primaria',
@@ -98,20 +96,11 @@ const I18N = {
     'code.space': 'Espacio',
 
     'fkey.f1': 'Controles',
-    'fkey.f2': 'Informacion',
     'fkey.f3': 'Ejecutar',
     'fkey.f4': 'Refrescar',
     'fkey.f5': 'Ayuda',
     'fkey.f9': 'Probar',
     'fkey.f10': 'Cerrar',
-
-    'info.searching': 'Buscando información de {title}...',
-    'info.unknownPublisher': 'Desconocida',
-    'info.noSynopsis': 'No se encontró sinopsis para este juego en Wikipedia.',
-    'info.noImage': 'Sin imagen<br>disponible',
-    'info.year': 'Año:',
-    'info.publisher': 'Distribuidora:',
-    'info.more': '[ Ver más ]',
 
     'toast.selectGameFirst': 'Seleccioná un juego primero y después presioná Ejecutar.',
 
@@ -147,12 +136,11 @@ const I18N = {
 
     'common.na': 'N/D',
     'common.loading': 'Cargando...',
+    'common.checkingGames': 'Verificando juegos...',
     'cmd.categories': 'CATEGORIAS',
 
     'newgames.intro.one': 'Se agregó 1 juego nuevo desde tu última visita:',
     'newgames.intro.many': 'Se agregaron {n} juegos nuevos desde tu última visita:',
-    'newgames.removed.one': 'Se quitó 1 juego desde tu última visita:',
-    'newgames.removed.many': 'Se quitaron {n} juegos desde tu última visita:',
   },
 
   en: {
@@ -166,7 +154,6 @@ const I18N = {
     'col.time': 'Time',
     'col.lang': 'Language',
 
-    'modal.info.title': 'Game info',
     'modal.controls.title': 'Controls',
     'modal.help.title': 'Help / Contact',
     'modal.newgames.title': "What's new",
@@ -201,7 +188,6 @@ const I18N = {
     'ctrl.run.hint': 'Same as Confirm, with a game selected',
     'ctrl.help.label': 'Help',
     'ctrl.controls.label': 'Controls',
-    'ctrl.info.label': 'Game info',
     'ctrl.refresh.label': 'Refresh',
     'ctrl.closeActive.label': 'Close active window',
     'ctrl.action1.label': 'Primary action',
@@ -238,20 +224,11 @@ const I18N = {
     'code.space': 'Space',
 
     'fkey.f1': 'Controls',
-    'fkey.f2': 'Info',
     'fkey.f3': 'Run',
     'fkey.f4': 'Refresh',
     'fkey.f5': 'Help',
     'fkey.f9': 'Test',
     'fkey.f10': 'Close',
-
-    'info.searching': 'Searching for info on {title}...',
-    'info.unknownPublisher': 'Unknown',
-    'info.noSynopsis': 'No synopsis was found for this game on Wikipedia.',
-    'info.noImage': 'No image<br>available',
-    'info.year': 'Year:',
-    'info.publisher': 'Publisher:',
-    'info.more': '[ See more ]',
 
     'toast.selectGameFirst': 'Select a game first, then press Run.',
 
@@ -287,12 +264,11 @@ const I18N = {
 
     'common.na': 'N/A',
     'common.loading': 'Loading...',
+    'common.checkingGames': 'Checking games...',
     'cmd.categories': 'CATEGORIES',
 
     'newgames.intro.one': '1 new game was added since your last visit:',
     'newgames.intro.many': '{n} new games were added since your last visit:',
-    'newgames.removed.one': '1 game was removed since your last visit:',
-    'newgames.removed.many': '{n} games were removed since your last visit:',
   },
 };
 

@@ -59,7 +59,6 @@ Decisión de Pol (2026-10-06): en DOSVault **se trabaja directo sobre `main`** y
 ### Errores conocidos del entorno (qa los lista, pero no rechaza por ellos)
 - **CORS de R2 desde 127.0.0.1:8612.** Si la política CORS del bucket no incluye ese origen, aparecen en `report.json` errores "blocked by CORS policy" sobre `r2.dev`. En ese caso, Tamaño y Fecha muestran `N/D` y el juego de la captura 04 termina en "UNEXPECTED ERROR OCCURED". Mientras pase esto, el flujo 4 cuenta como **NO PUDE PROBAR**, no como aprobado. (Pol: estado a confirmar con el chequeo del instalador.)
 - **GitHub API 403** sobre `api.github.com/repos/PolZirilli/dosvault/commits`: es el límite de pedidos sin autenticar. Afecta solo la fecha del catálogo.
-- **Wikipedia y Wikidata** (popup de información, F3): pueden fallar por red. Solo importa si la tarea toca ese popup.
 
 ## Pendientes conocidos
 Ver la sección 10 de `readme.md`, que lista las observaciones abiertas: counts desactualizados, teclas F que no coinciden con la barra, extensión `.scummvm` en F9, claves de géneros en i18n, campo `lang` y archivos sueltos. No se arreglan de paso; cada uno es una tarea propia.
